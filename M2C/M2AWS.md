@@ -329,7 +329,7 @@ aws iam create-open-id-connect-provider \
   --client-id-list sts.amazonaws.com
 ```
 
-Trust policy scoped to `repo:royalglowsalonspa/theroyalglow-webapp:ref:refs/heads/prod`.
+Trust policy scoped to `repo:izhaan2166/wecut:ref:refs/heads/prod`.
 
 Pipeline: `bun install` → `sst deploy --stage production` → poll `/api/health` on both apps →
 notify on failure.

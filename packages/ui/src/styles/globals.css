@@ -2,12 +2,12 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 08-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ui/styles/globals
  * Scope        : Shared Global Stylesheet (Tailwind v4)
  *
  * Description  : Turn-key global stylesheet for apps that want the complete
- *                Royal Glow base in one import. Loads Tailwind CSS v4, the
+ *                wecut base in one import. Loads Tailwind CSS v4, the
  *                shared design-token theme, and generic layout/utility
  *                affordances. Apps may instead import only `@rgss/ui/theme.css`
  *                into their own global stylesheet.

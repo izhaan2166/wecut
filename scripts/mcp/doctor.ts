@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 05-09-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : scripts/mcp/doctor
  * Scope        : Tooling — cross-device MCP setup parity check
  *

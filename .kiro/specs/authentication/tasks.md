@@ -2,7 +2,7 @@
 
 ## Overview
 
-Implement the authentication system for Royal Glow Salon & Spa using Better Auth with Google OAuth, RBAC (6 roles), session-based auth stored in Neon PostgreSQL, middleware for session validation and role enforcement, sign-in page, onboarding flow, and session context preservation across OAuth redirects.
+Implement the authentication system for wecut Salon & Spa using Better Auth with Google OAuth, RBAC (6 roles), session-based auth stored in Neon PostgreSQL, middleware for session validation and role enforcement, sign-in page, onboarding flow, and session context preservation across OAuth redirects.
 
 ## Tasks
 

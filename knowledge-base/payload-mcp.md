@@ -1,7 +1,7 @@
 # Payload MCP Server — Read-Only CMS Access for AI Agents
 
 The CMS exposes a **Model Context Protocol** server so AI agents (Kiro, Claude
-Desktop, any MCP client) can *read* Royal Glow content directly instead of
+Desktop, any MCP client) can *read* wecut content directly instead of
 guessing at it or scraping the website.
 
 It is **read-only by design**. Nothing about this integration can write to the
@@ -14,7 +14,7 @@ database.
 | Production | `https://cms.theroyalglow.in/api/mcp` |
 | Plugin | `@payloadcms/plugin-mcp` (exact pin, same release as `payload`; see `apps/cms/package.json`) |
 | Auth | `Authorization: Bearer <api-key>` |
-| Server name | `Royal Glow Payload MCP` |
+| Server name | `wecut Payload MCP` |
 | Exposed tools | 11, all `find*` |
 
 ---

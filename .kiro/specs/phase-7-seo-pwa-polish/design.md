@@ -107,7 +107,7 @@ buildMetadata(input: {
   images?: string[]; robotsIndex?: boolean;
 }): Metadata
 ```
-Produces title (` | Royal Glow Salon & Spa` suffix), description, canonical (`SITE_URL + path`), OpenGraph (`locale: 'en_IN'`, type website), Twitter (`summary_large_image`), and `robots`. The root layout sets `metadataBase = new URL(SITE_URL)`.
+Produces title (` | wecut Salon & Spa` suffix), description, canonical (`SITE_URL + path`), OpenGraph (`locale: 'en_IN'`, type website), Twitter (`summary_large_image`), and `robots`. The root layout sets `metadataBase = new URL(SITE_URL)`.
 
 ### 4. sitemap.ts / robots.ts
 
@@ -120,7 +120,7 @@ Two `GET` route handlers returning `text/plain`. `llms.txt` renders the concise 
 
 ### 6. PWA layer
 
-- `manifest.ts` (Next 16 `MetadataRoute.Manifest`): name, short_name, description, `start_url: '/'`, `display: 'standalone'`, theme/background colours (Royal Glow tokens), and `icons` referencing `/icons/icon-192.png` + `/icons/icon-512.png` (+ maskable). A documented `public/icons/README` lists the required sizes.
+- `manifest.ts` (Next 16 `MetadataRoute.Manifest`): name, short_name, description, `start_url: '/'`, `display: 'standalone'`, theme/background colours (wecut tokens), and `icons` referencing `/icons/icon-192.png` + `/icons/icon-512.png` (+ maskable). A documented `public/icons/README` lists the required sizes.
 - `public/sw.js`: a minimal, dependency-free service worker — on `install` pre-cache the app shell + `/offline`; on `fetch` (navigation requests only) try network, fall back to the cached `/offline` page; **never** intercept `/api/*`, `/admin/*`, or auth requests. Versioned cache name; old caches purged on `activate`.
 - `ServiceWorkerRegistrar.tsx`: registers `/sw.js` on `load` in production only; no-ops if `serviceWorker` is unavailable.
 - `(customer)/offline/page.tsx`: a branded "You're offline" page (static), with the phone number and a retry hint.
@@ -146,7 +146,7 @@ CONSENT_EVENT = 'rgss:consent-change'
 
 ### 10. Page metadata + JSON-LD wiring
 
-- **Root layout**: `metadataBase`, default title template `%s | Royal Glow Salon & Spa`, mount `<Analytics />`, `<CookieConsent />`, `<ServiceWorkerRegistrar />`.
+- **Root layout**: `metadataBase`, default title template `%s | wecut Salon & Spa`, mount `<Analytics />`, `<CookieConsent />`, `<ServiceWorkerRegistrar />`.
 - **Homepage**: `buildMetadata` + `LocalBusiness` + `Organization` + `WebSite` + `FAQPage` JSON-LD (FAQs from a shared constant matching `seo.md` Part 7).
 - **Services index**: metadata + `BreadcrumbList` + `LocalBusiness`.
 - **Service detail** (`/services/[slug]` if present, else the services page per service): `Service` JSON-LD with Offer + `BreadcrumbList`. (If individual service pages don't exist yet, attach `Service` items on the services index and note the per-page upgrade for when slugs land.)

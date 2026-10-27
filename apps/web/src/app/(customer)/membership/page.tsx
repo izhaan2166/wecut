@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : MembershipPage
  * Scope        : SPA Memberships
  *
@@ -50,7 +50,7 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: 'My SPA Membership',
-  description: 'Track your Royal Glow SPA membership hours, validity and session history.',
+  description: 'Track your wecut SPA membership hours, validity and session history.',
   robots: { index: false, follow: false },
 }
 

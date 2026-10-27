@@ -1,4 +1,4 @@
-# Design Brief — Royal Glow Salon & SPA
+# Design Brief — wecut Salon & SPA
 
 > Single-file design reference for AI design agents (Lovable, Stitch, Figma AI, v0, Galileo). Contains everything needed to generate consistent, high-fidelity mockups for the entire application.
 
@@ -6,7 +6,7 @@
 
 ## 1. Brand Identity
 
-- **Business:** Royal Glow Salon & SPA — Premium beauty salon and day spa in Bengaluru, India
+- **Business:** wecut Salon & SPA — Premium beauty salon and day spa in Bengaluru, India
 - **Personality:** Luxurious, warm, inviting, confident, modern Indian premium
 - **Tone:** Royal, elegant but approachable (not cold/clinical)
 - **Target audience:** Women 20-45, premium Indian urban market
@@ -271,7 +271,7 @@ Mobile: Hamburger menu · sticky "Book Now" gold CTA at bottom
 **Header details:**
 - Height: 64px (desktop), 56px (mobile)
 - Background: `canvas-white` with subtle bottom border (`cloud-gray`) on scroll
-- Logo: Left-aligned — wreath icon + "Royal Glow" in font-display + "SALON & SPA" in font-ui 9px
+- Logo: Left-aligned — wreath icon + "wecut" in font-display + "SALON & SPA" in font-ui 9px
 - Nav links: Center-aligned, font-ui 12px uppercase, tracking 0.5px, `cocoa-dark`
 - Right: User avatar (32px circle) + name in font-sans 14px
 - When signed out: "Book Now" btn-primary replaces avatar
@@ -342,7 +342,7 @@ Rich offer cards on `rich-chocolate` (#2D1810) background with 4px `deep-gold` l
 
 #### About (`/about`)
 
-Brand story section with large Cabinet Grotesk Black headline ("The Royal Glow Story"), Clash Grotesk Regular body text. Team member cards in grid: circular avatar, name (font-display), designation (font-sans, `dusty-gray`). Values section with `cloud-gray` cards. Gallery section with masonry grid.
+Brand story section with large Cabinet Grotesk Black headline ("The wecut Story"), Clash Grotesk Regular body text. Team member cards in grid: circular avatar, name (font-display), designation (font-sans, `dusty-gray`). Values section with `cloud-gray` cards. Gallery section with masonry grid.
 
 #### Contact (`/contact`)
 
@@ -382,7 +382,7 @@ Large gem balance (font-display, 48px). Redeemable services card grid. Transacti
 
 #### Sign-in (`/sign-in`)
 
-Centered card, minimal. Royal Glow logo, welcoming headline in Cabinet Grotesk Black, "Sign in with Google" button per Google branding. Privacy/Terms links in font-sans small.
+Centered card, minimal. wecut logo, welcoming headline in Cabinet Grotesk Black, "Sign in with Google" button per Google branding. Privacy/Terms links in font-sans small.
 
 #### Onboarding (`/onboarding`)
 
@@ -502,7 +502,7 @@ Sectioned form with card containers. Toggle switches, number inputs. Per-section
 | **Admin is data-dense** | Tablet-first, touch-friendly, information density over visual luxury. |
 | **No cool blues or purples** | Everything stays in the warm gold/cream/chocolate spectrum. |
 | **Pill radius for all buttons** | 9999px — never square or slightly-rounded buttons. |
-| **Gold as primary action colour** | Reinforces "Royal Glow" brand. Every CTA is immediately recognisable. |
+| **Gold as primary action colour** | Reinforces "wecut" brand. Every CTA is immediately recognisable. |
 | **Mobile-first for customers** | 99.99% of customer traffic is mobile. |
 | **Tablet-first for admin** | Receptionists use tablet at counter. |
 
@@ -571,4 +571,4 @@ Sectioned form with card containers. Toggle switches, number inputs. Per-section
 
 ---
 
-*Generated for use with Lovable, Stitch, Figma AI, v0, Galileo, and other AI design agents. Feed this entire file as context to generate consistent, brand-aligned mockups for any page in the Royal Glow Salon & SPA application.*
+*Generated for use with Lovable, Stitch, Figma AI, v0, Galileo, and other AI design agents. Feed this entire file as context to generate consistent, brand-aligned mockups for any page in the wecut Salon & SPA application.*

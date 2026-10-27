@@ -71,13 +71,13 @@ User triggers action requiring auth (e.g., "Book Now")
 │                                     │
 │          ┌───────────────┐          │
 │          │  👑            │          │
-│          │  Royal Glow   │          │
+│          │  wecut   │          │
 │          │  Salon & SPA  │          │
 │          └───────────────┘          │
 │                                     │
 │  ┌─────────────────────────────┐    │
 │  │                             │    │
-│  │  Sign in to Royal Glow     │    │
+│  │  Sign in to wecut     │    │
 │  │                             │    │
 │  │  Use your Google account    │    │
 │  │  to continue                │    │
@@ -104,12 +104,12 @@ User triggers action requiring auth (e.g., "Book Now")
 │         ┌── Premium gradient/brand background ──────────┐        │
 │         │                                                │        │
 │         │              ┌───────────────┐                 │        │
-│         │              │  👑 Royal Glow │                 │        │
+│         │              │  👑 wecut │                 │        │
 │         │              └───────────────┘                 │        │
 │         │                                                │        │
 │         │    ┌──────────────────────────────────┐       │        │
 │         │    │                                  │       │        │
-│         │    │   Sign in to Royal Glow          │       │        │
+│         │    │   Sign in to wecut          │       │        │
 │         │    │                                  │       │        │
 │         │    │   Use your Google account        │       │        │
 │         │    │   to continue                    │       │        │
@@ -193,7 +193,7 @@ AFTER OAuth callback returns:
 ```
 ┌─────────────────────────────────────┐
 │                                     │
-│  Welcome to Royal Glow, Priya! 👑   │
+│  Welcome to wecut, Priya! 👑   │
 │  ═══════════════════════════════     │
 │                                     │
 │  Let's set up your profile          │
@@ -231,7 +231,7 @@ AFTER OAuth callback returns:
 │    My data is stored securely on    │
 │    Indian servers. (Required)       │
 │                                     │
-│  ☐ Help us improve Royal Glow —    │
+│  ☐ Help us improve wecut —    │
 │    allow anonymous usage analytics  │
 │                                     │
 │  ☐ Send me offers, updates &       │

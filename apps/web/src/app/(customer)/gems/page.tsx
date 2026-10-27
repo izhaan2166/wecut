@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : GemsPage
  * Scope        : Loyalty Programme
  *
@@ -50,7 +50,7 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: 'My Gems',
-  description: 'Track your Royal Glow loyalty gems, history and rewards.',
+  description: 'Track your wecut loyalty gems, history and rewards.',
   robots: { index: false, follow: false },
 }
 

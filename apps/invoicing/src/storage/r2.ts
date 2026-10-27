@@ -1,7 +1,7 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : invoicing/storage/r2
  * Scope        : Storage (Cloudflare R2, S3-compatible)
  *

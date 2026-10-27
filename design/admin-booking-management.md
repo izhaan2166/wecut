@@ -472,6 +472,6 @@ Receptionist cancels a CONFIRMED booking (salon's fault):
 
 Customer receives:
   Email: apology + "Book again" CTA + priority rebooking
-  Push: "Your appointment was cancelled by Royal Glow. We're sorry!"
+  Push: "Your appointment was cancelled by wecut. We're sorry!"
   If cancelled <2h before: includes priority rebooking offer
 ```

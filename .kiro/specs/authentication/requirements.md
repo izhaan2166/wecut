@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This specification covers the authentication and authorization system for the Royal Glow Salon & Spa web application. The system uses Better Auth with Google OAuth as the sole authentication provider, implements role-based access control (RBAC) with six roles, handles first-time user onboarding, and preserves session context (UTM/booking parameters) across the OAuth redirect flow.
+This specification covers the authentication and authorization system for the wecut Salon & Spa web application. The system uses Better Auth with Google OAuth as the sole authentication provider, implements role-based access control (RBAC) with six roles, handles first-time user onboarding, and preserves session context (UTM/booking parameters) across the OAuth redirect flow.
 
 ## Glossary
 
@@ -73,7 +73,7 @@ This specification covers the authentication and authorization system for the Ro
 
 #### Acceptance Criteria
 
-1. THE Sign_In_Page SHALL display the Royal Glow logo, a heading "Sign in to Royal Glow", and a subheading "Use your Google account to continue"
+1. THE Sign_In_Page SHALL display the wecut logo, a heading "Sign in to wecut", and a subheading "Use your Google account to continue"
 2. THE Sign_In_Page SHALL display a full-width "Sign in with Google" button styled with Google branding guidelines
 3. THE Sign_In_Page SHALL display legal text linking to the Privacy Policy and Terms of Service pages
 4. WHEN the user clicks the sign-in button, THE Sign_In_Page SHALL save the current Session_Context to `sessionStorage` before initiating the OAuth redirect
@@ -130,4 +130,4 @@ This specification covers the authentication and authorization system for the Ro
 
 1. THE Auth_Layout SHALL render a minimal layout without the main site header or footer navigation
 2. THE Auth_Layout SHALL center its content vertically and horizontally on the viewport
-3. THE Auth_Layout SHALL apply the branded gradient background consistent with the Royal Glow design system
+3. THE Auth_Layout SHALL apply the branded gradient background consistent with the wecut design system

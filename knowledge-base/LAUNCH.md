@@ -1,4 +1,4 @@
-# Launch Runbook — Royal Glow Salon & Spa
+# Launch Runbook — wecut Salon & Spa
 
 A condensed, code-aware production release procedure derived from `launch-checklist.md`. AWS is already the active host for the customer and admin apps; this runbook covers subsequent production releases.
 

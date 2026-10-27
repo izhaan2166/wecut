@@ -130,7 +130,7 @@ apps/admin/src/app/me/
   the edge middleware (which already gates `/me/*` at level 1). It does **not** re-render the
   full admin chrome — the admin `RootLayout` already wraps every page in `AdminShell`, and the
   sidebar is filtered to show only the self-service section for a `staff` user (see RBAC
-  below). The layout sets `robots: { index: false, follow: false }` and a `%s | Royal Glow`
+  below). The layout sets `robots: { index: false, follow: false }` and a `%s | wecut`
   title template. This satisfies Req 1.3 (session-gated + navigation limited to self-service).
 - **`me/schedule/page.tsx`** — Server component ported from the web `StaffSchedulePage`.
   Resolves `getStaffProfileByUserId(session.user.id)`; when null, renders the explicit

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 09-06-2026 & Updated - 09-06-2026
  *
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : primitives (a11y test)
  * Scope        : Admin — Design-System Primitives accessibility
  *

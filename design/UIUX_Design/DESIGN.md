@@ -1,10 +1,10 @@
-# Royal Glow Salon & SPA — Design System
+# wecut Salon & SPA — Design System
 
 A premium, editorial salon brand. Warm chocolate + royal gold on bright canvas.
 Built on Tailwind CSS v4 (`@theme` tokens in `src/styles.css`).
 
 **Theme:** light
-**Logo file:** `Royal Glow Logo.png` (located in this folder)
+**Logo file:** `wecut Logo.png` (located in this folder)
 **Locale conventions:** All prices in ₹ (INR), dates in DD/MM/YYYY format, Indian English spelling.
 
 ---
@@ -341,4 +341,4 @@ ui font:        Plus Jakarta Sans Bold (700)
 
 ---
 
-*Generated for use with Lovable, Stitch, Figma AI, v0, Galileo, and other AI design agents. Feed this entire file as context to generate consistent, brand-aligned mockups for any page in the Royal Glow Salon & SPA application.*
+*Generated for use with Lovable, Stitch, Figma AI, v0, Galileo, and other AI design agents. Feed this entire file as context to generate consistent, brand-aligned mockups for any page in the wecut Salon & SPA application.*

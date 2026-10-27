@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : db/scripts/backfill-roles
  * Scope        : One-off migration — default + backfill the user.role column
  *

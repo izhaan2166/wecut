@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : breadcrumb (test)
  * Scope        : Admin UI — App Shell / Top_Bar accessibility
  *

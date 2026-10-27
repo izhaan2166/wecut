@@ -7,7 +7,7 @@
 ## High-Level Design (HLD)
 
 ### Problem Statement
-Repeat customers at Royal Glow typically book the same 2-4 services every visit. Currently, they must scroll through all services each time. This adds unnecessary friction to the booking flow.
+Repeat customers at wecut typically book the same 2-4 services every visit. Currently, they must scroll through all services each time. This adds unnecessary friction to the booking flow.
 
 ### Solution
 Add a "heart" icon on every service card. Tapping toggles the favourite state. On subsequent bookings, favourited services are shown in a "Your Favourites" section above the regular service list in Step 3 of the booking dialog.

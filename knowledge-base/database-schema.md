@@ -2,7 +2,7 @@
 
 ## Overview
 
-Production-level schema for Royal Glow Salon & Spa. **38 tables** covering auth, profiles, services, scheduling, bookings, billing, SPA memberships, offers, CRM, leads, loyalty (gems), notifications, branches, and system operations.
+Production-level schema for wecut Salon & Spa. **38 tables** covering auth, profiles, services, scheduling, bookings, billing, SPA memberships, offers, CRM, leads, loyalty (gems), notifications, branches, and system operations.
 
 **ORM:** Drizzle ORM (pure TypeScript, edge-native)
 **Database:** Neon DB (PostgreSQL 16, serverless, branching)
@@ -1445,7 +1445,7 @@ Admin creates membership for customer
   → spa_membership record created (status: active)
   → membership_purchase invoice generated (₹ amount)
   → Invoice emailed to customer (Resend)
-  → Push notification: "Your Royal Glow SPA Membership is active!"
+  → Push notification: "Your wecut SPA Membership is active!"
   → Customer sees full details on /membership
 
 On each session:
@@ -1897,7 +1897,7 @@ Key-value configuration editable from Owner View → System Settings.
 **Seed values:**
 | Key | Value | Description |
 |-----|-------|-------------|
-| `salon_name` | `"Royal Glow Salon & Spa"` | Business name |
+| `salon_name` | `"wecut Salon & Spa"` | Business name |
 | `salon_phone` | `"+91 63601 35720"` | Primary contact |
 | `salon_email` | `"hello@theroyalglow.in"` | Business email |
 | `salon_address` | `{"line1":"1st Floor, Narmada Complex, 48/3, Rayasandra Main Rd","line2":"Above SBI Bank, Naganathapura, Parappana Agrahara","city":"Bengaluru","state":"Karnataka","pincode":"560100"}` | Full address (JSON) |
@@ -2168,7 +2168,7 @@ Invoice PDF generated → emailed to customer (Resend)
 ```
 
 **Invoice PDF sections (Salon):**
-- Header: Royal Glow logo, invoice number (#INV1262XXXXXXX), date
+- Header: wecut logo, invoice number (#INV1262XXXXXXX), date
 - Customer name + phone
 - Line items: service name, staff name, price each
 - Taxable value (base price ex-GST, back-calculated)
@@ -2211,7 +2211,7 @@ If hours_remaining < 60 min → send membership_hours_low notification
 ```
 
 **Invoice PDF sections (Membership Session):**
-- Header: Royal Glow logo, invoice number, date
+- Header: wecut logo, invoice number, date
 - Customer name + Membership ID: #RGMEM26XXXXX (Tier: Gold)
 - Service performed, staff name, duration
 - **Session Total: ₹0.00 (Included in SPA Membership)**
@@ -2237,7 +2237,7 @@ Invoice PDF emailed to customer — membership welcome invoice
 ```
 
 **Invoice PDF sections (Membership Purchase):**
-- Header: Royal Glow logo, invoice number, date
+- Header: wecut logo, invoice number, date
 - Customer name + phone
 - **Membership: Silver / Gold / Platinum**
 - Membership ID: #RGMEM26XXXXX
@@ -2254,7 +2254,7 @@ Invoice PDF emailed to customer — membership welcome invoice
 
 Gems are **not a discount currency**. They are used to **unlock specific services** from a curated Gems Catalogue — a separate menu of redeemable experiences. You cannot apply gems as a rupee discount on any arbitrary service.
 
-**Analogy:** Like McDonald's MyRewards — you don't get ₹50 off your burger, you unlock a free McFlurry. At Royal Glow, you don't get ₹100 off your haircut — you unlock a free scalp massage or a complimentary add-on treatment.
+**Analogy:** Like McDonald's MyRewards — you don't get ₹50 off your burger, you unlock a free McFlurry. At wecut, you don't get ₹100 off your haircut — you unlock a free scalp massage or a complimentary add-on treatment.
 
 ```
 Customer earns gems on every paid visit

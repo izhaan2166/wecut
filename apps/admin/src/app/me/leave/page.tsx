@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : MeLeavePage (staff self-service)
  * Scope        : Admin Portal — Staff Self-Service
  *
@@ -19,7 +19,7 @@ import { MeLeavePanel } from './me-leave-panel'
 
 export const metadata: Metadata = {
   title: 'My Leave',
-  description: 'Request leave and review your leave history at Royal Glow.',
+  description: 'Request leave and review your leave history at wecut.',
 }
 
 export default function MeLeavePage() {

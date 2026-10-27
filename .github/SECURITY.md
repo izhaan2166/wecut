@@ -1,6 +1,6 @@
 # Security Policy
 
-The **Royal Glow Salon & Spa** project team takes security vulnerabilities
+The **wecut Salon & Spa** project team takes security vulnerabilities
 seriously. We appreciate coordinated disclosure and will work with reporters
 to validate, fix, and credit disclosures responsibly.
 

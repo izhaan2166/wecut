@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 30-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : CookieConsent
  * Scope        : Cookie Consent UI
  *
@@ -33,7 +33,7 @@
  * Dependencies : @/lib/consent/consent, @/lib/utils, next/link
  *
  * Notes        : Icons are inlined SVGs (the web app does not depend on
- *                lucide-react). Colours use Royal Glow Brand Tokens only.
+ *                lucide-react). Colours use wecut Brand Tokens only.
  ************************************************************/
 
 'use client'

@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : ui/motion/motion-presence
  * Scope        : Admin — Route + list presence wrappers
  *

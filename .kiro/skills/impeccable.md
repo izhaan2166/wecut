@@ -147,7 +147,7 @@ Before choosing dark vs. light: write one sentence of physical scene - who uses 
 
 ## RGSS Project Application
 
-For Royal Glow Salon & Spa customer-facing pages:
+For wecut Salon & Spa customer-facing pages:
 - **Register:** Brand (design IS the product for customer pages)
 - **Audience:** Beauty/wellness consumers in Bengaluru, mobile-first
 - **Scene:** Customer browsing on phone, likely in well-lit environment, looking for premium salon experience

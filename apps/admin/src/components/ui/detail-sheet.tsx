@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : ui/detail-sheet
  * Scope        : Admin — Right-edge detail panel
  *

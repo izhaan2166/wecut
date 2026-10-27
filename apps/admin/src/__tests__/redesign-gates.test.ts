@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : redesign-gates.test
  * Scope        : Admin Portal Redesign — static CI gates
  *

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : GalleryPage
  * Scope        : Customer Pages
  *
@@ -41,7 +41,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = buildMetadata({
   title: 'Gallery',
-  description: 'See the Royal Glow Salon & Spa — our interiors, treatments, and work in Bengaluru.',
+  description: 'See the wecut Salon & Spa — our interiors, treatments, and work in Bengaluru.',
   path: '/gallery',
 })
 
@@ -85,8 +85,7 @@ export default async function GalleryPage() {
               Gallery
             </h1>
             <p className="font-sans text-[17px] leading-[1.6] text-warm-gray mt-4 max-w-[520px]">
-              A look inside Royal Glow — our interiors, treatments, and the work our team is proud
-              of.
+              A look inside wecut — our interiors, treatments, and the work our team is proud of.
             </p>
           </div>
         </section>

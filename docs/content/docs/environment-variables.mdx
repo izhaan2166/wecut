@@ -1,10 +1,10 @@
 ---
 title: Environment Variables
-description: Environment-variable ownership, validation, and deployment boundaries for the Royal Glow platform.
+description: Environment-variable ownership, validation, and deployment boundaries for the wecut platform.
 icon: sliders-horizontal
 ---
 
-Royal Glow has four application contracts: `apps/web`, `apps/admin`, `apps/cms`, and `apps/invoicing`. The web and admin apps run on AWS Lambda + CloudFront through SST, the CMS stays on Render, and invoicing stays on Google Cloud Run. Cloudflare remains the authoritative DNS provider and R2 storage provider; it does not host application compute.
+wecut has four application contracts: `apps/web`, `apps/admin`, `apps/cms`, and `apps/invoicing`. The web and admin apps run on AWS Lambda + CloudFront through SST, the CMS stays on Render, and invoicing stays on Google Cloud Run. Cloudflare remains the authoritative DNS provider and R2 storage provider; it does not host application compute.
 
 <Warning>
   No single table is the complete environment contract. Use each app's validator or configuration file as the source of truth. Web and admin use `@t3-oss/env-nextjs`; invoicing parses `process.env` with Zod at startup; Payload, Sentry configuration, SST, and workflows also own variables outside those two Next.js validators.

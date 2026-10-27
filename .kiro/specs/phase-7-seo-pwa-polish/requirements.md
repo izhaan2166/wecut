@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 7 makes the Royal Glow Salon & Spa public site discoverable, installable, and compliant. It implements the structured-data, crawler, and AI-discovery standards from `seo.md` (treated as non-negotiable), adds a Progressive Web App layer (manifest, service worker, offline page), a two-tier cookie-consent banner, the static legal pages, and consent-gated analytics (Meta Pixel + PostHog).
+Phase 7 makes the wecut Salon & Spa public site discoverable, installable, and compliant. It implements the structured-data, crawler, and AI-discovery standards from `seo.md` (treated as non-negotiable), adds a Progressive Web App layer (manifest, service worker, offline page), a two-tier cookie-consent banner, the static legal pages, and consent-gated analytics (Meta Pixel + PostHog).
 
 The work is presentation, metadata, and static assets built on the public surfaces from Phases 2–6. There are no schema changes; the only data reads are the existing service-catalogue and active-offers queries. Third-party analytics load only after explicit opt-in and only when their keys are configured, so the build runs in any environment.
 

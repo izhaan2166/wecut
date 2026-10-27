@@ -1,17 +1,17 @@
 ---
 title: Notifications & Email
-description: How Royal Glow reaches customers and staff — transactional email via Resend, marketing email via Brevo, React Email templates, and browser Web Push notifications.
+description: How wecut reaches customers and staff — transactional email via Resend, marketing email via Brevo, React Email templates, and browser Web Push notifications.
 icon: mail
 ---
 
 <Info>
-  **In one line:** Royal Glow reaches people through **email** (the durable
+  **In one line:** wecut reaches people through **email** (the durable
   record — Resend for transactional, Brevo for marketing) and **Web Push** (the
   instant nudge). All three are guarded extension points: with a key absent the
   send is a no-op that logs and returns cleanly.
 </Info>
 
-Royal Glow keeps people informed through two channels: **email** (the durable
+wecut keeps people informed through two channels: **email** (the durable
 record — confirmations, invoices, reminders, offers) and **Web Push** (the
 instant nudge that lands on a phone or laptop even when the site is closed).
 This page covers how each is wired up and which service handles what.
@@ -93,7 +93,7 @@ unlimited contacts**.
 ## React Email templates
 
 Transactional templates are built with **React Email** as typed `.tsx`
-components in `packages/emails/`, styled in Royal Glow's brand. They receive
+components in `packages/emails/`, styled in wecut's brand. They receive
 strongly typed props (money as integer **paise**, dates as **DD/MM/YYYY**) and
 render to HTML at send time.
 
@@ -118,12 +118,12 @@ attachment to Resend:
 
 ```ts
 await resend.emails.send({
-  from: 'Royal Glow <hello@theroyalglow.in>',
+  from: 'wecut <hello@theroyalglow.in>',
   to: customer.email,
-  subject: `Hey ${customer.firstName}, your Royal Glow receipt is ready.`,
+  subject: `Hey ${customer.firstName}, your wecut receipt is ready.`,
   react: InvoiceServiceEmail(props),
   attachments: [{
-    filename: `RoyalGlow-Invoice-${invoice.invoiceNumber}.pdf`,
+    filename: `wecut-Invoice-${invoice.invoiceNumber}.pdf`,
     content: pdfBuffer,
   }],
 })

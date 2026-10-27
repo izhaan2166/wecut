@@ -2,11 +2,11 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 08-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ServiceCard
  * Scope        : CMS Collections
  *
- * Description  : Payload CMS collection for the "See what Royal Glow can do
+ * Description  : Payload CMS collection for the "See what wecut can do
  *                for you" homepage service category cards. Replaces the
  *                hardcoded array so the marketing team can update service
  *                names, starting prices, images, and links without code.

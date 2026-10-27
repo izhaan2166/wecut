@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : NoStaffProfileEmpty (staff self-service)
  * Scope        : Admin Portal — Staff Self-Service
  *

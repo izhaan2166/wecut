@@ -107,7 +107,7 @@ Do not add an independent Route 53 hosted zone for the production domain. Cloudf
 - [ ] Workload credentials use least-privilege bucket access.
 - [ ] Backup credentials are separate from DNS automation credentials.
 - [ ] Public media/invoice hostname resolves and serves expected objects.
-- [ ] CORS allows only required Royal Glow origins and methods.
+- [ ] CORS allows only required wecut origins and methods.
 - [ ] Lifecycle rules preserve required invoice and backup retention.
 - [ ] `R2_PUBLIC_BASE_URL` is configured for `apps/invoicing`.
 

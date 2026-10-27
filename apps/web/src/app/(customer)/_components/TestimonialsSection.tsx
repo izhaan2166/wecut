@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : TestimonialsSection
  * Scope        : Customer Pages
  *
@@ -41,7 +41,7 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
     reviewerName: 'Priya Sharma',
     rating: 5,
     reviewText:
-      'Royal Glow is truly a premium experience. The stylists listened to exactly what I wanted and delivered perfectly. Booking was effortless and the ambience is calming.',
+      'wecut is truly a premium experience. The stylists listened to exactly what I wanted and delivered perfectly. Booking was effortless and the ambience is calming.',
     timeLabel: '1 week ago',
   },
   {

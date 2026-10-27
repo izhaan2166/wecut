@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : business/auth/index
  * Scope        : Business Logic (pure)
  *

@@ -1,4 +1,4 @@
-# High-Level Design (HLD) — Royal Glow Salon & Spa
+# High-Level Design (HLD) — wecut Salon & Spa
 
 > **Document Classification:** System Design — Staff Engineer Review  
 > **Version:** 1.0  
@@ -13,7 +13,7 @@
 
 ### 1.1 Business Context
 
-Royal Glow Salon & Spa is a premium beauty and wellness establishment located in Bengaluru, India. The business operates across salon services (haircuts, facials, makeup) and SPA services (massage, aromatherapy) with plans for multi-branch expansion.
+wecut Salon & Spa is a premium beauty and wellness establishment located in Bengaluru, India. The business operates across salon services (haircuts, facials, makeup) and SPA services (massage, aromatherapy) with plans for multi-branch expansion.
 
 ### 1.2 System Purpose
 
@@ -205,7 +205,7 @@ The architecture uses **strict layer separation** within a monorepo to achieve t
 | **Toolchain** | Bun | npm, pnpm, Node.js scripts | Fast installs, native TypeScript scripts, and workspace support; SST/OpenNext packages production server output for Lambda |
 | **Database** | Neon PostgreSQL 16 | Supabase, PlanetScale, Turso, Xata | Branching, serverless auto-scaling, and Drizzle integration; all scheduled jobs use QStash HTTP routes |
 | **ORM** | Drizzle ORM | Prisma, Kysely | Pure TypeScript, no runtime binary, strong schema-first workflow, and portable Lambda/Node packaging |
-| **Auth** | Better Auth | Clerk, Auth.js, Supabase Auth | Self-hosted, Google OAuth shows the Royal Glow domain, built-in RBAC plugin, sessions in Neon |
+| **Auth** | Better Auth | Clerk, Auth.js, Supabase Auth | Self-hosted, Google OAuth shows the wecut domain, built-in RBAC plugin, sessions in Neon |
 | **Web + Admin Compute** | AWS Lambda + CloudFront via SST `sst.aws.Nextjs` | Render, Vercel | Declarative SST deployment, ARM64 SSR Lambda per app, CloudFront delivery, and generic OpenNext packaging |
 | **CMS Hosting** | Render (Singapore) | Railway, Fly.io | Payload CMS stays on its existing Node service near Neon; it is not part of the AWS compute deployment |
 | **PDF Rendering** | Google Cloud Run | Lambda, in-process rendering | Existing invoicing service remains isolated from web/admin compute |
@@ -349,7 +349,7 @@ No Redis response cache is implemented for service catalogue or availability. A 
 - Eliminates password-related vulnerabilities (credential stuffing, weak passwords, reset flows)
 - All salon customers in India have Google accounts
 - Reduces auth surface area for a solo developer
-- Google consent screen shows "Royal Glow Salon & Spa" with custom branding
+- Google consent screen shows "wecut Salon & Spa" with custom branding
 
 ### 5.2 RBAC Model
 
@@ -1213,4 +1213,4 @@ status.theroyalglow.in       Cloudflare DNS → BetterStack status page
 > **Document End**  
 > This HLD was prepared following MAANG/FAANG system design review standards.  
 > For detailed implementation specifications, refer to the individual documentation files  
-> linked throughout this document within the `theroyalglow-webapp/` documentation repository.
+> linked throughout this document within the `wecut-webapp/` documentation repository.

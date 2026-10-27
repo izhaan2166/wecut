@@ -2,7 +2,7 @@
 
 ## Overview
 
-Phase 9 establishes Royal Glow's automated quality and delivery backbone: a **test harness** (Vitest unit/integration, Playwright E2E, MSW mocking, v8 coverage, faker fixtures), a **`/api/health` endpoint**, the **GitHub Actions pipeline** (CI, integration/E2E, load/security, production deploy), and supporting Lighthouse, k6, security, and backup configuration. Committed workflows are executable truth; this design must not claim controls absent from their YAML.
+Phase 9 establishes wecut's automated quality and delivery backbone: a **test harness** (Vitest unit/integration, Playwright E2E, MSW mocking, v8 coverage, faker fixtures), a **`/api/health` endpoint**, the **GitHub Actions pipeline** (CI, integration/E2E, load/security, production deploy), and supporting Lighthouse, k6, security, and backup configuration. Committed workflows are executable truth; this design must not claim controls absent from their YAML.
 
 This phase is the **explicit exception** to the project's "no test files unless requested" rule: the tests *are* the deliverable. The goal is a working harness plus meaningful, representative coverage of the riskiest pure logic (money/GST/date math, SEO builders, consent and CMS-client guards) and a couple of integration + E2E smoke paths — not 100% coverage, which is a continuous effort that grows with the codebase.
 

@@ -18,11 +18,11 @@ After comparing all major options, **Better Auth** is the chosen auth library.
 | Auth0 | ✅ | ✅ | Limited free tier | Overkill, complex |
 
 ### Why Supabase Auth was ruled out
-On the free plan, Google OAuth callback runs through `*.supabase.co` — so Google's consent screen shows `supabase.co`, not "Royal Glow Salon & Spa". Upgrading to remove this requires a paid Supabase plan. Not acceptable.
+On the free plan, Google OAuth callback runs through `*.supabase.co` — so Google's consent screen shows `supabase.co`, not "wecut Salon & Spa". Upgrading to remove this requires a paid Supabase plan. Not acceptable.
 
 ### Why Better Auth wins
 - OAuth callback runs on **your own server** (`theroyalglow.in/api/auth/callback/google`)
-- Google consent screen shows **"Royal Glow Salon & Spa"** with your domain
+- Google consent screen shows **"wecut Salon & Spa"** with your domain
 - Built-in **roles & permissions plugin** (RBAC)
 - TypeScript-first, clean architecture for Bun + Next.js 16.2.9 App Router
 - All user data (sessions, accounts, verifications) stored in **your own Neon DB** (PostgreSQL, managed by Drizzle ORM)
@@ -33,7 +33,7 @@ On the free plan, Google OAuth callback runs through `*.supabase.co` — so Goog
 ## Google OAuth Setup
 
 1. Create OAuth 2.0 credentials in **Google Cloud Console**
-2. Set app name: `Royal Glow Salon & Spa`
+2. Set app name: `wecut Salon & Spa`
 3. Upload logo
 4. Set authorized callback URL: `https://theroyalglow.in/api/auth/callback/google`
 5. This ensures the Google consent screen shows your brand name and domain
@@ -81,7 +81,7 @@ On first Google sign-in, redirect to `/onboarding` to collect:
 - Gender *(select: Male / Female / Other / Prefer not to say)*
 - **Consent checkboxes:**
   - ☑ **Required:** "I agree to the Privacy Policy. My data is stored securely on Indian servers and will not be shared with any third-party organization." *(links to /privacy)*
-  - ☐ **Optional:** "Help us improve Royal Glow — allow anonymous usage analytics." *(analytics consent — DPDP Act. Seeds `analytics: true` in `rgss_cookie_consent`; PostHog + Clarity load for this user. Cookie banner suppressed for analytics category.)*
+  - ☐ **Optional:** "Help us improve wecut — allow anonymous usage analytics." *(analytics consent — DPDP Act. Seeds `analytics: true` in `rgss_cookie_consent`; PostHog + Clarity load for this user. Cookie banner suppressed for analytics category.)*
   - ☐ **Optional:** "Send me offers, updates & promotions via email and notifications." *(marketing consent — DPDP Act. Seeds `marketing: true` in `rgss_cookie_consent`; Meta Pixel + CAPI enabled. Cookie banner suppressed for marketing category.)*
 
 Before starting Google OAuth, store any booking/acquisition context in `sessionStorage` so it survives the OAuth redirect:
@@ -165,14 +165,14 @@ All future confirmed bookings can auto-create calendar events while that scope r
 
 **Why incremental consent:**
 - Asking for Calendar + Email + Profile at sign-in shows a long, intimidating Google permissions page
-- Users drop off when they see "Royal Glow wants to: Read and write your calendar" before even booking anything
+- Users drop off when they see "wecut wants to: Read and write your calendar" before even booking anything
 - Asking **after** a successful booking confirmation is contextually appropriate — "You just got confirmed, want it in your calendar?"
 - Google recommends incremental consent as a best practice
 
 **Calendar event contents:**
 | Field | Value |
 |-------|-------|
-| Title | "Royal Glow — [Service Names]" |
+| Title | "wecut — [Service Names]" |
 | Start/End | Booking date + time |
 | Location | Full salon address + Google Maps link |
 | Description | Services list, total amount, booking ID |
@@ -208,7 +208,7 @@ Architecture: Better Auth Cloud is a **hosted cloud service by Better Auth — y
 
 ## Custom Admin User Management Panel
 
-Since the Better Auth Cloud dashboard is generic (not branded), expose day-to-day user management through the custom `/users` page in the Royal Glow admin portal (`admin.theroyalglow.in/users`):
+Since the Better Auth Cloud dashboard is generic (not branded), expose day-to-day user management through the custom `/users` page in the wecut admin portal (`admin.theroyalglow.in/users`):
 
 ```ts
 // List all users

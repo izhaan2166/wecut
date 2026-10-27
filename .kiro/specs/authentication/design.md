@@ -2,7 +2,7 @@
 
 ## Overview
 
-This design implements the authentication system for Royal Glow Salon & Spa using Better Auth with Google OAuth, RBAC with six roles, session-based auth stored in Neon PostgreSQL via Drizzle ORM, and a first-time onboarding flow that preserves marketing attribution context across the OAuth redirect.
+This design implements the authentication system for wecut Salon & Spa using Better Auth with Google OAuth, RBAC with six roles, session-based auth stored in Neon PostgreSQL via Drizzle ORM, and a first-time onboarding flow that preserves marketing attribution context across the OAuth redirect.
 
 ## Architecture
 
@@ -233,7 +233,7 @@ function clearAuthContext(): void
 ```typescript
 // Server component (page.tsx)
 export const metadata: Metadata = {
-  title: 'Sign In | Royal Glow Salon & Spa',
+  title: 'Sign In | wecut Salon & Spa',
   robots: { index: false, follow: false },
 }
 

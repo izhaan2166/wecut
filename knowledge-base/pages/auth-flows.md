@@ -12,12 +12,12 @@
 | **Purpose** | Single entry point for authentication via Google OAuth. |
 | **Rendering** | SSR |
 | **SEO** | `robots: noindex, nofollow` |
-| **Layout** | Centered card on gradient/brand background, Royal Glow logo above card |
+| **Layout** | Centered card on gradient/brand background, wecut logo above card |
 
 **UI Components:**
-- Royal Glow logo (centered, above card)
+- wecut logo (centered, above card)
 - Card:
-  - Heading: "Sign in to Royal Glow"
+  - Heading: "Sign in to wecut"
   - Subheading: "Use your Google account to continue"
   - "Sign in with Google" button (Google branded, full-width)
   - Legal text below: "By signing in, you agree to our [Privacy Policy] and [Terms of Service]"
@@ -42,7 +42,7 @@
 
 | Property | Detail |
 |----------|--------|
-| **Title** | Welcome to Royal Glow |
+| **Title** | Welcome to wecut |
 | **Purpose** | First-time user data collection — name, phone, DOB, gender, consent. |
 | **Rendering** | SSR (auth-gated, shows only for users without a completed profile) |
 | **SEO** | `robots: noindex, nofollow` |
@@ -50,7 +50,7 @@
 | **Entry** | First Google sign-in, the homepage re-prompt, or Book Now by a signed-in account without a profile (`/onboarding?book=1&…`) |
 
 **UI Components:**
-- Welcome header: "Welcome to Royal Glow, [First Name from Google]! 👑"
+- Welcome header: "Welcome to wecut, [First Name from Google]! 👑"
 - Form fields:
   - Name: prefilled from Google, editable (`<input>` with `<label>`)
   - Email: prefilled from Google, read-only (greyed out, `disabled`)
@@ -59,7 +59,7 @@
   - Gender: select dropdown (Male / Female / Other / Prefer not to say)
 - Consent section (fieldset with legend "Privacy & Preferences"):
   - ☑ Required checkbox: "I agree to the Privacy Policy..." (links to `/privacy`) — cannot submit without
-  - ☐ Optional checkbox: "Help us improve Royal Glow — allow anonymous usage analytics"
+  - ☐ Optional checkbox: "Help us improve wecut — allow anonymous usage analytics"
   - ☐ Optional checkbox: "Send me offers, updates & promotions via email and notifications"
 - Submit button: "Let's Go!" (primary, full-width)
 

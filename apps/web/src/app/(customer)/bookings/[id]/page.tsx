@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 25-06-2026 & Updated - 25-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : BookingDetailPage
  * Scope        : Booking Management
  *
@@ -37,7 +37,7 @@ import { BookingDetail } from './booking-detail'
 
 export const metadata: Metadata = {
   title: 'Booking Details',
-  description: 'View and manage a Royal Glow appointment.',
+  description: 'View and manage a wecut appointment.',
   robots: { index: false, follow: false },
 }
 

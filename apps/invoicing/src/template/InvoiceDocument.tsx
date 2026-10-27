@@ -2,7 +2,7 @@ import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 /************************************************************
  * Author       : KATABATHUNI BOSE
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : invoicing/template/InvoiceDocument
  * Scope        : Presentation (vector PDF template)
  *
@@ -167,8 +167,8 @@ export function InvoiceDocument(payload: InvoicePdfPayload) {
     <Document
       title={`Invoice ${payload.invoiceNumber}`}
       author={seller.name}
-      creator="The Royal Glow"
-      producer="The Royal Glow Invoicing"
+      creator="The wecut"
+      producer="The wecut Invoicing"
     >
       <Page size="A4" style={styles.page}>
         {/* Header */}
@@ -300,7 +300,7 @@ export function InvoiceDocument(payload: InvoicePdfPayload) {
           <Text style={[styles.footerText, { marginTop: 6 }]}>
             SAC {SAC_CODE} · Prices are GST-inclusive
           </Text>
-          <Text style={styles.thankYou}>Thank you for visiting The Royal Glow</Text>
+          <Text style={styles.thankYou}>Thank you for visiting The wecut</Text>
         </View>
       </Page>
     </Document>

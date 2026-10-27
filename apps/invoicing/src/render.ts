@@ -2,7 +2,7 @@ import { renderToBuffer } from '@react-pdf/renderer'
 /************************************************************
  * Author       : KATABATHUNI BOSE
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : invoicing/render
  * Scope        : Rendering
  *

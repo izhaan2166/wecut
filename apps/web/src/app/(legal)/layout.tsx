@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : LegalLayout
  * Scope        : Legal Pages
  *
@@ -60,7 +60,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
             href="/"
             className="font-display text-2xl text-cocoa-dark tracking-tight transition-colors duration-200 hover:text-gold-ink"
           >
-            Royal Glow
+            wecut
           </Link>
         </div>
       </header>
@@ -72,7 +72,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       <footer className="mt-auto bg-cocoa-dark text-canvas-white">
         <div className="mx-auto max-w-[760px] px-5 py-12">
           <Link href="/" className="font-display text-xl text-canvas-white tracking-tight">
-            Royal Glow
+            wecut
           </Link>
 
           <address className="mt-4 space-y-1 font-sans text-[15px] text-dusty-gray not-italic leading-[1.6]">

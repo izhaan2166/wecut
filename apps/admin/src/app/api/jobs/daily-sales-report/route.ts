@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : POST /api/jobs/daily-sales-report
  * Scope        : API — Background Jobs
  *
@@ -109,7 +109,7 @@ export const POST = async (req: Request) => {
     if (recipients.length > 0) {
       await sendEmail({
         to: recipients,
-        subject: 'Royal Glow — Daily Sales Report',
+        subject: 'wecut — Daily Sales Report',
         html: `<pre>${escapeHtml(text)}</pre>`,
       })
     }

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 5 delivers the operational layer of the Royal Glow Salon & Spa (RGSS) platform on top of the booking (Phase 3) and CRM (Phase 4) foundations. It covers three cohesive areas: **Staff Scheduling & Leave** (weekly availability grid, leave submission and approval with conflict detection), **Notifications & Realtime** (persistent notification records, an in-app feed and bell, Web Push subscription management, and an Ably token endpoint), and **Offers** (admin offer management, a customer-facing active-offers display, and offer application at checkout).
+Phase 5 delivers the operational layer of the wecut Salon & Spa (RGSS) platform on top of the booking (Phase 3) and CRM (Phase 4) foundations. It covers three cohesive areas: **Staff Scheduling & Leave** (weekly availability grid, leave submission and approval with conflict detection), **Notifications & Realtime** (persistent notification records, an in-app feed and bell, Web Push subscription management, and an Ably token endpoint), and **Offers** (admin offer management, a customer-facing active-offers display, and offer application at checkout).
 
 All work follows the established layered architecture: API routes are thin orchestrators (parse → Zod validate → call business logic / query layer → return the standard envelope), business rules are pure functions in `packages/business` that throw `AppError`, and all database access is isolated in `packages/db/queries`. Every response conforms to the single envelope shape and every route is wrapped with `withErrorHandler()`. The underlying tables already exist and are pushed to Neon; the only schema change is one additive nullable column (`notification.read_at`) to support the in-app unread bell.
 

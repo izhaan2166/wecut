@@ -1,6 +1,6 @@
 ---
 title: Background Jobs
-description: The 19 scheduled and event-driven jobs that keep Royal Glow running — 14 QStash scheduled, 4 QStash triggered, 1 GitHub Actions cron.
+description: The 19 scheduled and event-driven jobs that keep wecut running — 14 QStash scheduled, 4 QStash triggered, 1 GitHub Actions cron.
 icon: timer
 ---
 
@@ -12,7 +12,7 @@ icon: timer
   GitHub Actions cron. Every job pings a BetterStack heartbeat on success.
 </Info>
 
-Royal Glow runs **19 background jobs**. **All scheduled and event-driven jobs run
+wecut runs **19 background jobs**. **All scheduled and event-driven jobs run
 on QStash** (HTTP → Next.js API routes) — including the pure-SQL maintenance jobs,
 which execute their idempotent SQL via `@rgss/db` query functions. The single
 exception is the `pprd` branch reset (Job 5), which is a Neon control-plane op and

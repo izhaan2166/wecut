@@ -18,7 +18,7 @@ test('sign-in page renders the Continue with Google button', async ({ page }) =>
 
   // Heading confirms the auth card mounted.
   await expect(
-    page.getByRole('heading', { name: 'Sign in to Royal Glow' }),
+    page.getByRole('heading', { name: 'Sign in to wecut' }),
   ).toBeVisible()
 
   // Google OAuth is the only sign-in method — the button must be visible.

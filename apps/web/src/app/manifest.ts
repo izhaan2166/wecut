@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : manifest
  * Scope        : PWA Configuration
  *
@@ -29,15 +29,15 @@
  ************************************************************/
 import type { MetadataRoute } from 'next'
 
-// Royal Glow brand tokens (from apps/web/src/styles/globals.css):
+// wecut brand tokens (from apps/web/src/styles/globals.css):
 //   --color-cocoa-dark:   #1a0f0a  → theme_color
 //   --color-canvas-white: #ffffff  → background_color
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Royal Glow Salon & Spa',
-    short_name: 'Royal Glow',
+    name: 'wecut Salon & Spa',
+    short_name: 'wecut',
     description:
-      'Royal Glow Salon & Spa — a premium beauty and wellness destination in Bengaluru. Book salon and spa appointments, explore offers, and manage your visits.',
+      'wecut Salon & Spa — a premium beauty and wellness destination in Bengaluru. Book salon and spa appointments, explore offers, and manage your visits.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

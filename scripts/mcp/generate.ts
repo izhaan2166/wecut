@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 01-09-2026 & Updated - 01-09-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : scripts/mcp/generate
  * Scope        : Tooling — cross-IDE MCP server config generation
  *

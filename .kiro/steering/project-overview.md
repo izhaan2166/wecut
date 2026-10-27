@@ -1,8 +1,8 @@
-# Project Overview — Royal Glow Salon & Spa (RGSS)
+# Project Overview — wecut Salon & Spa (RGSS)
 
 ## What This Is
 
-Full-stack digital operations platform for **Royal Glow Salon & Spa** — a premium beauty and wellness business in Bengaluru, India. Single developer project covering: customer website, booking system, admin portal, CRM, billing, memberships, loyalty programme, marketing automation, analytics, and backend automations.
+Full-stack digital operations platform for **wecut Salon & Spa** — a premium beauty and wellness business in Bengaluru, India. Single developer project covering: customer website, booking system, admin portal, CRM, billing, memberships, loyalty programme, marketing automation, analytics, and backend automations.
 
 **Domain:** `theroyalglow.in`
 
@@ -13,7 +13,7 @@ Full-stack digital operations platform for **Royal Glow Salon & Spa** — a prem
 ### Monorepo Structure (Turborepo + Bun Workspaces)
 
 ```
-theroyalglow-webapp/
+wecut-webapp/
 ├── apps/
 │   ├── web/           ← Next.js 16.2.9 (App Router) — theroyalglow.in
 │   ├── admin/         ← Next.js 16.2.9 (App Router) — admin.theroyalglow.in

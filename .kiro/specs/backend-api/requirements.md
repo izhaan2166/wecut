@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Backend API feature delivers the API layer for the Royal Glow Salon & Spa (RGSS) platform. It connects the existing customer and admin UI (currently driven by hardcoded data) to the live Neon PostgreSQL database through a strict layered architecture.
+The Backend API feature delivers the API layer for the wecut Salon & Spa (RGSS) platform. It connects the existing customer and admin UI (currently driven by hardcoded data) to the live Neon PostgreSQL database through a strict layered architecture.
 
 The system follows the established RGSS architecture: API routes are thin orchestrators (parse → Zod validate → call business logic → return JSON), business rules live in `packages/business/` as pure functions that throw `AppError`, and all database access is isolated in `packages/db/queries/` using Drizzle ORM. Every response conforms to a single envelope shape, and every route is wrapped with `withErrorHandler()`.
 

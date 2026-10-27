@@ -1,6 +1,6 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 /************************************************************
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : sst.config
  * Scope        : Infrastructure (deployment)
  *

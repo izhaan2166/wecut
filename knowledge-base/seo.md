@@ -2,7 +2,7 @@
 
 ## Overview
 
-Royal Glow Salon & Spa is a location-based premium business — local search is the primary customer acquisition channel alongside Meta ads. Every page must be built to rank locally, pass 100% Lighthouse SEO, and be fully readable by AI agents and search crawlers from day one.
+wecut Salon & Spa is a location-based premium business — local search is the primary customer acquisition channel alongside Meta ads. Every page must be built to rank locally, pass 100% Lighthouse SEO, and be fully readable by AI agents and search crawlers from day one.
 
 These are **non-negotiable implementation standards**, not optional enhancements. Every page is built to this spec.
 
@@ -25,13 +25,13 @@ These are **non-negotiable implementation standards**, not optional enhancements
 | Homepage | `luxury salon in Bengaluru` | `premium spa Bengaluru` |
 | Services | `[service name] in Bengaluru` | `best [service] near me` |
 | Booking | `book salon appointment Bengaluru` | `online salon booking Bengaluru` |
-| About | `Royal Glow Salon Bengaluru` | `Bengaluru beauty salon` |
+| About | `wecut Salon Bengaluru` | `Bengaluru beauty salon` |
 
 ### NAP Consistency (Name, Address, Phone)
 **NAP must be identical across every platform:**
 
 ```
-Name:    Royal Glow Salon & Spa
+Name:    wecut Salon & Spa
 Address: 1st Floor, Narmada Complex, 48/3, Rayasandra Main Rd,
          Above SBI Bank, Naganathapura, Parappana Agrahara,
          Bengaluru, Karnataka 560100, India
@@ -57,7 +57,7 @@ All JSON-LD is injected server-side in Next.js via `<script type="application/ld
 {
   "@context": "https://schema.org",
   "@type": ["LocalBusiness", "BeautySalon", "DaySpa"],
-  "name": "Royal Glow Salon & Spa",
+  "name": "wecut Salon & Spa",
   "url": "https://theroyalglow.in",
   "logo": "https://theroyalglow.in/logo.png",
   "image": ["https://theroyalglow.in/gallery/1.jpg"],
@@ -121,7 +121,7 @@ All JSON-LD is injected server-side in Next.js via `<script type="application/ld
   "@context": "https://schema.org",
   "@type": "Service",
   "serviceType": "Deep Tissue Massage",
-  "provider": { "@type": "LocalBusiness", "name": "Royal Glow Salon & Spa" },
+  "provider": { "@type": "LocalBusiness", "name": "wecut Salon & Spa" },
   "name": "Deep Tissue Massage",
   "description": "...",
   "offers": {
@@ -155,7 +155,7 @@ Pre-populate with common customer questions. These appear as rich results in Goo
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How do I book an appointment at Royal Glow?",
+      "name": "How do I book an appointment at wecut?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "You can book online at theroyalglow.in/?book=1 or call us at +91 63601 35720."
@@ -272,8 +272,8 @@ These are build-time requirements. Every component and page is built to this spe
 ```tsx
 // Every page exports metadata via Next.js 16 generateMetadata()
 export const metadata: Metadata = {
-  title: 'Deep Tissue Massage | Royal Glow Salon & Spa',
-  description: 'Book a deep tissue massage at Royal Glow...',
+  title: 'Deep Tissue Massage | wecut Salon & Spa',
+  description: 'Book a deep tissue massage at wecut...',
   openGraph: {
     title: '...',
     description: '...',
@@ -300,7 +300,7 @@ export const metadata: Metadata = {
 ### 4f. Machine-Readable Content
 | Rule | Implementation |
 |------|---------------|
-| Image alt text | Descriptive: `alt="Therapist performing deep tissue massage at Royal Glow Spa"` — never empty, never "image1.jpg" |
+| Image alt text | Descriptive: `alt="Therapist performing deep tissue massage at wecut Spa"` — never empty, never "image1.jpg" |
 | Prices | Schema.org `Offer` markup + readable text `₹2,500` |
 | Staff | Schema.org `Person` with `jobTitle`, `name` |
 | Availability | Schema.org `OpeningHoursSpecification` |
@@ -343,7 +343,7 @@ All endpoints:
 ## Part 5 — Page-by-Page SEO Checklist
 
 ### Every Page (non-negotiable)
-- [ ] Unique `<title>` — format: `[Page Topic] | Royal Glow Salon & Spa`
+- [ ] Unique `<title>` — format: `[Page Topic] | wecut Salon & Spa`
 - [ ] Unique meta description (150–160 chars)
 - [ ] OpenGraph + Twitter card tags
 - [ ] Canonical URL
@@ -406,11 +406,11 @@ Every public page must follow the **answer-first** writing pattern:
 
 ```
 ❌ WRONG (marketing-first):
-"Welcome to Royal Glow Salon & Spa, where beauty meets luxury.
+"Welcome to wecut Salon & Spa, where beauty meets luxury.
 Our expert team has decades of experience in..."
 
 ✅ CORRECT (answer-first):
-"Royal Glow Salon & Spa is a premium beauty salon and spa in [City],
+"wecut Salon & Spa is a premium beauty salon and spa in [City],
 offering haircuts, facials, massages, and bridal packages.
 Book appointments online at theroyalglow.in/?book=1 or call +91 63601 35720.
 Open Monday–Friday 10am–9pm, Saturday–Sunday 10am–10pm."
@@ -424,9 +424,9 @@ The correct version directly answers: *What is this? Where is it? What does it o
 |------|--------------------------|------------------------|
 | Homepage | "best luxury salon in [city]" | First paragraph: name, location, category, key services, booking link. Then detailed sections. |
 | Each service page | "how much does [service] cost in [city]" | First line: service name, price, duration, location. Then description. |
-| About page | "who owns Royal Glow salon" | First paragraph: owner name, city, founding year, specialty. |
-| Contact page | "Royal Glow salon address / phone / hours" | Structured in `<address>` tag, hours in `<time>` tags, all Schema.org marked |
-| FAQ section | "does Royal Glow take walk-ins" | Question as `<h3>`, answer immediately below in 1–2 sentences. FAQPage JSON-LD. |
+| About page | "who owns wecut salon" | First paragraph: owner name, city, founding year, specialty. |
+| Contact page | "wecut salon address / phone / hours" | Structured in `<address>` tag, hours in `<time>` tags, all Schema.org marked |
+| FAQ section | "does wecut take walk-ins" | Question as `<h3>`, answer immediately below in 1–2 sentences. FAQPage JSON-LD. |
 
 ### The FAQ Strategy — Highest AI Overview Hit Rate
 
@@ -436,13 +436,13 @@ FAQs have the **highest citation rate** in AI Overviews because they match the e
 
 | Question | Answer Pattern |
 |----------|---------------|
-| "What services does Royal Glow offer?" | Concise list: haircuts, facials, massages, bridal packages, nail art, etc. with prices |
-| "How do I book at Royal Glow?" | "Book online at theroyalglow.in/?book=1, call +91 63601 35720, or scan the in-store QR. Google Maps users can use theroyalglow.in/?book=1&utm_source=gmb." |
-| "Does Royal Glow take walk-ins?" | Direct yes/no + policy detail |
-| "What are Royal Glow's prices?" | Price range + link to full menu |
-| "Where is Royal Glow located?" | Full address + landmark |
-| "What are Royal Glow's opening hours?" | Days + times |
-| "Does Royal Glow offer bridal packages?" | Yes/no + brief details |
+| "What services does wecut offer?" | Concise list: haircuts, facials, massages, bridal packages, nail art, etc. with prices |
+| "How do I book at wecut?" | "Book online at theroyalglow.in/?book=1, call +91 63601 35720, or scan the in-store QR. Google Maps users can use theroyalglow.in/?book=1&utm_source=gmb." |
+| "Does wecut take walk-ins?" | Direct yes/no + policy detail |
+| "What are wecut's prices?" | Price range + link to full menu |
+| "Where is wecut located?" | Full address + landmark |
+| "What are wecut's opening hours?" | Days + times |
+| "Does wecut offer bridal packages?" | Yes/no + brief details |
 | "How can I cancel or reschedule?" | Policy in 1–2 sentences |
 
 Each FAQ must also be marked up in **FAQPage JSON-LD** — this is what triggers Google's FAQ rich result AND feeds into AI Overviews.
@@ -456,11 +456,11 @@ Each FAQ must also be marked up in **FAQPage JSON-LD** — this is what triggers
 ### File: `https://theroyalglow.in/llms.txt`
 
 ```txt
-# Royal Glow Salon & Spa
+# wecut Salon & Spa
 # Premium beauty salon and day spa in Bengaluru, India
 
 ## About
-Royal Glow Salon & Spa is a premium beauty salon and day spa located in
+wecut Salon & Spa is a premium beauty salon and day spa located in
 Parappana Agrahara, Bengaluru, Karnataka 560100, India.
 We offer haircuts, hair colouring, facials, massages, bridal packages, nail art, and skincare treatments.
 
@@ -580,7 +580,7 @@ Allow: /
 Sitemap: https://theroyalglow.in/sitemap.xml
 ```
 
-**Why allow all AI crawlers:** Royal Glow is a public business that benefits from maximum AI visibility. Blocking crawlers (like some publishers do) makes sense for content creators protecting IP — not for a salon that wants to be recommended. More AI systems indexing your site = more chances of being cited in AI answers.
+**Why allow all AI crawlers:** wecut is a public business that benefits from maximum AI visibility. Blocking crawlers (like some publishers do) makes sense for content creators protecting IP — not for a salon that wants to be recommended. More AI systems indexing your site = more chances of being cited in AI answers.
 
 ---
 
@@ -595,7 +595,7 @@ Google AI Overviews heavily weight **E-E-A-T** — Experience, Expertise, Author
 
 ### Expertise
 - Service pages include **detailed descriptions** — not just "Deep Tissue Massage ₹2,500" but what it involves, who it's for, duration, aftercare advice
-- Blog/tips section (Phase 2) — "5 Signs You Need a Deep Tissue Massage" positions Royal Glow as an authority
+- Blog/tips section (Phase 2) — "5 Signs You Need a Deep Tissue Massage" positions wecut as an authority
 
 ### Authoritativeness
 - **Google Reviews** — actively request reviews from happy customers. GMB rating directly influences AI citation
@@ -617,7 +617,7 @@ Google AI Overviews heavily weight **E-E-A-T** — Experience, Expertise, Author
 | Tool | What It Shows | Cost |
 |------|-------------|------|
 | **Google Search Console** | "AI Overview" impressions appear in the Performance report (2025+) | Free |
-| **Manual search audits** | Weekly: search your target queries in Google, check if Royal Glow appears in the AI answer | Free |
+| **Manual search audits** | Weekly: search your target queries in Google, check if wecut appears in the AI answer | Free |
 | **PostHog referrer tracking** | Track visits where `referrer` contains `google.com` with AI Overview click patterns | Free (already in stack) |
 
 ### Queries to Monitor Weekly
@@ -626,7 +626,7 @@ Search these from an incognito browser and check AI Overview inclusion:
 - "luxury spa near me" (from your city)
 - "[service name] price in [city]"
 - "book salon appointment [city]"
-- "Royal Glow Salon"
+- "wecut Salon"
 
 ### AI Search Optimization Checklist (Monthly)
 - [ ] Are FAQs still current? Update with new common questions from WhatsApp/AiSensy

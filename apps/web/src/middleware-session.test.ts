@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : web/middleware-session
  * Scope        : Customer site — session-cookie gate + onboarding prompt cookie
  *

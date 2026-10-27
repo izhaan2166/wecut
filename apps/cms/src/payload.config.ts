@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : payload.config
  * Scope        : CMS Configuration
  *
@@ -92,7 +92,7 @@ export default buildConfig({
     ? {
         email: resendAdapter({
           defaultFromAddress: process.env.RESEND_FROM_ADDRESS ?? 'contact@theroyalglow.in',
-          defaultFromName: process.env.RESEND_FROM_NAME ?? 'Royal Glow Salon & Spa',
+          defaultFromName: process.env.RESEND_FROM_NAME ?? 'wecut Salon & Spa',
           apiKey: resendApiKey,
         }),
       }
@@ -201,7 +201,7 @@ export default buildConfig({
         service: {
           enabled: { find: true },
           description:
-            'The operational, BOOKABLE service catalogue for Royal Glow Salon & Spa. Each document is a service a customer can book: name, slug, description, categoryId (relationship to service_category), durationMinutes (fixed set: 15/30/45/60/90/120/150/180), bufferMinutes (clean-up time after the service), pricePaise (GST-inclusive price in PAISE — 149900 means ₹1,499.00), isActive (false = retired, services are deactivated never deleted), imageUrl, displayOrder, and the gems loyalty fields gemsRedeemable / gemsRequired / gemsCatalogueOrder. These records are MIRRORED into the booking engine database (public.service) by an afterChange sync hook, so this is live operational data, not marketing copy. Use it to answer questions about what services exist, their prices, and their durations.',
+            'The operational, BOOKABLE service catalogue for wecut Salon & Spa. Each document is a service a customer can book: name, slug, description, categoryId (relationship to service_category), durationMinutes (fixed set: 15/30/45/60/90/120/150/180), bufferMinutes (clean-up time after the service), pricePaise (GST-inclusive price in PAISE — 149900 means ₹1,499.00), isActive (false = retired, services are deactivated never deleted), imageUrl, displayOrder, and the gems loyalty fields gemsRedeemable / gemsRequired / gemsCatalogueOrder. These records are MIRRORED into the booking engine database (public.service) by an afterChange sync hook, so this is live operational data, not marketing copy. Use it to answer questions about what services exist, their prices, and their durations.',
         },
         service_category: {
           enabled: { find: true },
@@ -211,12 +211,12 @@ export default buildConfig({
         'service-card': {
           enabled: { find: true },
           description:
-            'Homepage MARKETING category cards for the "See what Royal Glow can do for you" scroll row (Hair, Spa, Bridal, Nails, ...). Display-only and NOT bookable — distinct from the `service` / `service_category` collections. Fields: name, fromPrice (a display string like "₹1,499", not paise), image + imageAlt, bookingHref (where the "Book →" CTA points), active, order.',
+            'Homepage MARKETING category cards for the "See what wecut can do for you" scroll row (Hair, Spa, Bridal, Nails, ...). Display-only and NOT bookable — distinct from the `service` / `service_category` collections. Fields: name, fromPrice (a display string like "₹1,499", not paise), image + imageAlt, bookingHref (where the "Book →" CTA points), active, order.',
         },
         blog: {
           enabled: { find: true },
           description:
-            'Blog posts for the Royal Glow website (/blog and /blog/[slug]). Fields: title, slug, excerpt, coverImage, body (Lexical rich text — large, prefer `select` to skip it), author (relationship to team), category (skincare | hair | spa | bridal | tips), tags, an seo group (metaTitle, metaDescription, ogImage), publishedAt, and status (draft | published). Use it to find beauty/wellness editorial content and its publication state.',
+            'Blog posts for the wecut website (/blog and /blog/[slug]). Fields: title, slug, excerpt, coverImage, body (Lexical rich text — large, prefer `select` to skip it), author (relationship to team), category (skincare | hair | spa | bridal | tips), tags, an seo group (metaTitle, metaDescription, ogImage), publishedAt, and status (draft | published). Use it to find beauty/wellness editorial content and its publication state.',
         },
         gallery: {
           enabled: { find: true },
@@ -261,7 +261,7 @@ export default buildConfig({
         },
         serverOptions: {
           serverInfo: {
-            name: 'Royal Glow Payload MCP',
+            name: 'wecut Payload MCP',
             version: '1.0.0',
           },
         },

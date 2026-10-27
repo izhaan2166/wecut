@@ -2,7 +2,7 @@ import { getCookieCache } from 'better-auth/cookies'
 import type { NextRequest } from 'next/server'
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : middleware
  * Scope        : Authentication & Authorization (Edge)
  *

@@ -1,7 +1,7 @@
 {
   "theme": "aspen",
-  "name": "Royal Glow Salon & Spa",
-  "description": "Product, engineering, operations, and API documentation for the Royal Glow Salon & Spa platform — the digital operations system behind a premium beauty and wellness business in Bengaluru.",
+  "name": "wecut Salon & Spa",
+  "description": "Product, engineering, operations, and API documentation for the wecut Salon & Spa platform — the digital operations system behind a premium beauty and wellness business in Bengaluru.",
   "colors": {
     "primary": "#7D5C12",
     "light": "#F4E09B",
@@ -43,7 +43,7 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/royalglowsalonspa/theroyalglow-webapp",
+        "href": "https://github.com/izhaan2166/wecut",
         "icon": "github"
       }
     ],
@@ -56,7 +56,7 @@
   "footer": {
     "socials": {
       "website": "https://theroyalglow.in",
-      "github": "https://github.com/royalglowsalonspa/theroyalglow-webapp"
+      "github": "https://github.com/izhaan2166/wecut"
     },
     "links": [
       {
@@ -87,12 +87,12 @@
         ]
       },
       {
-        "header": "Royal Glow",
+        "header": "wecut",
         "items": [
           { "label": "Main site", "href": "https://theroyalglow.in" },
           { "label": "Admin portal", "href": "https://admin.theroyalglow.in" },
           { "label": "Status page", "href": "https://status.theroyalglow.in" },
-          { "label": "GitHub", "href": "https://github.com/royalglowsalonspa/theroyalglow-webapp" }
+          { "label": "GitHub", "href": "https://github.com/izhaan2166/wecut" }
         ]
       }
     ]
@@ -280,17 +280,17 @@
     ]
   },
   "search": {
-    "prompt": "Search Royal Glow documentation"
+    "prompt": "Search wecut documentation"
   },
   "seo": {
     "indexing": "navigable",
     "metatags": {
-      "og:site_name": "Royal Glow Salon & Spa Documentation",
+      "og:site_name": "wecut Salon & Spa Documentation",
       "twitter:card": "summary_large_image"
     },
     "organization": {
       "id": "https://theroyalglow.in/#organization",
-      "name": "Royal Glow Salon & Spa",
+      "name": "wecut Salon & Spa",
       "url": "https://theroyalglow.in",
       "sameAs": ["https://github.com/royalglowsalonspa"]
     }

@@ -2,7 +2,7 @@
 
 ## Current Production Topology
 
-Royal Glow uses several deployment platforms by design. Only the two Next.js applications run on AWS.
+wecut uses several deployment platforms by design. Only the two Next.js applications run on AWS.
 
 | Component | Current host | Deployment mechanism |
 |---|---|---|

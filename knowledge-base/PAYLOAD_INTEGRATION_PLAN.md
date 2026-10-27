@@ -1,6 +1,6 @@
 # Payload CMS → Website Integration Plan (Handoff Document)
 
-**Project:** theroyalglow-webapp (Royal Glow Salon & Spa)
+**Project:** wecut-webapp (wecut Salon & Spa)
 **Goal:** Let the owner/manager (non-technical) manage all marketing content of the
 customer website (`localhost:3000` in dev, `theroyalglow.in` in prod) from the
 Payload CMS admin (`localhost:3002/admin` in dev, `admin.theroyalglow.in` in prod) —
@@ -17,7 +17,7 @@ Make these homepage / site sections fully CMS-driven (owner can do all CRUD from
 
 | # | Section | Page/Component (web) | CMS collection | Status |
 |---|---------|----------------------|----------------|--------|
-| 1 | "See what Royal Glow can do for you" category cards | `ServicesSection.tsx` | `service-card` | collection exists, **not wired** |
+| 1 | "See what wecut can do for you" category cards | `ServicesSection.tsx` | `service-card` | collection exists, **not wired** |
 | 2 | Services page (Salon vs SPA, with duration/price/Book) | `/services` `services-content.tsx` | `service` (NEW, detailed) | **build collection + wire** |
 | 3 | Special Offers | `OffersSection.tsx` + `/offers` | `offer` | collection exists, **not wired** |
 | 4 | Testimonials carousel | `TestimonialsSection.tsx` | `testimonial` | collection exists, **not wired** |
@@ -252,7 +252,7 @@ export type Offer = {
 
 ---
 
-### FEATURE C — Homepage service category cards ("See what Royal Glow can do for you")
+### FEATURE C — Homepage service category cards ("See what wecut can do for you")
 
 **CMS:** `service-card` collection (exists). Owner adds Hair/Spa/Bridal/Nails (and any
 new category) with name, fromPrice, image, bookingHref.

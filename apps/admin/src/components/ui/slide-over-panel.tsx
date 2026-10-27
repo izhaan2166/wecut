@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : ui/slide-over-panel (compatibility shim)
  * Scope        : Admin — Right-edge detail panel (re-export)
  *

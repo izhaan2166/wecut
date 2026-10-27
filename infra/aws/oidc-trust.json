@@ -12,7 +12,7 @@
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
         },
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": "repo:royalglowsalonspa/theroyalglow-webapp:*"
+          "token.actions.githubusercontent.com:sub": "repo:izhaan2166/wecut:*"
         }
       }
     }

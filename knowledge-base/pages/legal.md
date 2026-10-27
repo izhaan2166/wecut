@@ -10,7 +10,7 @@
 |----------|--------|
 | **Title** | Privacy Policy |
 | **Rendering** | SSG |
-| **SEO** | `<title>Privacy Policy | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Privacy Policy | wecut Salon & SPA</title>` |
 | **JSON-LD** | `BreadcrumbList` |
 | **Canonical** | `https://theroyalglow.in/privacy` |
 | **Requirement** | Mandatory — India Digital Personal Data Protection Act 2023 |
@@ -25,7 +25,7 @@
 |----------|--------|
 | **Title** | Terms of Service |
 | **Rendering** | SSG |
-| **SEO** | `<title>Terms of Service | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Terms of Service | wecut Salon & SPA</title>` |
 | **Canonical** | `https://theroyalglow.in/terms` |
 
 **Content covers:** service usage terms, booking rules, account responsibilities, intellectual property, liability limitations, governing law (India), dispute resolution.
@@ -38,7 +38,7 @@
 |----------|--------|
 | **Title** | Refund & Cancellation Policy |
 | **Rendering** | SSG |
-| **SEO** | `<title>Refund & Cancellation Policy | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Refund & Cancellation Policy | wecut Salon & SPA</title>` |
 | **Canonical** | `https://theroyalglow.in/refund-policy` |
 
 **Content covers:**

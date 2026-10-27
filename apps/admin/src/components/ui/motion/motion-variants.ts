@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : ui/motion/motion-variants
  * Scope        : Admin — Motion design tokens (bounded variants)
  *

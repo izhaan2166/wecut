@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 0 foundation scaffolding for the Royal Glow Salon & Spa monorepo. This spec covers the complete project structure setup using Turborepo + Bun workspaces, including the Next.js 16 web application, shared packages (db, business, types, errors, logger), tooling configuration (Biome, Husky, TypeScript strict), design token integration (Tailwind CSS v4 + shadcn/ui), and environment variable validation. The goal is a fully buildable, lintable, type-safe monorepo skeleton that all subsequent phases build upon.
+Phase 0 foundation scaffolding for the wecut Salon & Spa monorepo. This spec covers the complete project structure setup using Turborepo + Bun workspaces, including the Next.js 16 web application, shared packages (db, business, types, errors, logger), tooling configuration (Biome, Husky, TypeScript strict), design token integration (Tailwind CSS v4 + shadcn/ui), and environment variable validation. The goal is a fully buildable, lintable, type-safe monorepo skeleton that all subsequent phases build upon.
 
 ## Glossary
 
@@ -58,7 +58,7 @@ Phase 0 foundation scaffolding for the Royal Glow Salon & Spa monorepo. This spe
 
 ### Requirement 3: Tailwind CSS v4 with Design Tokens
 
-**User Story:** As a developer, I want Tailwind CSS v4 configured with all Royal Glow design tokens, so that I can use brand colors, fonts, radii, and shadows as utility classes throughout the application.
+**User Story:** As a developer, I want Tailwind CSS v4 configured with all wecut design tokens, so that I can use brand colors, fonts, radii, and shadows as utility classes throughout the application.
 
 #### Acceptance Criteria
 
@@ -75,14 +75,14 @@ Phase 0 foundation scaffolding for the Royal Glow Salon & Spa monorepo. This spe
 
 ### Requirement 4: shadcn/ui Component Library Initialization
 
-**User Story:** As a developer, I want shadcn/ui initialized with Radix primitives and configured for the Royal Glow design system, so that I can add accessible UI components that match the brand.
+**User Story:** As a developer, I want shadcn/ui initialized with Radix primitives and configured for the wecut design system, so that I can add accessible UI components that match the brand.
 
 #### Acceptance Criteria
 
 1. THE Web_App SHALL have a `components.json` configuration file for shadcn/ui with the correct style, RSC support, and Tailwind CSS path
 2. THE Web_App SHALL have a `components/ui/` directory ready to receive shadcn/ui component source files
 3. THE Web_App SHALL have a `lib/utils.ts` file exporting the `cn()` utility function (clsx + tailwind-merge)
-4. THE Web_App SHALL configure shadcn/ui to use the Royal Glow color tokens as CSS variables for its theming system
+4. THE Web_App SHALL configure shadcn/ui to use the wecut color tokens as CSS variables for its theming system
 5. WHEN a shadcn/ui component is added via CLI, THE Web_App SHALL place the component source file in `components/ui/` with correct import paths
 
 ### Requirement 5: Biome and Ultracite Linting Configuration

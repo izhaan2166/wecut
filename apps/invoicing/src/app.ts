@@ -1,7 +1,7 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : invoicing/app
  * Scope        : HTTP (Hono application)
  *

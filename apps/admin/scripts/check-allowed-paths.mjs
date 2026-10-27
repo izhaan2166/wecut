@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : scripts/check-allowed-paths
  * Scope        : Admin Portal Redesign — path-allowlist CI gate (Req 21)
  *

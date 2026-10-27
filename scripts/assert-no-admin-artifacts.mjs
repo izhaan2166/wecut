@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : assert-no-admin-artifacts
  * Scope        : CI cutover guard (admin-subdomain-migration)
  *

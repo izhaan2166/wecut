@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 8 adds Royal Glow's Payload CMS v3 application and customer-facing content pages. Payload owns marketing content plus service-catalogue authoring. Marketing documents remain in Payload-owned `cms` tables and are consumed through Payload REST. `service_category` and `service` are the authoritative catalogue write surfaces; atomic hooks mirror each successful save into Drizzle-owned `public.service_category` and `public.service` read models used by booking, availability, offers, and admin selectors.
+Phase 8 adds wecut's Payload CMS v3 application and customer-facing content pages. Payload owns marketing content plus service-catalogue authoring. Marketing documents remain in Payload-owned `cms` tables and are consumed through Payload REST. `service_category` and `service` are the authoritative catalogue write surfaces; atomic hooks mirror each successful save into Drizzle-owned `public.service_category` and `public.service` read models used by booking, availability, offers, and admin selectors.
 
 Payload runs at `cms.theroyalglow.in` on Render, uses Neon PostgreSQL, and stores media in Cloudflare R2. It does not own bookings, billing, memberships, staff assignments, offer-service links, or the Better Auth admin portal.
 

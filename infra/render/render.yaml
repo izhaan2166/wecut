@@ -1,5 +1,5 @@
 # ============================================================================
-# Render Blueprint — Royal Glow Salon & Spa CMS (apps/cms)
+# Render Blueprint — wecut Salon & Spa CMS (apps/cms)
 # ----------------------------------------------------------------------------
 # This file lives at `infra/render/render.yaml`, NOT the repository root. Render
 # defaults to `render.yaml` at the root, so the Blueprint MUST carry a matching

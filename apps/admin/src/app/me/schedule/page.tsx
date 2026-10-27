@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : MeSchedulePage (staff self-service)
  * Scope        : Admin Portal — Staff Self-Service
  *
@@ -32,7 +32,7 @@ import { NoStaffProfileEmpty } from './no-profile-empty'
 
 export const metadata: Metadata = {
   title: 'My Schedule',
-  description: 'Your weekly working hours at Royal Glow.',
+  description: 'Your weekly working hours at wecut.',
 }
 
 type ScheduleRow = Awaited<ReturnType<typeof getStaffSchedule>>[number]

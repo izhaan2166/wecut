@@ -1,6 +1,6 @@
 # Customer-Facing — Public Pages
 
-> These 8 pages are accessible to everyone without authentication. They form the marketing, discovery, and content layer of Royal Glow Salon & Spa.
+> These 8 pages are accessible to everyone without authentication. They form the marketing, discovery, and content layer of wecut Salon & Spa.
 
 ---
 
@@ -11,13 +11,13 @@
 | **Title** | Home |
 | **Purpose** | Premium brand landing page with a single conversion goal: open the booking dialog. |
 | **Rendering** | SSR (dynamic — personalised CTA if signed in) |
-| **SEO** | `<title>Royal Glow Salon & SPA — Premium Beauty in Bengaluru</title>` |
+| **SEO** | `<title>wecut Salon & SPA — Premium Beauty in Bengaluru</title>` |
 | **JSON-LD** | `LocalBusiness` + `Organization` + `WebSite` (with `SearchAction`) + `FAQPage` |
 | **OG Image** | Custom branded default (`/opengraph-image`) |
 | **Canonical** | `https://theroyalglow.in` |
 
 **UI Components:**
-- Hero section: full-bleed image/video background, Royal Glow wordmark, tagline, single "Book Now" button (primary CTA)
+- Hero section: full-bleed image/video background, wecut wordmark, tagline, single "Book Now" button (primary CTA)
 - Services preview: top 4–6 services as horizontal scroll cards linking to `/services`
 - Offers banner: active promotion (if any) with countdown timer and CTA
 - Testimonials/Reviews: embedded Google Maps review snippets (static at build, refreshed ISR)
@@ -50,7 +50,7 @@
 
 **Accessibility:**
 - Skip-to-content link as first focusable element
-- Hero CTA: `aria-label="Book an appointment at Royal Glow"`
+- Hero CTA: `aria-label="Book an appointment at wecut"`
 - FAQ accordions: `aria-expanded`, `aria-controls` pattern
 - All images: descriptive `alt` text
 
@@ -61,9 +61,9 @@
 | Property | Detail |
 |----------|--------|
 | **Title** | Services |
-| **Purpose** | Browse all services with prices. Primary discovery page for what Royal Glow offers. |
+| **Purpose** | Browse all services with prices. Primary discovery page for what wecut offers. |
 | **Rendering** | Next.js page shell with a client-side catalogue fetch from `GET /api/services` |
-| **SEO** | `<title>Services & Prices | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Services & Prices | wecut Salon & SPA</title>` |
 | **JSON-LD** | `LocalBusiness` + `BreadcrumbList` + `Service` schema per service + `FAQPage` (service FAQs) |
 | **OG Image** | Services-specific branded image |
 | **Canonical** | `https://theroyalglow.in/services` |
@@ -100,7 +100,7 @@
 | **Title** | Offers & Combos |
 | **Purpose** | Active promotions with terms, validity dates, and linked services. |
 | **Rendering** | SSR |
-| **SEO** | `<title>Current Offers & Combos | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Current Offers & Combos | wecut Salon & SPA</title>` |
 | **JSON-LD** | `LocalBusiness` + `BreadcrumbList` + `Event` (per active offer) |
 | **Canonical** | `https://theroyalglow.in/offers` |
 
@@ -130,7 +130,7 @@
 | **Title** | About Us |
 | **Purpose** | Business story, team gallery, salon philosophy. Builds trust and E-E-A-T signals. |
 | **Rendering** | ISR (1h revalidation — content from Payload CMS) |
-| **SEO** | `<title>About Royal Glow Salon & SPA — Our Story</title>` |
+| **SEO** | `<title>About wecut Salon & SPA — Our Story</title>` |
 | **JSON-LD** | `LocalBusiness` + `BreadcrumbList` + `Person` (per staff member shown) |
 | **Canonical** | `https://theroyalglow.in/about` |
 
@@ -155,7 +155,7 @@
 | **Title** | Contact |
 | **Purpose** | All contact methods, location, and enquiry form. Critical for local SEO. |
 | **Rendering** | SSG (static — contact info rarely changes) |
-| **SEO** | `<title>Contact & Location | Royal Glow Salon & SPA Bengaluru</title>` |
+| **SEO** | `<title>Contact & Location | wecut Salon & SPA Bengaluru</title>` |
 | **JSON-LD** | `LocalBusiness` (full, with `geo`, `openingHoursSpecification`) + `BreadcrumbList` |
 | **Canonical** | `https://theroyalglow.in/contact` |
 
@@ -187,7 +187,7 @@
 | **Title** | Blog |
 | **Purpose** | Beauty & wellness articles for SEO content marketing and E-E-A-T. |
 | **Rendering** | ISR (1h revalidation) |
-| **SEO** | `<title>Beauty & Wellness Blog | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Beauty & Wellness Blog | wecut Salon & SPA</title>` |
 | **JSON-LD** | `LocalBusiness` + `BreadcrumbList` |
 | **Canonical** | `https://theroyalglow.in/blog` |
 
@@ -208,12 +208,12 @@
 
 | Property | Detail |
 |----------|--------|
-| **Title** | `[Article Title] | Royal Glow Blog` |
+| **Title** | `[Article Title] | wecut Blog` |
 | **Purpose** | Individual article page with rich structured data for Google. |
 | **Rendering** | ISR (1h revalidation) |
 | **SEO** | Dynamic `<title>` + `<meta description>` from Payload CMS fields |
 | **JSON-LD** | `BlogPosting` + `BreadcrumbList` + `LocalBusiness` |
-| **OG Image** | Per-post generated OG image (article title + Royal Glow branding) |
+| **OG Image** | Per-post generated OG image (article title + wecut branding) |
 | **Canonical** | `https://theroyalglow.in/blog/[slug]` |
 
 **UI Components:**
@@ -235,7 +235,7 @@
 | **Title** | FAQ |
 | **Purpose** | Frequently asked questions — optimised for Google AI Overviews and FAQ rich results. |
 | **Rendering** | SSG (static) |
-| **SEO** | `<title>Frequently Asked Questions | Royal Glow Salon & SPA</title>` |
+| **SEO** | `<title>Frequently Asked Questions | wecut Salon & SPA</title>` |
 | **JSON-LD** | `FAQPage` + `BreadcrumbList` + `LocalBusiness` |
 | **Canonical** | `https://theroyalglow.in/faq` |
 

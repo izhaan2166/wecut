@@ -2,11 +2,11 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : business
  * Scope        : SEO — Business Data
  *
- * Description  : Single source of truth for Royal Glow NAP, geo, opening hours,
+ * Description  : Single source of truth for wecut NAP, geo, opening hours,
  *                amenities, socials, and AI-discovery FAQs used across all SEO
  *                surfaces.
  *
@@ -30,7 +30,7 @@
  ************************************************************/
 
 /**
- * Canonical business facts for Royal Glow Salon & Spa.
+ * Canonical business facts for wecut Salon & Spa.
  *
  * SINGLE SOURCE OF TRUTH for NAP (Name, Address, Phone), geo, opening hours,
  * amenities, socials, and AI-discovery FAQs. Every JSON-LD builder, the footer,
@@ -96,8 +96,8 @@ export const SOCIAL_LINKS = [
  * The canonical business facts constant. Verbatim from `seo.md` Part 1 / 2.
  */
 export const BUSINESS = {
-  name: 'Royal Glow Salon & Spa',
-  legalName: 'Royal Glow Salon & Spa',
+  name: 'wecut Salon & Spa',
+  legalName: 'wecut Salon & Spa',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
   image: [`${SITE_URL}/gallery/1.jpg`],
@@ -168,38 +168,38 @@ export const BUSINESS = {
  */
 export const FAQS: readonly Faq[] = [
   {
-    question: 'What services does Royal Glow offer?',
+    question: 'What services does wecut offer?',
     answer:
-      'Royal Glow Salon & Spa offers haircuts, hair colouring, facials, skincare treatments, massages, bridal packages, nail art, and sauna. See the full menu with prices at https://theroyalglow.in/services.',
+      'wecut Salon & Spa offers haircuts, hair colouring, facials, skincare treatments, massages, bridal packages, nail art, and sauna. See the full menu with prices at https://theroyalglow.in/services.',
   },
   {
-    question: 'How do I book at Royal Glow?',
+    question: 'How do I book at wecut?',
     answer:
       'Book online at https://theroyalglow.in/?book=1, call +91 63601 35720, or scan the in-store QR. Google Maps users can use https://theroyalglow.in/?book=1&utm_source=gmb.',
   },
   {
-    question: 'Does Royal Glow take walk-ins?',
+    question: 'Does wecut take walk-ins?',
     answer:
       'Yes, walk-ins are welcome subject to availability. To guarantee your slot we recommend booking ahead at https://theroyalglow.in/?book=1 or calling +91 63601 35720.',
   },
   {
-    question: "What are Royal Glow's prices?",
+    question: "What are wecut's prices?",
     answer:
-      'Royal Glow is a premium salon and spa (price range ₹₹₹). See the full menu with current prices at https://theroyalglow.in/services.',
+      'wecut is a premium salon and spa (price range ₹₹₹). See the full menu with current prices at https://theroyalglow.in/services.',
   },
   {
-    question: 'Where is Royal Glow located?',
+    question: 'Where is wecut located?',
     answer:
       '1st Floor, Narmada Complex, 48/3, Rayasandra Main Rd, Above SBI Bank, Naganathapura, Parappana Agrahara, Bengaluru, Karnataka 560100, India.',
   },
   {
-    question: "What are Royal Glow's opening hours?",
+    question: "What are wecut's opening hours?",
     answer: 'Monday to Friday 10:00 AM – 9:00 PM, and Saturday to Sunday 10:00 AM – 10:00 PM.',
   },
   {
-    question: 'Does Royal Glow offer bridal packages?',
+    question: 'Does wecut offer bridal packages?',
     answer:
-      'Yes. Royal Glow offers bridal packages tailored to your event. Call +91 63601 35720 or book a consultation at https://theroyalglow.in/?book=1.',
+      'Yes. wecut offers bridal packages tailored to your event. Call +91 63601 35720 or book a consultation at https://theroyalglow.in/?book=1.',
   },
   {
     question: 'How can I cancel or reschedule?',

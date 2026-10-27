@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : db/scripts/set-role
  * Scope        : Dev utility — assign an RBAC role to a user by email
  *

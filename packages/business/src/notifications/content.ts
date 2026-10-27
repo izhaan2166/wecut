@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : content (notifications)
  * Scope        : Business Logic — Notifications
  *
@@ -86,17 +86,17 @@ export function buildNotificationContent(
     case 'reminder_24h':
       return {
         title: `Reminder: Tomorrow at ${time}`,
-        body: `${serviceName} at Royal Glow. We're looking forward to seeing you!`,
+        body: `${serviceName} at wecut. We're looking forward to seeing you!`,
       }
     case 'reminder_1h':
       return {
         title: 'Almost time! 1 hour to go',
-        body: `Your ${serviceName} appointment is at ${time}. See you soon at Royal Glow.`,
+        body: `Your ${serviceName} appointment is at ${time}. See you soon at wecut.`,
       }
     case 'booking_confirmed':
       return {
         title: 'Booking Confirmed! ✓',
-        body: `Your appointment on ${date} at ${time} is confirmed. See you at Royal Glow!`,
+        body: `Your appointment on ${date} at ${time} is confirmed. See you at wecut!`,
       }
     case 'booking_rescheduled':
       return {
@@ -115,7 +115,7 @@ export function buildNotificationContent(
       }
     case 'membership_created':
       return {
-        title: 'Welcome to Royal Glow Membership',
+        title: 'Welcome to wecut Membership',
         body: 'Your SPA membership is now active. Enjoy your sessions!',
       }
     case 'membership_session_recorded':
@@ -155,13 +155,13 @@ export function buildNotificationContent(
       }
     case 'birthday_offer':
       return {
-        title: 'Happy Birthday from Royal Glow! 🎉',
+        title: 'Happy Birthday from wecut! 🎉',
         body: 'Celebrate with a special birthday offer, just for you. Book today!',
       }
     case 'post_service_followup':
       return {
         title: 'How Was Your Visit?',
-        body: `We'd love your feedback on your recent ${serviceName} at Royal Glow.`,
+        body: `We'd love your feedback on your recent ${serviceName} at wecut.`,
       }
     case 'leave_submitted':
       return {
@@ -204,6 +204,6 @@ export function buildNotificationContent(
         body: `${count} of your gems have expired. Earn more on your next visit!`,
       }
     default:
-      return { title: 'Royal Glow', body: 'You have a new notification.' }
+      return { title: 'wecut', body: 'You have a new notification.' }
   }
 }

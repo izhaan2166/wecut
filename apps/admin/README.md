@@ -1,6 +1,6 @@
-# Royal Glow Admin
+# wecut Admin
 
-The private operations portal for Royal Glow Salon & Spa, served at
+The private operations portal for wecut Salon & Spa, served at
 [admin.theroyalglow.in](https://admin.theroyalglow.in). This app gives salon teams
 booking, CRM, staff, membership, billing, reporting, and administration workflows.
 It also hosts the signed HTTP background jobs used by the wider platform.

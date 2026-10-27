@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : ui/motion/use-reduced-motion
  * Scope        : Web — Reduced-motion preference hook
  *

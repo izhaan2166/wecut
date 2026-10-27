@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 21-02-2027 & Updated - 21-02-2027
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : date.timezone.test
  * Scope        : Business Logic — Utilities (test)
  *

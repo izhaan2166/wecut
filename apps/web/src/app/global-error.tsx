@@ -43,10 +43,10 @@ export default function GlobalError({ error, retry }: GlobalErrorProps) {
         className="bg-warm-cream font-sans text-cocoa-dark antialiased"
         suppressHydrationWarning
       >
-        <title>Something went wrong | Royal Glow Salon &amp; Spa</title>
+        <title>Something went wrong | wecut Salon &amp; Spa</title>
         <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-6 px-6 py-16 text-center">
           <p className="font-ui text-xs font-semibold uppercase tracking-[0.2em] text-gold-ink">
-            Royal Glow Salon &amp; Spa
+            wecut Salon &amp; Spa
           </p>
           <h1 className="font-display text-3xl leading-tight font-extrabold sm:text-4xl">
             Something went wrong

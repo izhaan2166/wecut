@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 25-06-2026 & Updated - 25-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : InstallPrompt
  * Scope        : PWA
  *
@@ -152,7 +152,7 @@ export function InstallPrompt() {
 
   return (
     <section
-      aria-label="Install Royal Glow app"
+      aria-label="Install wecut app"
       className={`fixed inset-x-4 bottom-4 z-50 mx-auto max-w-md rounded-[10px] border border-cloud-gray bg-canvas-white p-4 shadow-card-hover motion-safe:transition-opacity duration-200 sm:left-auto sm:right-4 ${
         visible ? 'opacity-100' : 'pointer-events-none opacity-0'
       }`}
@@ -174,9 +174,7 @@ export function InstallPrompt() {
         </span>
 
         <div className="min-w-0 flex-1">
-          <p className="font-display text-[16px] text-cocoa-dark leading-snug">
-            Install Royal Glow
-          </p>
+          <p className="font-display text-[16px] text-cocoa-dark leading-snug">Install wecut</p>
           <p className="mt-0.5 font-sans text-[13px] text-warm-gray">
             Add our app to your home screen for faster booking and a full-screen experience.
           </p>

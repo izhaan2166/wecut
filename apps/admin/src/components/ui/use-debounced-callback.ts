@@ -4,7 +4,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : use-debounced-callback
  * Scope        : Admin — Reusable Primitives / FilterBar search
  *

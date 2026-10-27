@@ -2,13 +2,13 @@
 
 ## Overview
 
-Scaffold the complete Royal Glow Salon & Spa monorepo foundation using Turborepo + Bun workspaces. This plan follows strict dependency ordering: root config → leaf packages (types, logger) → dependent packages (errors, business, db) → apps (web, cms, docs) → tooling (Husky, env validation) → final verification. Each task produces specific files and ends with a passing typecheck/lint/build gate.
+Scaffold the complete wecut Salon & Spa monorepo foundation using Turborepo + Bun workspaces. This plan follows strict dependency ordering: root config → leaf packages (types, logger) → dependent packages (errors, business, db) → apps (web, cms, docs) → tooling (Husky, env validation) → final verification. Each task produces specific files and ends with a passing typecheck/lint/build gate.
 
 ## Tasks
 
 - [x] 1. Initialize root monorepo configuration
   - [x] 1.1 Create root `package.json` with Bun workspaces, ESM, and Turborepo scripts
-    - Create `package.json` with `"name": "theroyalglow-webapp"`, `"private": true`, `"type": "module"`, `"workspaces": ["apps/*", "packages/*", "docs"]`
+    - Create `package.json` with `"name": "wecut-webapp"`, `"private": true`, `"type": "module"`, `"workspaces": ["apps/*", "packages/*", "docs"]`
     - Add root scripts: `build`, `dev`, `lint`, `typecheck`, `test`, `clean`, `prepare` (all delegating to Turborepo)
     - Add devDependencies: `turbo`, `typescript`, `@biomejs/biome`, `husky`, `lint-staged`
     - Add `lint-staged` config for `*.{ts,tsx,json,css}` → `biome check --write`
@@ -153,7 +153,7 @@ Scaffold the complete Royal Glow Salon & Spa monorepo foundation using Turborepo
     - Create `apps/web/tsconfig.json` extending root with Next.js options, path alias `@/` → `./src/`
     - _Requirements: 2.1, 2.2, 2.5, 2.6, 2.7, 15.6_
 
-  - [x] 9.2 Create Tailwind CSS v4 globals with Royal Glow design tokens
+  - [x] 9.2 Create Tailwind CSS v4 globals with wecut design tokens
     - Create `apps/web/src/styles/globals.css` with `@import "tailwindcss"` and `@theme` block
     - Define all brand colors, neutrals, functional colors, accent colors as CSS custom properties
     - Define font families (`--font-display`, `--font-sans`, `--font-ui`), radii, shadows, container width

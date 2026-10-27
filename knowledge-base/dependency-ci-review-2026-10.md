@@ -1,21 +1,21 @@
 # Dependency CI review — October 2026
 
-Reviewed on 2026-10-06. This change combines the production updates from [PR #281](https://github.com/royalglowsalonspa/theroyalglow-webapp/pull/281) and development updates from [PR #280](https://github.com/royalglowsalonspa/theroyalglow-webapp/pull/280). Vitest 5.0.3 supersedes the 5.0.2 update in [PR #273](https://github.com/royalglowsalonspa/theroyalglow-webapp/pull/273).
+Reviewed on 2026-10-06. This change combines the production updates from [PR #281](https://github.com/izhaan2166/wecut/pull/281) and development updates from [PR #280](https://github.com/izhaan2166/wecut/pull/280). Vitest 5.0.3 supersedes the 5.0.2 update in [PR #273](https://github.com/izhaan2166/wecut/pull/273).
 
 ## Original failures and evidence
 
 | PR | Failed check | Evidence and cause |
 | --- | --- | --- |
-| #281 | Lint/typecheck dependency guard | [Job 111645229367](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273458661/job/111645229367): root overrides retained sharp 0.35.4, hono 4.13.9 and @hono/node-server 2.1.1 while workspace declarations requested 0.35.5, 4.13.12 and 2.1.3. Bun honored the overrides. |
-| #281 | Unit coverage | [Job 111645229313](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273458661/job/111645229313): 1,405 tests passed and two failed. One repeated the override inconsistency; the other expected database initialization without DATABASE_URL to throw. Neon 1.2.0 changed connection configuration/validation timing, exposing reliance on the driver's old behavior. |
-| #281 | Dependency audit | [Job 111645229421](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273458661/job/111645229421): 34 advisories, including 16 high, 14 moderate and four low. Direct upgrades alone did not repair old root pins and all transitive resolutions. |
-| #281 | Security scan | [Job 111645228927](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273458694/job/111645228927): eight high findings. |
-| #280 | Dependency audit | [Job 111644837531](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273332499/job/111644837531): 21 advisories, including eight high, nine moderate and four low. Vulnerable brace-expansion, braces, DOMPurify, fast-uri, http-cache-semantics, ip-address and undici versions already existed in the base commit. |
-| #280 | Coverage upload | [Job 111644837608](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273332499/job/111644837608): all 176 files and 1,407 tests passed. Codecov then failed downloading its executable from cli.codecov.io with a TLS handshake error; signature verification consequently had no downloaded signature to check. |
-| #280 | Security scan | [Job 111644838261](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37273332537/job/111644838261): eight high findings. The scanner and vulnerability database download succeeded. |
-| #273 | Dependency audit | [Job 109769912085](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/36678929625/job/109769912085): 19 advisories, including seven high, nine moderate and three low. |
-| #273 | Security scan | [Job 109769912037](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/36678929701/job/109769912037): six high findings. |
-| #273 | Additional compatibility defect | [Unit job 109769912187](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/36678929625/job/109769912187) passed 1,407 tests but warned about unsupported mixed versions: Vitest 5.0.2 with coverage-v8 5.0.1. This warning was not the failing check. |
+| #281 | Lint/typecheck dependency guard | [Job 111645229367](https://github.com/izhaan2166/wecut/actions/runs/37273458661/job/111645229367): root overrides retained sharp 0.35.4, hono 4.13.9 and @hono/node-server 2.1.1 while workspace declarations requested 0.35.5, 4.13.12 and 2.1.3. Bun honored the overrides. |
+| #281 | Unit coverage | [Job 111645229313](https://github.com/izhaan2166/wecut/actions/runs/37273458661/job/111645229313): 1,405 tests passed and two failed. One repeated the override inconsistency; the other expected database initialization without DATABASE_URL to throw. Neon 1.2.0 changed connection configuration/validation timing, exposing reliance on the driver's old behavior. |
+| #281 | Dependency audit | [Job 111645229421](https://github.com/izhaan2166/wecut/actions/runs/37273458661/job/111645229421): 34 advisories, including 16 high, 14 moderate and four low. Direct upgrades alone did not repair old root pins and all transitive resolutions. |
+| #281 | Security scan | [Job 111645228927](https://github.com/izhaan2166/wecut/actions/runs/37273458694/job/111645228927): eight high findings. |
+| #280 | Dependency audit | [Job 111644837531](https://github.com/izhaan2166/wecut/actions/runs/37273332499/job/111644837531): 21 advisories, including eight high, nine moderate and four low. Vulnerable brace-expansion, braces, DOMPurify, fast-uri, http-cache-semantics, ip-address and undici versions already existed in the base commit. |
+| #280 | Coverage upload | [Job 111644837608](https://github.com/izhaan2166/wecut/actions/runs/37273332499/job/111644837608): all 176 files and 1,407 tests passed. Codecov then failed downloading its executable from cli.codecov.io with a TLS handshake error; signature verification consequently had no downloaded signature to check. |
+| #280 | Security scan | [Job 111644838261](https://github.com/izhaan2166/wecut/actions/runs/37273332537/job/111644838261): eight high findings. The scanner and vulnerability database download succeeded. |
+| #273 | Dependency audit | [Job 109769912085](https://github.com/izhaan2166/wecut/actions/runs/36678929625/job/109769912085): 19 advisories, including seven high, nine moderate and three low. |
+| #273 | Security scan | [Job 109769912037](https://github.com/izhaan2166/wecut/actions/runs/36678929701/job/109769912037): six high findings. |
+| #273 | Additional compatibility defect | [Unit job 109769912187](https://github.com/izhaan2166/wecut/actions/runs/36678929625/job/109769912187) passed 1,407 tests but warned about unsupported mixed versions: Vitest 5.0.2 with coverage-v8 5.0.1. This warning was not the failing check. |
 
 The common base was commit `039715835661fbe66f9236055d0b69fa385f403e`. PR heads inspected were #281 `f82174e3b24c7c95c21e80c3789a1981b3d94d3a`, #280 `e3dc01f6bc2b2aeec58ad8fbbbf69ce57be9f4ef`, and #273 `9ebbc4fc3cbaec947b0317e396159ad664219fbf`.
 
@@ -104,7 +104,7 @@ MCP SDK 1.30.0, forced by the root override, is affected by
 [GHSA-6qxp-vccf-f47h](https://github.com/advisories/GHSA-6qxp-vccf-f47h), added to
 GitHub's advisory database on October 6. This is a newly available advisory against
 an unchanged base dependency, not evidence that every individual upgrade broke.
-[PR #284 audit job](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/37585819369/job/112675565944)
+[PR #284 audit job](https://github.com/izhaan2166/wecut/actions/runs/37585819369/job/112675565944)
 records the affected Payload MCP dependency chain.
 
 The MCP SDK is now a direct root dependency at `^1.32.1`; its root override uses
@@ -231,8 +231,8 @@ The October 23 runs failed their strict security checks, while builds, types,
 unit coverage and Lighthouse passed. PR 302 retained 14 advisories in five
 packages; PR 303 updated the manifest-controlled application dependencies but
 retained seven advisories in follow-redirects and Vite. See the failed
-[302 audit](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/39896124026/job/120226889857)
-and [303 audit](https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/runs/39896232278/job/120227233928).
+[302 audit](https://github.com/izhaan2166/wecut/actions/runs/39896124026/job/120226889857)
+and [303 audit](https://github.com/izhaan2166/wecut/actions/runs/39896232278/job/120227233928).
 These are security findings, not a repeat of the previously repaired
 Vitest/CMS/authentication compatibility failures.
 

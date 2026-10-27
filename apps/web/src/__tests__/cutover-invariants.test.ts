@@ -4,7 +4,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : cutover-invariants.test
  * Scope        : Admin Subdomain Migration — Cutover Smoke / Invariant Tests
  *

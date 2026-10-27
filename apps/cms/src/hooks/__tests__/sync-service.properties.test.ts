@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 30-07-2026 & Updated - 30-07-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : sync-service.properties.test
  * Scope        : Property-based test — Service sync hook (cms → public)
  *

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 09-06-2026 & Updated - 27-09-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : onboarding-guard
  * Scope        : Authentication — Profile-completion routing (server-side)
  *

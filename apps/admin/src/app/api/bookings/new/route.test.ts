@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : bookings/new/route.test
  * Scope        : POST /api/bookings/new — walk-ins only for onboarded customers
  *

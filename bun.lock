@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "theroyalglow-webapp",
+      "name": "wecut-webapp",
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.32.1",
         "body-parser": "^2.4.0",

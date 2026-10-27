@@ -9,7 +9,7 @@
 ```
 ┌─────────────────────────────────────┐
 │  ┌─────────────────────────────┐    │
-│  │ 👑 Royal Glow   ☰ (hamburger)│    │
+│  │ 👑 wecut   ☰ (hamburger)│    │
 │  └─────────────────────────────┘    │
 │                                     │
 │  ┌─────────────────────────────┐    │
@@ -18,7 +18,7 @@
 │  │   (salon interior,          │    │
 │  │    happy customer)          │    │
 │  │                             │    │
-│  │   Royal Glow                │    │
+│  │   wecut                │    │
 │  │   Salon & SPA              │    │
 │  │                             │    │
 │  │   "Where beauty meets      │    │
@@ -108,7 +108,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │  ┌───────────────────────────────────────────────────────────────────┐  │
-│  │ 👑 Royal Glow      Services  Offers  Gallery  Contact   [Book Now]│  │
+│  │ 👑 wecut      Services  Offers  Gallery  Contact   [Book Now]│  │
 │  └───────────────────────────────────────────────────────────────────┘  │
 │                                                                          │
 │  ┌───────────────────────────────────────────────────────────────────┐  │
@@ -116,7 +116,7 @@
 │  │                    FULL-WIDTH HERO                                 │  │
 │  │             (background: salon interior image)                     │  │
 │  │                                                                    │  │
-│  │         Royal Glow Salon & SPA                                    │  │
+│  │         wecut Salon & SPA                                    │  │
 │  │         "Where beauty meets royalty"                              │  │
 │  │                                                                    │  │
 │  │         ⭐ 4.9 rating · 86+ Google reviews                        │  │
@@ -357,7 +357,7 @@ MOBILE (stacked):
 │  │   📍 GOOGLE MAP EMBED       │    │
 │  │   (interactive, pinch-zoom) │    │
 │  │                             │    │
-│  │   Royal Glow Salon & SPA   │    │
+│  │   wecut Salon & SPA   │    │
 │  │   1st Floor, Narmada Complex│    │
 │  │   Rayasandra Main Road     │    │
 │  │   Bengaluru, 560099        │    │
@@ -432,12 +432,12 @@ DESKTOP (2-column):
 ```
 MOBILE HEADER:
 ┌─────────────────────────────────────┐
-│  👑 Royal Glow              ☰       │
+│  👑 wecut              ☰       │
 └─────────────────────────────────────┘
 
 Hamburger menu expands (slide from right):
 ┌─────────────────────────────────────┐
-│  👑 Royal Glow              ✕       │
+│  👑 wecut              ✕       │
 ├─────────────────────────────────────┤
 │                                     │
 │  Home                               │
@@ -464,7 +464,7 @@ Hamburger menu expands (slide from right):
 
 DESKTOP HEADER:
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  👑 Royal Glow      Services  Offers  Gallery  Contact    [ Book Now ] │
+│  👑 wecut      Services  Offers  Gallery  Contact    [ Book Now ] │
 │                                                                          │
 │  (if signed in: + My Bookings, Gems, Profile avatar dropdown)           │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -492,7 +492,7 @@ HEADER SPECS:
 │                                                                          │
 │  ┌───────────────────────────────────────────────────────────────────┐  │
 │  │                                                                    │  │
-│  │  👑 Royal Glow Salon & SPA                                        │  │
+│  │  👑 wecut Salon & SPA                                        │  │
 │  │                                                                    │  │
 │  │  ── NAP (Name, Address, Phone) ──                                │  │
 │  │  📍 1st Floor, Narmada Complex                                    │  │
@@ -514,7 +514,7 @@ HEADER SPECS:
 │  │  [ 🍪 Cookie Preferences ]                                       │  │
 │  │                                                                    │  │
 │  │  ─────────────────────────────────────────────────────────────── │  │
-│  │  © 2026 Royal Glow Salon & SPA. All rights reserved.             │  │
+│  │  © 2026 wecut Salon & SPA. All rights reserved.             │  │
 │  │  Built with ❤️ in Bengaluru                                       │  │
 │  │                                                                    │  │
 │  └───────────────────────────────────────────────────────────────────┘  │
@@ -554,7 +554,7 @@ HEADER SPECS:
 │  │                                                              │       │
 │  │  ┌──────────────────────────────────────────────────────┐   │       │
 │  │  │                                                       │   │       │
-│  │  │  👑 Add Royal Glow to your home screen               │   │       │
+│  │  │  👑 Add wecut to your home screen               │   │       │
 │  │  │                                                       │   │       │
 │  │  │  Get quick access to:                                 │   │       │
 │  │  │  ✓ Book appointments instantly                       │   │       │

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : PrivacyPolicyPage
  * Scope        : Legal Pages
  *
@@ -34,7 +34,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata = buildMetadata({
   title: 'Privacy Policy',
   description:
-    'How Royal Glow Salon & Spa collects, uses, and protects your personal data under the Digital Personal Data Protection Act, 2023, and your rights as a data principal.',
+    'How wecut Salon & Spa collects, uses, and protects your personal data under the Digital Personal Data Protection Act, 2023, and your rights as a data principal.',
   path: '/privacy',
   robotsIndex: true,
 })
@@ -55,11 +55,11 @@ export default function PrivacyPolicyPage() {
           Last updated: <time dateTime="2026-02-15">{LAST_UPDATED}</time>
         </p>
         <p className="mt-6">
-          {BUSINESS.name} ("Royal Glow", "we", "us", or "our") is committed to protecting your
-          privacy. This policy explains what personal data we collect when you visit our salon, use
-          our website, or book an appointment, why we collect it, and the choices and rights you
-          have. We process personal data in accordance with India's Digital Personal Data Protection
-          Act, 2023 (the "DPDP Act") and applicable rules.
+          {BUSINESS.name} ("wecut", "we", "us", or "our") is committed to protecting your privacy.
+          This policy explains what personal data we collect when you visit our salon, use our
+          website, or book an appointment, why we collect it, and the choices and rights you have.
+          We process personal data in accordance with India's Digital Personal Data Protection Act,
+          2023 (the "DPDP Act") and applicable rules.
         </p>
       </header>
 

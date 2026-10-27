@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-08-2026 & Updated - 04-08-2026
  *
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : RedeemFlow (component test)
  * Scope        : Gems Redemption UI — dialog wiring + accessibility
  *

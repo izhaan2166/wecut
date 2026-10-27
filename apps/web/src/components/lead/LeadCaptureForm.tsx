@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : LeadCaptureForm
  * Scope        : Lead Capture UI
  *
@@ -171,7 +171,7 @@ export function LeadCaptureForm({ services, utm }: { services: ServiceOption[]; 
       {/* Brand + trust signals above the form */}
       <header className="mb-6 text-center">
         <p className="font-display text-2xl text-cocoa-dark">
-          👑 Royal Glow <span className="text-gold-ink">Salon &amp; Spa</span>
+          👑 wecut <span className="text-gold-ink">Salon &amp; Spa</span>
         </p>
         <p className="mt-2 font-ui text-sm text-dusty-gray">⭐ 4.9 · 86 reviews · Bengaluru</p>
       </header>

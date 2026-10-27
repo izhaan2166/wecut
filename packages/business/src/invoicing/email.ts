@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 21-06-2026 & Updated - 21-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : invoicing/email
  * Scope        : Business Logic — Invoicing
  *
@@ -94,7 +94,7 @@ function totalRow(
  * inline-styled HTML document suitable for Resend.
  */
 export function buildInvoiceEmailHtml(data: InvoiceEmailData): { subject: string; html: string } {
-  const subject = `Your Royal Glow invoice ${data.invoiceNumber}`
+  const subject = `Your wecut invoice ${data.invoiceNumber}`
 
   const itemsHtml = data.items.map(itemRow).join('')
   const discountHtml =
@@ -112,7 +112,7 @@ export function buildInvoiceEmailHtml(data: InvoiceEmailData): { subject: string
 <body style="margin:0;background:#faf7f2;font-family:Helvetica,Arial,sans-serif">
   <div style="max-width:560px;margin:0 auto;padding:24px">
     <div style="background:#ffffff;border:1px solid ${LINE};border-radius:12px;padding:28px">
-      <h1 style="margin:0 0 4px;color:${COCOA};font-size:22px">Royal Glow Salon &amp; Spa</h1>
+      <h1 style="margin:0 0 4px;color:${COCOA};font-size:22px">wecut Salon &amp; Spa</h1>
       <p style="margin:0;color:${MUTED};font-size:13px">Thank you for visiting us, ${esc(data.customerName)}.</p>
 
       <div style="margin:20px 0;padding:12px 16px;background:#faf7f2;border-radius:8px">
@@ -143,7 +143,7 @@ export function buildInvoiceEmailHtml(data: InvoiceEmailData): { subject: string
         This is a GST-compliant invoice (SAC 999721). For any query, reply to this email or call your branch.
       </p>
     </div>
-    <p style="text-align:center;color:${MUTED};font-size:11px;margin:16px 0 0">Royal Glow Salon &amp; Spa · Bengaluru</p>
+    <p style="text-align:center;color:${MUTED};font-size:11px;margin:16px 0 0">wecut Salon &amp; Spa · Bengaluru</p>
   </div>
 </body></html>`
 

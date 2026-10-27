@@ -1,10 +1,10 @@
 ---
 title: Deployment
-description: Branch strategy, hosting, CI/CD workflows, feature-flag releases, rollback tiers, and backups for Royal Glow.
+description: Branch strategy, hosting, CI/CD workflows, feature-flag releases, rollback tiers, and backups for wecut.
 icon: cloud-upload
 ---
 
-Royal Glow ships through a four-stage Git pipeline with progressively stricter
+wecut ships through a four-stage Git pipeline with progressively stricter
 gates, deploys `apps/web` and `apps/admin` to AWS Lambda + CloudFront through
 SST, and decouples **deploy** from **release** using PostHog feature flags.
 

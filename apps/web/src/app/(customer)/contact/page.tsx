@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ContactPage
  * Scope        : Customer Pages
  *
@@ -38,7 +38,7 @@ import { ContactForm } from './ContactForm'
 export const metadata: Metadata = buildMetadata({
   title: 'Contact Us',
   description:
-    'Get in touch with Royal Glow Salon & Spa. Visit us at Narmada Complex, Rayasandra Main Road, Bengaluru or call +91 63601 35720.',
+    'Get in touch with wecut Salon & Spa. Visit us at Narmada Complex, Rayasandra Main Road, Bengaluru or call +91 63601 35720.',
   path: '/contact',
 })
 
@@ -79,14 +79,14 @@ export default function ContactPage() {
             {/* LEFT COLUMN: Map + NAP */}
             <div>
               {/* Google Maps embed — official keyless "Embed a map" iframe for
-                  the real Royal Glow Salon & Spa Business Profile (feature ID
+                  the real wecut Salon & Spa Business Profile (feature ID
                   0x3bae6d5cd0552b29:0xb87793c64005049e). No Maps Embed API key
                   required; allowed by the middleware CSP frame-src
                   (https://www.google.com). Width is responsive (100%); height
                   fixed to the contact-card design. */}
               <div className="rounded-[6px] overflow-hidden border border-cloud-gray">
                 <iframe
-                  title="Royal Glow Salon & Spa location on Google Maps"
+                  title="wecut Salon & Spa location on Google Maps"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.5204681262835!2d77.66475897572211!3d12.874219217004518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6d5cd0552b29%3A0xb87793c64005049e!2sROYAL%20GLOW%20SALON%20%26%20SPA!5e0!3m2!1sen!2sin!4v1782664203581!5m2!1sen!2sin"
                   width="100%"
                   height="300"

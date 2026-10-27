@@ -1,4 +1,4 @@
-# File Header Guide — Royal Glow Salon & Spa
+# File Header Guide — wecut Salon & Spa
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Every source file in this monorepo carries a **production-grade header block** t
  * Author       : KATABATHUNI BOSE
  * Date         : Created - DD-MM-YYYY & Updated - DD-MM-YYYY
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : {name}
  * Scope        : {scope / domain area}
  *
@@ -47,7 +47,7 @@ Every source file in this monorepo carries a **production-grade header block** t
 |-------|-----------------|---------|
 | **Author** | Code owner / creator | `KATABATHUNI BOSE` |
 | **Date** | Creation + last meaningful update (DD-MM-YYYY, Indian format) | `Created - 04-06-2026 & Updated - 04-06-2026` |
-| **Project** | Monorepo name | `theroyalglow-webapp` |
+| **Project** | Monorepo name | `wecut-webapp` |
 | **Module Name** | Exported component/function name or endpoint path | `BookingDialog`, `POST /api/bookings` |
 | **Scope** | Business domain this file belongs to | `Booking Management`, `Admin Portal — CRM` |
 | **Description** | Plain-English summary (max 2 lines) | What does this file *do*? |

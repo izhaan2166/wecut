@@ -43,11 +43,11 @@ export default function GlobalError({ error, retry }: GlobalErrorProps) {
         className="bg-background font-sans text-foreground antialiased"
         suppressHydrationWarning
       >
-        <title>Something went wrong | Royal Glow Admin</title>
+        <title>Something went wrong | wecut Admin</title>
         <meta content="noindex, nofollow" name="robots" />
         <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-5 px-6 py-16 text-center">
           <p className="font-ui text-xs font-semibold uppercase tracking-[0.2em] text-gold-ink">
-            Royal Glow Admin
+            wecut Admin
           </p>
           <h1 className="font-display text-2xl leading-tight font-extrabold sm:text-3xl">
             Something went wrong

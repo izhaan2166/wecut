@@ -1,4 +1,4 @@
-# Icon & OG Asset Manifest — Royal Glow Salon & Spa
+# Icon & OG Asset Manifest — wecut Salon & Spa
 
 Status of the brand raster assets and where each one lives.
 

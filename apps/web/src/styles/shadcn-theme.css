@@ -1,10 +1,10 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : styles/shadcn-theme
  * Scope        : Web — shadcn/ui ↔ Brand Token mapping
  *
  * Description  : Redefines EVERY shadcn/ui theme variable so it resolves to a
- *                named Royal Glow Brand Token from `@rgss/ui/theme.css`. This is
+ *                named wecut Brand Token from `@rgss/ui/theme.css`. This is
  *                the single bridge between the owned-source shadcn components
  *                (which style themselves with `bg-background`, `text-foreground`,
  *                `border-border`, `bg-primary`, `bg-card`, the `--chart-*`

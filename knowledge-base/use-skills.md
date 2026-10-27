@@ -1,4 +1,4 @@
-# Skills & npx Commands — Royal Glow Salon & Spa
+# Skills & npx Commands — wecut Salon & Spa
 
 > Essential tools, CLI skills, and npx commands for efficient development.
 > Curated for this stack: Next.js 16 + Bun + Turborepo + Drizzle + AWS + Cloudflare DNS/R2 + shadcn/ui.

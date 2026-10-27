@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 29-07-2026 & Updated - 29-07-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : fake-tx-db (hooks test support)
  * Scope        : CMS Integration — Service Sync unit-test double
  *

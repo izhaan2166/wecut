@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 15-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : tests/support/create-test-admin
  * Scope        : CMS E2E Support — Throwaway Admin Provisioning
  *

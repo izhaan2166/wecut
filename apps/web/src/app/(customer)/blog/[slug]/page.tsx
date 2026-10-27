@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : BlogPostPage
  * Scope        : Customer Pages
  *
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   if (post === null) {
     return buildMetadata({
       title: 'Article',
-      description: 'Read the latest from the Royal Glow Journal.',
+      description: 'Read the latest from the wecut Journal.',
       path: `/blog/${slug}`,
       robotsIndex: false,
     })
@@ -207,7 +207,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 Ready for the royal treatment?
               </h2>
               <p className="font-sans text-[16px] leading-[1.6] text-warm-gray mt-3 max-w-[420px] mx-auto">
-                Book your appointment and experience Royal Glow for yourself.
+                Book your appointment and experience wecut for yourself.
               </p>
               <Button
                 asChild
@@ -215,7 +215,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 size="lg"
                 className="mt-7 rounded-full font-ui text-xs uppercase tracking-[0.5px]"
               >
-                <Link href="/?book=1" aria-label="Book an appointment at Royal Glow">
+                <Link href="/?book=1" aria-label="Book an appointment at wecut">
                   Book Now
                 </Link>
               </Button>

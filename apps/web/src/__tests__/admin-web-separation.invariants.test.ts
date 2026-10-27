@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : admin-web-separation.invariants.test
  * Scope        : Static verification of the admin/web separation (Req 9)
  *

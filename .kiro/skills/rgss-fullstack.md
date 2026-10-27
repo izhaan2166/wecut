@@ -1,7 +1,7 @@
 # RGSS Full-Stack Development Skill
 
 ## Description
-Guides Kiro to generate code following Royal Glow Salon & Spa's exact conventions, architecture, and business rules. Activates automatically when working in this monorepo.
+Guides Kiro to generate code following wecut Salon & Spa's exact conventions, architecture, and business rules. Activates automatically when working in this monorepo.
 
 ## Activation
 - Always active in this workspace

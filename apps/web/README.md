@@ -1,4 +1,4 @@
-# Royal Glow customer website
+# wecut customer website
 
 `@rgss/web` is the customer-facing Next.js application at
 [theroyalglow.in](https://theroyalglow.in). It combines public salon content,

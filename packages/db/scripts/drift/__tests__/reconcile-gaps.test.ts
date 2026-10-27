@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-10-2026 & Updated - 04-10-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : drift/__tests__/reconcile-gaps.test
  * Scope        : Unit tests — ungated unique index + unexpressed column DEFAULT
  *

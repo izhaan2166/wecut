@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : metadata
  * Scope        : SEO — Metadata
  *
@@ -17,7 +17,7 @@
  *
  * Features / Functionality :
  * - buildMetadata() — complete Metadata from title/description/path
- * - Automatic brand suffixing (| Royal Glow Salon & Spa)
+ * - Automatic brand suffixing (| wecut Salon & Spa)
  * - Canonical URL normalisation (no double slashes)
  *
  * Tech Stack   : TypeScript, Next.js
@@ -40,7 +40,7 @@
 import type { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/business'
 
-const BRAND = 'Royal Glow Salon & Spa'
+const BRAND = 'wecut Salon & Spa'
 const DEFAULT_OG_IMAGE = '/og-default.jpg'
 
 type BuildMetadataInput = {
@@ -79,7 +79,7 @@ export function buildMetadata({
 
   return {
     // `absolute` so the root layout's title template never double-appends the
-    // brand suffix (this helper already includes ` | Royal Glow Salon & Spa`).
+    // brand suffix (this helper already includes ` | wecut Salon & Spa`).
     title: { absolute: fullTitle },
     description,
     alternates: {

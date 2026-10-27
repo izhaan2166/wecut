@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : root-path-convention
  * Scope        : CI static gate (admin-portal-redesign)
  *

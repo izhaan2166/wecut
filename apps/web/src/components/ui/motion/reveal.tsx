@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : ui/motion/reveal
  * Scope        : Web — Scroll-into-view reveal wrappers
  *

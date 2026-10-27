@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : TermsOfServicePage
  * Scope        : Legal Pages
  *
@@ -34,7 +34,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata = buildMetadata({
   title: 'Terms of Service',
   description:
-    'The terms governing your use of Royal Glow Salon & Spa services, bookings, payments, memberships, and loyalty programme, including pricing, conduct, and governing law.',
+    'The terms governing your use of wecut Salon & Spa services, bookings, payments, memberships, and loyalty programme, including pricing, conduct, and governing law.',
   path: '/terms',
   robotsIndex: true,
 })
@@ -56,8 +56,8 @@ export default function TermsOfServicePage() {
         </p>
         <p className="mt-6">
           These Terms of Service ("Terms") govern your use of the website, bookings, and services of{' '}
-          {BUSINESS.name} ("Royal Glow", "we", "us", or "our"). By booking an appointment, visiting
-          our salon, or using our website, you agree to these Terms. Please read them carefully.
+          {BUSINESS.name} ("wecut", "we", "us", or "our"). By booking an appointment, visiting our
+          salon, or using our website, you agree to these Terms. Please read them carefully.
         </p>
       </header>
 
@@ -78,9 +78,9 @@ export default function TermsOfServicePage() {
           2. Our services
         </h2>
         <p className="mt-4">
-          Royal Glow provides salon and spa services including hair care, skincare, beauty
-          treatments, massage and wellness therapies, bridal packages, and related offerings.
-          Service availability, duration, and outcomes may vary based on individual needs, staff
+          wecut provides salon and spa services including hair care, skincare, beauty treatments,
+          massage and wellness therapies, bridal packages, and related offerings. Service
+          availability, duration, and outcomes may vary based on individual needs, staff
           availability, and product suitability. Our team may decline or modify a treatment where it
           is unsafe or unsuitable for you.
         </p>
@@ -165,10 +165,10 @@ export default function TermsOfServicePage() {
           8. Intellectual property
         </h2>
         <p className="mt-4">
-          All content on our website — including the Royal Glow name, logo, text, graphics, and
-          images — is owned by us or our licensors and is protected by applicable intellectual
-          property laws. You may not copy, reproduce, or use our content for commercial purposes
-          without our prior written permission.
+          All content on our website — including the wecut name, logo, text, graphics, and images —
+          is owned by us or our licensors and is protected by applicable intellectual property laws.
+          You may not copy, reproduce, or use our content for commercial purposes without our prior
+          written permission.
         </p>
       </section>
 
@@ -178,8 +178,8 @@ export default function TermsOfServicePage() {
         </h2>
         <p className="mt-4">
           We strive to deliver our services with reasonable skill and care. To the extent permitted
-          by law, Royal Glow is not liable for indirect or consequential losses, or for reactions
-          arising from undisclosed allergies or medical conditions. Nothing in these Terms excludes
+          by law, wecut is not liable for indirect or consequential losses, or for reactions arising
+          from undisclosed allergies or medical conditions. Nothing in these Terms excludes
           liability that cannot be excluded under applicable law.
         </p>
       </section>

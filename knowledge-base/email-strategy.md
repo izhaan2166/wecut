@@ -2,7 +2,7 @@
 
 ## Overview
 
-Since authentication is **Google OAuth only**, the auth system sends **zero auth emails** (no password resets, no magic links). Every email Royal Glow sends is a **business event** handled by application code.
+Since authentication is **Google OAuth only**, the auth system sends **zero auth emails** (no password resets, no magic links). Every email wecut sends is a **business event** handled by application code.
 
 This means the email stack is completely independent of the auth library choice.
 
@@ -111,7 +111,7 @@ Booking completion enqueues the invoice-PDF job through QStash
 
 ## React Email (Templates)
 
-All invoice email templates are built with **React Email**, designed visually in **Resend's AI template builder** with Royal Glow's brand styling.
+All invoice email templates are built with **React Email**, designed visually in **Resend's AI template builder** with wecut's brand styling.
 
 ### Template Files
 ```
@@ -139,7 +139,7 @@ packages/emails/                       ← React Email templates (Resend only)
 
 ```
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 ```
@@ -150,9 +150,9 @@ packages/emails/                       ← React Email templates (Resend only)
 
 ```
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
-"Thank you for choosing Royal Glow! ✨"
+"Thank you for choosing wecut! ✨"
 Review us on Google Maps → [Google Maps link]
 Cancellation & Refund Policy: theroyalglow.in/refund-policy
 This is a computer-generated invoice and does not require a physical signature.
@@ -164,12 +164,12 @@ This is a computer-generated invoice and does not require a physical signature.
 
 **Trigger:** Onboarding completed (profile created after first Google sign-in)
 **Template:** `welcome.tsx`
-**Subject:** `Welcome to the Royal Glow family, [First Name] 👑`
+**Subject:** `Welcome to the wecut family, [First Name] 👑`
 
 ```
 Hi [First Name],
 
-We're so glad you're here. Royal Glow Salon & SPA is your space to
+We're so glad you're here. wecut Salon & SPA is your space to
 unwind, transform, and feel like royalty — every single visit.
 
 Here's everything you need to get started:
@@ -197,10 +197,10 @@ Here's everything you need to get started:
     📞 +91 63601 35720
 ──────────────────────────────────────────
 
-Your first Royal Glow moment awaits. See you soon! ✨
+Your first wecut moment awaits. See you soon! ✨
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 theroyalglow.in | Instagram → @theroyalglow
 📞 +91 63601 35720
@@ -256,7 +256,7 @@ Branch:       Rayasandra
 ──────────────────────────────────────────
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📍 1st Floor, Narmada Complex, Rayasandra Main Rd, Bengaluru – 560100
 📞 +91 63601 35720 | theroyalglow.in
@@ -321,7 +321,7 @@ Payment: Cash / UPI / Card
 ──────────────────────────────────────────
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 Cancellation & Refund Policy: theroyalglow.in/refund-policy
@@ -379,7 +379,7 @@ Or call us directly:
 📞 +91 63601 35720
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 ```
@@ -407,8 +407,8 @@ Or call us directly:
 - Same-day bookings: only 1h reminder (skip 24h)
 
 **Template:** `appointment-reminder.tsx`
-**Subject (24h):** `Tomorrow at [Time] — your Royal Glow appointment 💆‍♀️`
-**Subject (1h):** `In 1 hour — your appointment at Royal Glow ⏰`
+**Subject (24h):** `Tomorrow at [Time] — your wecut appointment 💆‍♀️`
+**Subject (1h):** `In 1 hour — your appointment at wecut ⏰`
 
 ```
 Hi [First Name],
@@ -442,7 +442,7 @@ Duration:     ~90 min
 ──────────────────────────────────────────
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 ```
@@ -483,7 +483,7 @@ Booking confirmed:
 ```
 Hi [First Name],
 
-[30d:] Your Royal Glow SPA Membership expires in 30 days. You still
+[30d:] Your wecut SPA Membership expires in 30 days. You still
        have hours to enjoy — book them before they're gone!
 [7d:]  Time is running out. 7 days left to use your remaining SPA hours.
        Don't leave them on the table.
@@ -515,7 +515,7 @@ Or visit:
 ──────────────────────────────────────────
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 ```
@@ -549,7 +549,7 @@ Or visit:
 ```
 Hi [First Name],
 
-Your Royal Glow SPA Membership has expired. Any unused hours have
+Your wecut SPA Membership has expired. Any unused hours have
 been forfeited.
 
 ──────────────────────────────────────────
@@ -577,7 +577,7 @@ we even customize hours and pricing.
 📍  Visit us: Rayasandra | Marathahalli (coming soon)
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 ```
@@ -633,7 +633,7 @@ Book your next session — treat yourself before they expire.
 🌐  [View My Membership →]  theroyalglow.in/membership
 
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA — Rayasandra
+              wecut Salon & SPA — Rayasandra
 ──────────────────────────────────────────────────────────────
 📞 +91 63601 35720 | theroyalglow.in
 ```
@@ -662,12 +662,12 @@ Book your next session — treat yourself before they expire.
 
 **Trigger:** Booking moves to `completed`, invoice generated
 **Template:** `invoice-service.tsx`
-**Subject:** `Hey [First Name], Your Royal Glow receipt is ready.`
+**Subject:** `Hey [First Name], Your wecut receipt is ready.`
 
 ```
 Hi [First Name],
 
-You just had a Royal Glow moment — and we want it to last. Here's your
+You just had a wecut moment — and we want it to last. Here's your
 invoice for today's visit. Every service was crafted with care, just for you.
 
 ──────────────────────────────────────────
@@ -735,7 +735,7 @@ Redeem at: theroyalglow.in/gems
 ```
 Hi [First Name],
 
-Welcome to the inner circle. Your Royal Glow SPA Membership is now live —
+Welcome to the inner circle. Your wecut SPA Membership is now live —
 X hours of pure indulgence, ready whenever you are. Book your first session
 and let the transformation begin.
 
@@ -863,7 +863,7 @@ and sends the invoice email without an attachment rather than failing the comple
 
 The first-time user onboarding screen must include:
 
-- [ ] Marketing consent checkbox: *"I agree to receive promotional emails and offers from Royal Glow Salon & Spa"*
+- [ ] Marketing consent checkbox: *"I agree to receive promotional emails and offers from wecut Salon & Spa"*
 - [ ] This consent is stored on the user record in the neon database (`marketing_consent` boolean)
 - [ ] Only users with `marketing_consent = true` are added to Brevo subscriber lists
 
@@ -933,7 +933,7 @@ User unsubscribes (via Brevo link in email footer)
 
 ```
 ──────────────────────────────────────────────────────────────
-              Royal Glow Salon & SPA
+              wecut Salon & SPA
 ──────────────────────────────────────────────────────────────
 📍 1st Floor, Narmada Complex, 48/3, Rayasandra Main Rd
    Parappana Agrahara, Bengaluru – 560100
@@ -959,7 +959,7 @@ You received this because you opted in to marketing emails.
 ```
 Hi [First Name],
 
-We hope you loved your time at Royal Glow! Your feedback helps us
+We hope you loved your time at wecut! Your feedback helps us
 serve you better.
 
 ──────────────────────────────────────────
@@ -971,7 +971,7 @@ How was your recent visit on [Booking Date]?
     → [Google Maps Review Link]
 
 Your review means the world to us and helps others discover
-Royal Glow.
+wecut.
 ──────────────────────────────────────────
 
 🎁  As a thank you — here's something special:
@@ -1014,14 +1014,14 @@ Event: booking_completed (via API)
 **Trigger:** Automated — Brevo segment condition `LAST_VISIT_DATE < today - 60`
 **Automation:** Brevo workflow runs weekly, targets contacts entering "Inactive 60d+" segment
 **Audience:** Customers who haven't visited in 60+ days
-**Subject:** `We miss you, [First Name]! Come back to Royal Glow 💆‍♀️`
+**Subject:** `We miss you, [First Name]! Come back to wecut 💆‍♀️`
 
 ```
 Hi [First Name],
 
 It's been a while since your last visit — and we miss pampering you!
 
-Royal Glow has some exciting updates since you were last here:
+wecut has some exciting updates since you were last here:
 
 🆕  What's New:
     • New SPA therapy: Hot Stone Relaxation (60 min)
@@ -1079,7 +1079,7 @@ Segment entry: "Inactive 60d+"
 **Subject examples:**
 - `Diwali Glow-Up, [First Name] ✨ Up to 30% OFF all services`
 - `Summer Refresh: Cool SPA packages starting ₹2,999`
-- `Happy Women's Day! A special treat from Royal Glow 👑`
+- `Happy Women's Day! A special treat from wecut 👑`
 
 ```
 Hi [First Name],
@@ -1087,7 +1087,7 @@ Hi [First Name],
 [Festival greeting — e.g., "Wishing you a sparkling Diwali!"]
 
 This [festival], treat yourself (or someone special) to the
-Royal Glow experience:
+wecut experience:
 
 ──────────────────────────────────────────
 🎉  [Festival Name] Special Offers
@@ -1133,12 +1133,12 @@ Walk-ins welcome | Advance booking recommended
 **Trigger:** Manual or semi-automated — when Owner adds a new offer on `admin.theroyalglow.in/offers`
 **Automation option:** API call to Brevo on offer publish → triggers campaign
 **Audience:** "All Customers" list
-**Subject:** `New at Royal Glow: [Offer Name] — [X]% OFF 🎁`
+**Subject:** `New at wecut: [Offer Name] — [X]% OFF 🎁`
 
 ```
 Hi [First Name],
 
-Something new just dropped at Royal Glow — and we wanted you to be
+Something new just dropped at wecut — and we wanted you to be
 the first to know!
 
 ──────────────────────────────────────────
@@ -1198,7 +1198,7 @@ Owner publishes offer on admin.theroyalglow.in/offers
 ```
 Hi [First Name],
 
-It's been a week since your Royal Glow SPA Membership expired.
+It's been a week since your wecut SPA Membership expired.
 We'd hate for you to lose the benefits you love.
 
 ──────────────────────────────────────────

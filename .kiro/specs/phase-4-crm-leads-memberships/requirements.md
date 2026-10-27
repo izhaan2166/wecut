@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 4 delivers the customer-relationship layer of the Royal Glow Salon & Spa (RGSS) platform, built on top of the booking backend from Phase 3. It covers four cohesive areas: a marketing **Lead Pipeline** (cold Meta-ad capture → kanban management), **CRM** (customer directory and profiles with tags and notes), **SPA Memberships** (admin-created hour-based memberships with session recording), and a customer-facing **Loyalty (Gems)** view.
+Phase 4 delivers the customer-relationship layer of the wecut Salon & Spa (RGSS) platform, built on top of the booking backend from Phase 3. It covers four cohesive areas: a marketing **Lead Pipeline** (cold Meta-ad capture → kanban management), **CRM** (customer directory and profiles with tags and notes), **SPA Memberships** (admin-created hour-based memberships with session recording), and a customer-facing **Loyalty (Gems)** view.
 
 All four areas reuse the layered architecture already established: API routes are thin orchestrators (parse → Zod validate → call business logic / query layer → return the standard envelope), business rules are pure functions in `packages/business` that throw `AppError`, and all database access is isolated in `packages/db/queries`. Every response conforms to the single envelope shape and every route is wrapped with `withErrorHandler()`. The nine underlying tables already exist in the schema and are pushed to Neon, so this phase is additive and requires no migrations.
 

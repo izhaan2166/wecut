@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : nav-filter.property.test
  * Scope        : Property-based test for role-level nav filtering
  *

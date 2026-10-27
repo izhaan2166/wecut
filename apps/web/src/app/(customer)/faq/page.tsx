@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : FAQPage
  * Scope        : Customer Pages
  *
@@ -48,7 +48,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata: Metadata = buildMetadata({
   title: 'FAQ',
   description:
-    'Find answers to frequently asked questions about Royal Glow Salon & Spa — services, booking, payments, location, memberships, and more.',
+    'Find answers to frequently asked questions about wecut Salon & Spa — services, booking, payments, location, memberships, and more.',
   path: '/faq',
 })
 
@@ -77,8 +77,8 @@ export default async function FAQPage() {
               Frequently Asked Questions
             </h1>
             <p className="mt-4 max-w-[520px] font-sans text-[17px] leading-[1.6] text-warm-gray">
-              Everything you need to know about Royal Glow Salon & Spa. Can&apos;t find your answer?
-              Feel free to{' '}
+              Everything you need to know about wecut Salon & Spa. Can&apos;t find your answer? Feel
+              free to{' '}
               <a
                 href="/contact"
                 className="text-gold-ink underline underline-offset-2 transition-colors duration-200 hover:text-cocoa-dark"

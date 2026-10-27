@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 07-06-2026 & Updated - 07-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : NotificationsPage
  * Scope        : Customer Pages
  *
@@ -33,7 +33,7 @@ import { NotificationsPanel } from './notifications-panel'
 
 export const metadata: Metadata = {
   title: 'Notifications',
-  description: 'Your Royal Glow booking updates, reminders, and offers.',
+  description: 'Your wecut booking updates, reminders, and offers.',
   robots: { index: false, follow: false },
 }
 

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : BookLandingPage
  * Scope        : Lead Capture
  *
@@ -34,7 +34,7 @@ import { LeadCaptureForm } from '@/components/lead/LeadCaptureForm'
 
 // Ad-traffic landing page — never indexed, never linked from site navigation.
 export const metadata: Metadata = {
-  title: 'Book Your Visit | Royal Glow Salon & Spa',
+  title: 'Book Your Visit | wecut Salon & Spa',
   robots: { index: false, follow: false },
 }
 

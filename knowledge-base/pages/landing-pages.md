@@ -8,7 +8,7 @@
 
 | Property | Detail |
 |----------|--------|
-| **Title** | Book Now — Royal Glow Salon & SPA |
+| **Title** | Book Now — wecut Salon & SPA |
 | **Purpose** | Dedicated lead capture for Meta/Instagram ad traffic. Creates a `lead` row, then funnels to booking dialog. |
 | **Rendering** | SSR |
 | **SEO** | `robots: noindex, nofollow` (excluded from sitemap — ad traffic only) |
@@ -18,7 +18,7 @@
 
 **UI Components:**
 - Trust signals (above fold):
-  - Royal Glow wordmark/logo
+  - wecut wordmark/logo
   - "⭐ 4.9 · 86 reviews · Bengaluru" (social proof)
 - Heading: "Tell us what you're looking for"
 - Lead capture form (3 fields only):

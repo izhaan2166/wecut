@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : ui/motion/motion-variants
  * Scope        : Web — Motion design tokens (bounded variants)
  *

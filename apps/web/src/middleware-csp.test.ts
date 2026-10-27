@@ -1,7 +1,7 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : web/middleware-csp
  * Scope        : Customer site — CSP regression tests
  *

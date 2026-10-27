@@ -62,7 +62,7 @@
 
 **States:**
 - Loading: skeleton cards (3 placeholders)
-- Empty (Upcoming): "No upcoming bookings. Ready for your next Royal Glow moment?" + "Book Now" CTA
+- Empty (Upcoming): "No upcoming bookings. Ready for your next wecut moment?" + "Book Now" CTA
 - Empty (Past): "No past bookings yet."
 - Error: "Unable to load bookings." with retry
 

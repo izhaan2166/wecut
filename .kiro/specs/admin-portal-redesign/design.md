@@ -2,7 +2,7 @@
 
 ## Overview
 
-This design specifies a **presentation-layer** redesign of the Royal Glow admin
+This design specifies a **presentation-layer** redesign of the wecut admin
 portal (`apps/admin`, served at `admin.theroyalglow.in`). It rebuilds the
 portal's UI on the **canonical shadcn/ui component set** — owned source copied
 into `apps/admin/src/components/ui/` via the shadcn CLI, built on **Radix UI**
@@ -16,7 +16,7 @@ markup. Their **pure helper logic and property-tested behaviour are preserved
 unchanged** — the refactor swaps the rendering substrate, not the logic.
 
 Because `apps/admin/components.json` is configured with `baseColor: neutral`,
-the design **remaps the shadcn theme CSS variables onto the existing Royal Glow
+the design **remaps the shadcn theme CSS variables onto the existing wecut
 Brand Tokens** (`@rgss/ui`) so every shadcn component renders in the warm
 cocoa/gold brand identity instead of the default neutral palette. Brand Tokens
 in `@rgss/ui` remain the **single source of truth**; the admin app maps onto
@@ -526,7 +526,7 @@ unchanged), and `UserIdentity`.
   active item via the existing `@/lib/admin/active-nav` longest-prefix resolver,
   rendered visually distinct + `aria-current="page"` (Req 7.5, 7.6); unresolved
   role → level 0 (Req 7.7).
-- Royal Glow logo + "Admin" label at the top (Req 7.8); emoji replaced by
+- wecut logo + "Admin" label at the top (Req 7.8); emoji replaced by
   `navIconFor(item.href)` (Req 5.3); Root-Path hrefs preserved, no `/admin`
   prefix (Req 7.9).
 - **Motion:** active-item and hover transitions are ≤150ms micro-interactions

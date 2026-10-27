@@ -325,7 +325,7 @@ export const membershipTiers = [
 // scripts/data/settings.ts
 
 export const systemSettings = [
-  { key: 'salon_name', value: '"Royal Glow Salon & Spa"' },
+  { key: 'salon_name', value: '"wecut Salon & Spa"' },
   { key: 'salon_phone', value: '"+91 63601 35720"' },
   { key: 'salon_email', value: '"hello@theroyalglow.in"' },
   { key: 'salon_address', value: JSON.stringify({
@@ -740,7 +740,7 @@ export const demoOffers = [
     id: 'offer_first_visit',
     name: '₹200 OFF First Visit',
     slug: 'first-visit-200-off',
-    description: 'New to Royal Glow? Get ₹200 off your first booking on any service.',
+    description: 'New to wecut? Get ₹200 off your first booking on any service.',
     offerType: 'flat',
     discountAmountPaise: 20000,
     startDate: subDays(today, 60),

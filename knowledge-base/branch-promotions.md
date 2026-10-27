@@ -163,7 +163,7 @@ whenever a release tag falls out of history and an equivalent commit exists on
 `dev`:
 
 ```sh
-gh api -X PATCH repos/royalglowsalonspa/theroyalglow-webapp/git/refs/tags/vX.Y.Z \
+gh api -X PATCH repos/izhaan2166/wecut/git/refs/tags/vX.Y.Z \
   -f sha=<equivalent commit on dev> -F force=true
 gh workflow run release-please.yml --ref dev
 ```

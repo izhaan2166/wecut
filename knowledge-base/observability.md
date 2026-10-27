@@ -103,7 +103,7 @@ Free tier checks every 3 minutes. Average detection time ~1.5 minutes. Acceptabl
 - Funnels — identify drop-off in booking flow
 - Cohort analysis — customers acquired via Meta campaign vs organic vs GMB vs in-store QR
 
-**Key events to track for Royal Glow:**
+**Key events to track for wecut:**
 
 | Event | Trigger |
 |-------|---------|

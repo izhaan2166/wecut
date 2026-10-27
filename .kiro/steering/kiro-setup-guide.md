@@ -1,4 +1,4 @@
-# Kiro CLI + IDE Setup Guide — Royal Glow Salon & Spa
+# Kiro CLI + IDE Setup Guide — wecut Salon & Spa
 
 ## The Verdict: Use BOTH Kiro IDE + Kiro CLI Together
 
@@ -41,12 +41,12 @@ kiro auth login
 
 ```bash
 # Create your actual implementation repo (separate from this docs repo)
-mkdir theroyalglow-webapp
-cd theroyalglow-webapp
+mkdir wecut-webapp
+cd wecut-webapp
 
 # Initialize git
 git init
-git remote add origin git@github.com:royalglowsalonspa/theroyalglow-webapp.git
+git remote add origin git@github.com:izhaan2166/wecut.git
 ```
 
 ---
@@ -124,15 +124,15 @@ npx skills list
 The steering files we created in this docs repo need to be in your implementation repo too:
 
 ```bash
-# From your implementation repo root (theroyalglow-webapp/)
+# From your implementation repo root (wecut-webapp/)
 mkdir -p .kiro/steering
 
 # Copy from docs repo (adjust path as needed)
-cp /path/to/theroyalglow-webapp/.kiro/steering/*.md .kiro/steering/
+cp /path/to/wecut-webapp/.kiro/steering/*.md .kiro/steering/
 ```
 
 Or recreate them — they're already pushed to GitHub at:
-`https://github.com/royalglowsalonspa/theroyalglow-webapp/tree/prod/.kiro/steering/`
+`https://github.com/izhaan2166/wecut/tree/prod/.kiro/steering/`
 
 ---
 
@@ -188,7 +188,7 @@ Or recreate them — they're already pushed to GitHub at:
 ### Phase 0: Scaffolding (Day 1)
 
 ```bash
-# In your theroyalglow-webapp/ directory:
+# In your wecut-webapp/ directory:
 
 kiro "Scaffold the monorepo using Turborepo + Bun workspaces. 
 Create apps/web (Next.js 16), packages/db (Drizzle ORM), 
@@ -390,7 +390,7 @@ Create `.kiro/hooks/` for automatic actions:
 
 ```bash
 # 1. Create implementation repo
-mkdir theroyalglow-webapp && cd theroyalglow-webapp && git init
+mkdir wecut-webapp && cd wecut-webapp && git init
 
 # 2. Copy steering files
 mkdir -p .kiro/steering

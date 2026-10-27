@@ -1,4 +1,4 @@
-# Low-Level Design (LLD) — Royal Glow Salon & Spa
+# Low-Level Design (LLD) — wecut Salon & Spa
 
 > **Document Classification:** System Design — Implementation Level  
 > **Version:** 1.0  

@@ -110,7 +110,7 @@ RGSS uses multiple scheduling mechanisms. All scheduled jobs now run via QStash 
 
 ## Realtime — Neon Does NOT Have This Built In
 
-**Neon is pure serverless PostgreSQL — it has no websocket or live-subscription layer.** This is a real gap for Royal Glow because several features require live data push:
+**Neon is pure serverless PostgreSQL — it has no websocket or live-subscription layer.** This is a real gap for wecut because several features require live data push:
 
 | Feature | Realtime Needed |
 |---------|----------------|

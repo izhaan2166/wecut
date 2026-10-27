@@ -1,4 +1,4 @@
-// Royal Glow Salon & Spa — service worker (dependency-free, no Workbox).
+// wecut Salon & Spa — service worker (dependency-free, no Workbox).
 // Strategy: network-first for navigations with an offline fallback page.
 // Never caches or serves API, admin, or auth responses.
 

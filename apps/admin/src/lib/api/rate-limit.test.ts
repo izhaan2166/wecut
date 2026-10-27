@@ -1,7 +1,7 @@
 // @vitest-environment node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : rate-limit.test
  * Scope        : Unit tests for the Upstash-backed admin rate limiter
  *

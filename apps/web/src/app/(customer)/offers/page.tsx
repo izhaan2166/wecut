@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : OffersPage
  * Scope        : Customer Pages
  *
@@ -48,7 +48,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata: Metadata = buildMetadata({
   title: 'Special Offers',
   description:
-    'Explore exclusive offers and discounts at Royal Glow Salon & Spa. Save on facials, spa treatments, and more at our Bengaluru salon.',
+    'Explore exclusive offers and discounts at wecut Salon & Spa. Save on facials, spa treatments, and more at our Bengaluru salon.',
   path: '/offers',
 })
 

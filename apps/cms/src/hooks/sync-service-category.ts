@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 15-06-2026 & Updated - 15-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : sync-service-category (hooks)
  * Scope        : CMS Integration — Service Category Sync
  *

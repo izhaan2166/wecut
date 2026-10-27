@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : GET|PATCH /api/notifications
  * Scope        : API — Admin Notifications
  *

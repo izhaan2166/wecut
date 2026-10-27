@@ -2,7 +2,7 @@
 
 ## Overview
 
-Royal Glow Salon & Spa is built for scale (20k–50k users), premium feel, and long-term maintainability by a single developer. Every technology choice is made with that constraint in mind.
+wecut Salon & Spa is built for scale (20k–50k users), premium feel, and long-term maintainability by a single developer. Every technology choice is made with that constraint in mind.
 
 ---
 
@@ -215,7 +215,7 @@ Tool split: **Bun workspaces** (package management) + **Turborepo** (task orches
 | **Turborepo** | Runs `build`, `dev`, `lint`, `test` in parallel across apps with incremental caching. Defined in `turbo.json`. |
 
 ```
-theroyalglow-webapp/
+wecut-webapp/
 ├── apps/
 │   ├── web/          # Next.js 16.2.9 — theroyalglow.in (customer)
 │   ├── admin/        # Next.js 16.2.9 — admin.theroyalglow.in (admin portal)

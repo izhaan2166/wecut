@@ -2,11 +2,11 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 08-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ui/styles/theme
  * Scope        : Shared Design Tokens (Tailwind v4)
  *
- * Description  : Single source of truth for the Royal Glow Tailwind v4
+ * Description  : Single source of truth for the wecut Tailwind v4
  *                design-token theme. Defines brand colours, fonts, radii,
  *                shadow tokens, the shadcn/ui CSS custom properties, and the
  *                accessible base layer. Imported by each app's global

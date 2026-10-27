@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 09-06-2026 & Updated - 09-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ChartCard (component test)
  * Scope        : Admin — Dashboard Chart Card primitive
  *

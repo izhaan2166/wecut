@@ -2,7 +2,7 @@
 
 ## What This File Covers
 
-End-to-end plan for Meta Pixel (browser) + Conversions API (server-side) for Royal Glow Salon & Spa. Covers the technical setup, every event to track, where exactly in the codebase each event fires, how to build audiences, and how to structure campaigns.
+End-to-end plan for Meta Pixel (browser) + Conversions API (server-side) for wecut Salon & Spa. Covers the technical setup, every event to track, where exactly in the codebase each event fires, how to build audiences, and how to structure campaigns.
 
 **Prerequisite reading:** [environment-variables.md](./environment-variables.md) — 3 vars needed (`NEXT_PUBLIC_META_PIXEL_ID`, `META_PIXEL_ACCESS_TOKEN`, `META_TEST_EVENT_CODE`).
 
@@ -32,7 +32,7 @@ Submits campaign lead form → Lead fires (browser + CAPI server)
 Redirects into homepage booking dialog (`/?book=1&leadId=...`) → InitiateCheckout fires when dialog opens
     │
     ├── Doesn't show up?
-    │       └── Meta retargeting ad: "Finish your Royal Glow booking" ← retargeting
+    │       └── Meta retargeting ad: "Finish your wecut booking" ← retargeting
     │
     ▼
 Receptionist marks payment received → Purchase fires (CAPI server)
@@ -740,7 +740,7 @@ The goal in Phase 1 is not maximum ROAS. It's to accumulate enough `Purchase` ev
 Campaign 1: Retargeting — Warm (₹300/day)
 ├── Objective: Leads
 ├── Audience: RGSS - Initiated Booking (30d) EXCLUDING RGSS - Past Customers
-├── Ad: "Complete your booking at Royal Glow — slots available"
+├── Ad: "Complete your booking at wecut — slots available"
 └── Format: Single image + CTA "Book Now"
 
 Campaign 2: Retargeting — Hot (₹200/day)
@@ -752,7 +752,7 @@ Campaign 2: Retargeting — Hot (₹200/day)
 Campaign 3: Prospecting — Interest (₹500/day)
 ├── Objective: Leads
 ├── Audience: Women, Bengaluru 20km, age 20–45, interests: beauty, skincare, spa, wellness
-├── Ad: Transformation content / "What a Royal Glow session feels like"
+├── Ad: Transformation content / "What a wecut session feels like"
 └── Format: Video (15s) or before/after
 ```
 
@@ -768,7 +768,7 @@ Campaign 4: Prospecting — Lookalike (₹800/day)
 Campaign 5: Re-engagement (₹200/day)
 ├── Objective: Traffic
 ├── Audience: RGSS - Past Customers (180d) — customers who haven't booked in 60d
-├── Ad: "We miss you at Royal Glow — your next session awaits"
+├── Ad: "We miss you at wecut — your next session awaits"
 └── Seasonal variations: new service launches, festive offers
 ```
 

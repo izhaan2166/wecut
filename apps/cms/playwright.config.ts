@@ -4,7 +4,7 @@ import { loadEnvFile } from './tests/support/env'
 
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/cms)
+ * Project      : wecut-webapp (apps/cms)
  * Module Name  : playwright.config
  * Scope        : CMS E2E test configuration (Payload → Drizzle sync)
  *

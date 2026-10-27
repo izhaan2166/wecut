@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : playwright.config
  * Scope        : Admin E2E test configuration
  *

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-08-2026 & Updated - 04-08-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : redeem.properties.test
  * Scope        : Property-based tests — Gems redemption business gate
  *

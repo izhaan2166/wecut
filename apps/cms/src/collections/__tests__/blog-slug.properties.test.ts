@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 21-02-2027 & Updated - 21-02-2027
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : blog-slug.properties.test
  * Scope        : Property-based test — Blog collection slug hook
  *

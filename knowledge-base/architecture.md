@@ -164,7 +164,7 @@ Separate hosts: apps/cms → Render; apps/invoicing → Google Cloud Run.
 > Micro-frontend architecture was evaluated and rejected: designed for multi-team enterprise orgs, adds module federation complexity, cross-app routing overhead, and shared state problems with zero benefit for a solo developer on a single stack.
 
 ```
-theroyalglow-webapp/
+wecut-webapp/
 │
 ├── apps/
 │   ├── web/                              ← Next.js 16 application (AWS Lambda + CloudFront via SST)
@@ -343,7 +343,7 @@ theroyalglow-webapp/
 ├── docs/                                ← Mintlify content (docs.theroyalglow.in)
 │   │
 │   ├── getting-started/                 ← Project intro, tech stack, env vars
-│   │   ├── introduction.mdx             ← What is Royal Glow, system overview, quick links
+│   │   ├── introduction.mdx             ← What is wecut, system overview, quick links
 │   │   ├── tech-stack.mdx               ← Full stack reference (Next.js 16, Neon, Cloudflare, Bun…)
 │   │   └── environment-variables.mdx    ← All env vars grouped by service with descriptions
 │   │
@@ -806,7 +806,7 @@ Retry-After: 60  (only on 429)
 
 ### CORS Policy
 
-**CORS is strict by default.** Only approved Royal Glow web origins are allowed to call the API.
+**CORS is strict by default.** Only approved wecut web origins are allowed to call the API.
 
 ```typescript
 // middleware.ts or next.config.ts
@@ -824,13 +824,13 @@ if (process.env.NODE_ENV === 'development') {
 
 | Header | Value | Why |
 |--------|-------|-----|
-| `Access-Control-Allow-Origin` | request origin when it matches the allowlist | Only approved Royal Glow frontends can call the API |
+| `Access-Control-Allow-Origin` | request origin when it matches the allowlist | Only approved wecut frontends can call the API |
 | `Access-Control-Allow-Methods` | `GET, POST, PUT, PATCH, DELETE, OPTIONS` | Explicit method whitelist |
 | `Access-Control-Allow-Headers` | `Content-Type, Authorization, X-Request-Id` | Only required headers |
 | `Access-Control-Allow-Credentials` | `true` | Needed for Better Auth session cookies |
 | `Access-Control-Max-Age` | `86400` | Cache preflight for 24h — reduces OPTIONS requests |
 
-**Why not `Access-Control-Allow-Origin: *`:** Wildcard CORS allows any website to call your API — an attacker could build a page that books appointments, reads customer data, or submits fake leads through the Royal Glow API from their own domain. Exact origin matching prevents this entirely.
+**Why not `Access-Control-Allow-Origin: *`:** Wildcard CORS allows any website to call your API — an attacker could build a page that books appointments, reads customer data, or submits fake leads through the wecut API from their own domain. Exact origin matching prevents this entirely.
 
 **Public API endpoints** (`/api/services`, `/api/availability`) are still read-only and rate-limited — CORS restricts where the browser call originates, not server-to-server calls. Agent/crawler access to these endpoints is unaffected by CORS (CORS is a browser-only enforcement).
 

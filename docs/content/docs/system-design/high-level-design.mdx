@@ -1,15 +1,15 @@
 ---
 title: High-Level Design
-description: Architecture overview, technology decisions matrix, data model, auth design, and API patterns for Royal Glow.
+description: Architecture overview, technology decisions matrix, data model, auth design, and API patterns for wecut.
 icon: network
 ---
 
 ## Executive Summary
 
-Royal Glow Salon & Spa is a premium beauty and wellness establishment in Bengaluru, India. This document describes the high-level design of the full-stack digital operations platform.
+wecut Salon & Spa is a premium beauty and wellness establishment in Bengaluru, India. This document describes the high-level design of the full-stack digital operations platform.
 
 <Info>
-  Royal Glow uses a **monolithic modular** monorepo on Next.js 16 + Neon. The customer and admin apps run on AWS Lambda behind CloudFront through SST, with Cloudflare retained for authoritative DNS and R2 storage. The platform is designed for 20k–50k users, India-first (DPDP, IST, paise, GST 18%), with Lighthouse ≥95 performance and 100 accessibility/SEO.
+  wecut uses a **monolithic modular** monorepo on Next.js 16 + Neon. The customer and admin apps run on AWS Lambda behind CloudFront through SST, with Cloudflare retained for authoritative DNS and R2 storage. The platform is designed for 20k–50k users, India-first (DPDP, IST, paise, GST 18%), with Lighthouse ≥95 performance and 100 accessibility/SEO.
 </Info>
 
 ### Scale Targets
@@ -193,7 +193,7 @@ User clicks "Sign in with Google".
 </Step>
 
 <Step title="Consent">
-Redirect to the Google consent screen (shows "Royal Glow Salon & Spa").
+Redirect to the Google consent screen (shows "wecut Salon & Spa").
 </Step>
 
 <Step title="Callback">

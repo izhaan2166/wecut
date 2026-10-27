@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 27-09-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : OnboardingPage
  * Scope        : Authentication UI
  *
@@ -41,7 +41,7 @@ import { readBookingContext } from '@/lib/onboarding-prompt'
 import { OnboardingForm } from './onboarding-form'
 
 export const metadata = {
-  title: 'Complete Your Profile | Royal Glow Salon & Spa',
+  title: 'Complete Your Profile | wecut Salon & Spa',
   robots: { index: false, follow: false },
 }
 

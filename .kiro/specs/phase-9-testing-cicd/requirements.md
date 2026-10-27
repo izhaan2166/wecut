@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 9 builds Royal Glow Salon & Spa's quality and delivery backbone: Vitest unit/integration tests, Playwright E2E, MSW mocking, coverage, fixtures, health endpoints, GitHub Actions quality workflows, SST production deployment, Lighthouse CI, k6, security scanning, and off-site backups.
+Phase 9 builds wecut Salon & Spa's quality and delivery backbone: Vitest unit/integration tests, Playwright E2E, MSW mocking, coverage, fixtures, health endpoints, GitHub Actions quality workflows, SST production deployment, Lighthouse CI, k6, security scanning, and off-site backups.
 
 Tests are an explicit exception to the project's default "no test files unless requested" rule because the harness is this phase's deliverable. The target is meaningful coverage of risky pure logic and critical smoke paths, not a fixed coverage percentage.
 

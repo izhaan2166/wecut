@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : layout/command-palette
  * Scope        : Admin — Command palette (⌘K / Ctrl+K)
  *

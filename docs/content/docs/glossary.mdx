@@ -1,6 +1,6 @@
 ---
 title: Glossary
-description: Plain-language definitions of every term used in the Royal Glow platform documentation.
+description: Plain-language definitions of every term used in the wecut platform documentation.
 icon: library
 ---
 
@@ -21,7 +21,7 @@ The staff-facing app at `admin.theroyalglow.in` — a separate Next.js app (`@rg
 A custom error class in `packages/errors/` that carries a machine-readable code, a human-readable message, and an HTTP status code. Used throughout the codebase to represent expected business errors.
 
 **App Router**
-The modern Next.js routing system (introduced in Next.js 13) that uses the `app/` directory. Royal Glow uses Next.js 16 with App Router.
+The modern Next.js routing system (introduced in Next.js 13) that uses the `app/` directory. wecut uses Next.js 16 with App Router.
 
 ## B
 
@@ -62,7 +62,7 @@ A commit message format: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, etc. U
 ## D
 
 **DPDP Act**
-India's Digital Personal Data Protection Act 2023. Governs how personal data of Indian citizens must be collected, stored, and used. Royal Glow complies by collecting only necessary data, providing a Privacy Policy, and gating analytics behind cookie consent.
+India's Digital Personal Data Protection Act 2023. Governs how personal data of Indian citizens must be collected, stored, and used. wecut complies by collecting only necessary data, providing a Privacy Policy, and gating analytics behind cookie consent.
 
 **Drizzle ORM**
 The database query library used to interact with PostgreSQL. Pure TypeScript with no runtime binary, which keeps the data layer portable across local development, Lambda, and the Render-hosted CMS.
@@ -89,10 +89,10 @@ India's financial year runs April–March. Used in invoice numbers: `INV-1-2627-
 The loyalty currency. Customers earn 1 gem per ₹100 spent on services (floor, not rounded). Gems expire after 365 days. Redeemable against specific catalogue services — not a general ₹ discount.
 
 **GMB (Google My Business)**
-The Google business listing for Royal Glow. Customers find the salon on Google Maps and can click through to book. The booking link uses `?utm_source=gmb` for attribution.
+The Google business listing for wecut. Customers find the salon on Google Maps and can click through to book. The booking link uses `?utm_source=gmb` for attribution.
 
 **GST**
-Goods and Services Tax — India's indirect tax. Royal Glow charges 18% GST (SAC code 999721) on all services. All prices are GST-inclusive. Back-calculation: `base = price ÷ 1.18`.
+Goods and Services Tax — India's indirect tax. wecut charges 18% GST (SAC code 999721) on all services. All prices are GST-inclusive. Back-calculation: `base = price ÷ 1.18`.
 
 ## H
 
@@ -118,7 +118,7 @@ A format for embedding structured data in web pages. Used for LocalBusiness, Ser
 A potential customer who submitted the `/book` form from a Meta/Instagram ad. Leads are tracked in the CRM pipeline: New → Contacted → Follow-up → Booked → Won/Lost.
 
 **Lighthouse**
-Google's tool for measuring web page quality. Royal Glow requires: Performance ≥ 95, Accessibility = 100, Best Practices = 100, SEO = 100. These are enforced as CI gates.
+Google's tool for measuring web page quality. wecut requires: Performance ≥ 95, Accessibility = 100, Best Practices = 100, SEO = 100. These are enforced as CI gates.
 
 **llms.txt**
 A plain-text file at the site root that helps AI systems (ChatGPT, Perplexity, Claude) understand the site quickly. The "robots.txt for AI models".
@@ -135,7 +135,7 @@ When a SPA member uses their membership hours for a service. Recorded as a compl
 The docs-as-code platform that publishes this documentation site. Content is MDX, navigation and redirects live in `docs/docs.json`, and Mintlify hosts the site and builds it from the repo on push — Git-backed publishing with no infrastructure of our own.
 
 **Monorepo**
-A single Git repository containing multiple apps and packages. Royal Glow's monorepo contains four workspaces — `apps/web` (customer site), `apps/admin` (admin portal), `apps/cms` (Payload CMS), and `apps/invoicing` (Cloud Run PDF service) — plus shared `packages/` and `docs/` (this Mintlify-published documentation).
+A single Git repository containing multiple apps and packages. wecut's monorepo contains four workspaces — `apps/web` (customer site), `apps/admin` (admin portal), `apps/cms` (Payload CMS), and `apps/invoicing` (Cloud Run PDF service) — plus shared `packages/` and `docs/` (this Mintlify-published documentation).
 
 **MSW (Mock Service Worker)**
 A library for mocking API calls in tests. Works at the network level — tests don't know they're hitting a mock.
@@ -146,7 +146,7 @@ A library for mocking API calls in tests. Works at the network level — tests d
 Name, Address, Phone — the three pieces of contact information that must be identical across all platforms (website, Google My Business, social media, directories) for local SEO.
 
 **Neon**
-The PostgreSQL database provider. Serverless, auto-scaling, with Git-like branching. Royal Glow uses one Neon project with four branches: `prod`, `pprd`, `test`, `dev`.
+The PostgreSQL database provider. Serverless, auto-scaling, with Git-like branching. wecut uses one Neon project with four branches: `prod`, `pprd`, `test`, `dev`.
 
 **No-Show**
 When a customer doesn't arrive for a confirmed booking. After 4 no-shows within 90 days, future bookings require manager approval. Walk-in no-shows don't count.
@@ -171,7 +171,7 @@ All 14 scheduled background jobs (nightly sales summaries, membership/offer/gems
 The product analytics platform. Tracks user behaviour, booking funnels, feature flags, and session replays. 1 million events/month free.
 
 **PWA (Progressive Web App)**
-A web app that can be installed on a phone like a native app. Royal Glow's PWA supports offline viewing of the service menu and booking history.
+A web app that can be installed on a phone like a native app. wecut's PWA supports offline viewing of the service menu and booking history.
 
 ## Q
 
@@ -192,7 +192,7 @@ A unique identifier (`req_abc123xyz`) attached to every API request. Appears in 
 ## S
 
 **SAC Code**
-Service Accounting Code — India's GST classification for services. Royal Glow uses SAC 999721 (Beauty treatment services).
+Service Accounting Code — India's GST classification for services. wecut uses SAC 999721 (Beauty treatment services).
 
 **Sentry**
 The error monitoring platform. Captures unhandled exceptions with full stack traces, user context, and request details. 5,000 errors/month free.

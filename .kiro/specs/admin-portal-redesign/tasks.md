@@ -2,7 +2,7 @@
 
 ## Overview
 
-This plan converts the presentation-layer redesign of the Royal Glow admin
+This plan converts the presentation-layer redesign of the wecut admin
 portal (`apps/admin`, served at `admin.theroyalglow.in`) into incremental,
 test-driven coding tasks, following the design's **six-step Migration & Rollout
 order**:
@@ -10,7 +10,7 @@ order**:
 1. **shadcn + motion + theme mapping** — install the canonical shadcn/ui
    component set as owned source via the CLI; add `motion` and the required
    Radix packages as pinned dependencies; map the shadcn theme variables onto
-   the Royal Glow Brand Tokens; create the motion layer; enable the initial
+   the wecut Brand Tokens; create the motion layer; enable the initial
    static gates (no-literals, theme-mapping presence, owned-source/no-runtime-dep,
    token-presence).
 2. **Composite primitives onto shadcn** — refactor the existing hand-rolled
@@ -127,7 +127,7 @@ verification gate**, never rewritten. Only **Property 6** (the new
     - **Validates: Requirements 9.4, 9.5**
 
   - [x] 5.3 Refactor AdminSidebar onto the shadcn Sidebar sub-components
-    - Rewrite `apps/admin/src/components/layout/admin-sidebar.tsx` (client) to compose `SidebarGroup`/`SidebarGroupLabel`/`SidebarMenu`/`SidebarMenuItem`/`SidebarMenuButton` + `ScrollArea`: titled sections from `filterNavByLevel(ADMIN_NAV, roleLevel)`, empty sections omitted, `navIconFor(item.href)` lucide icons **replacing every emoji**, active item via the `active-nav` resolver with `aria-current="page"`, Royal Glow logo + "Admin" label, unresolved role → level 0, Root-Path hrefs preserved (no `/admin` prefix); keep `filterNavByLevel`, `active-nav`, and `nav-icons` helpers **unchanged**
+    - Rewrite `apps/admin/src/components/layout/admin-sidebar.tsx` (client) to compose `SidebarGroup`/`SidebarGroupLabel`/`SidebarMenu`/`SidebarMenuItem`/`SidebarMenuButton` + `ScrollArea`: titled sections from `filterNavByLevel(ADMIN_NAV, roleLevel)`, empty sections omitted, `navIconFor(item.href)` lucide icons **replacing every emoji**, active item via the `active-nav` resolver with `aria-current="page"`, wecut logo + "Admin" label, unresolved role → level 0, Root-Path hrefs preserved (no `/admin` prefix); keep `filterNavByLevel`, `active-nav`, and `nav-icons` helpers **unchanged**
     - _Requirements: 5.3, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9_
 
   - [x] 5.4 Refactor Breadcrumb onto the shadcn Breadcrumb

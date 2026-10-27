@@ -25,7 +25,7 @@ test('admin route loads the dashboard or redirects to sign-in', async ({ page })
   // Without an authenticated session the RBAC guard sends the user to
   // /sign-in; with a Checkly test account the dashboard "Quick Actions"
   // section renders. Accept either as a healthy protected-route response.
-  const signInHeading = page.getByRole('heading', { name: 'Sign in to Royal Glow' })
+  const signInHeading = page.getByRole('heading', { name: 'Sign in to wecut' })
   const dashboardHeading = page.getByRole('heading', { name: /quick actions/i })
 
   await expect(signInHeading.or(dashboardHeading)).toBeVisible()

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : OfflinePage
  * Scope        : Customer Pages
  *
@@ -33,7 +33,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: "You're Offline | Royal Glow Salon & Spa",
+  title: "You're Offline | wecut Salon & Spa",
   robots: { index: false, follow: false },
 }
 
@@ -60,8 +60,8 @@ export default function OfflinePage() {
 
           {/* Message */}
           <p className="font-sans text-[17px] leading-[1.6] text-dusty-gray mt-6 max-w-[480px] mx-auto">
-            We can't reach Royal Glow right now. Check your connection and try again — your
-            appointments and offers will be waiting for you.
+            We can't reach wecut right now. Check your connection and try again — your appointments
+            and offers will be waiting for you.
           </p>
 
           {/* Retry + contact */}

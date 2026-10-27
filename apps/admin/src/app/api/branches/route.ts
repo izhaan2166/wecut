@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 21-06-2026 & Updated - 21-06-2026
  *
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : GET|POST /api/branches (admin)
  * Scope        : API — Admin branch management
  *

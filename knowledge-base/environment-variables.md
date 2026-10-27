@@ -2,7 +2,7 @@
 
 ## Overview
 
-Royal Glow Salon & Spa has four application contracts: `apps/web`, `apps/admin`, `apps/cms`, and `apps/invoicing`. The web and admin apps run on AWS Lambda + CloudFront through SST, the CMS stays on Render, and invoicing stays on Google Cloud Run. Cloudflare provides authoritative DNS and R2 object storage only; Workers/Pages compute, KV bindings, Wrangler configuration, and compute-specific variables are retired.
+wecut Salon & Spa has four application contracts: `apps/web`, `apps/admin`, `apps/cms`, and `apps/invoicing`. The web and admin apps run on AWS Lambda + CloudFront through SST, the CMS stays on Render, and invoicing stays on Google Cloud Run. Cloudflare provides authoritative DNS and R2 object storage only; Workers/Pages compute, KV bindings, Wrangler configuration, and compute-specific variables are retired.
 
 No hand-maintained document can override the executable contracts. Authoritative sources are:
 
@@ -21,7 +21,7 @@ Web and admin use `@t3-oss/env-nextjs` with Zod. Invoicing parses `process.env` 
 ## File Structure
 
 ```text
-theroyalglow-webapp/
+wecut-webapp/
 ├── .env.example               # Shared starting template for apps/web
 ├── .env.local                 # Optional root-local values; gitignored
 └── apps/

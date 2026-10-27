@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : google-signin.test
  * Scope        : Authentication — new-user routing into onboarding
  *

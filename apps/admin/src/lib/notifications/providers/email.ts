@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : email (admin)
  * Scope        : Notifications — Email
  *
@@ -47,7 +47,7 @@ const logger = createLogger({
   environment: process.env.NODE_ENV ?? 'development',
 })
 
-const DEFAULT_FROM = 'Royal Glow <contact@theroyalglow.in>'
+const DEFAULT_FROM = 'wecut <contact@theroyalglow.in>'
 
 export type SendEmailParams = {
   to: string | string[]

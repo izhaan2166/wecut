@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This spec covers Phase 1.1 of the Royal Glow Salon & Spa project: defining the complete PostgreSQL database schema using Drizzle ORM. It includes all 38 table definitions across 15 domain files, all PostgreSQL enums, indexes, constraints, relations in separate files, and a barrel file for aggregated exports. The schema follows Option B architecture — pgTable definitions in domain files, relations in a `schema/relations/` subfolder, aggregated through `schema/index.ts`.
+This spec covers Phase 1.1 of the wecut Salon & Spa project: defining the complete PostgreSQL database schema using Drizzle ORM. It includes all 38 table definitions across 15 domain files, all PostgreSQL enums, indexes, constraints, relations in separate files, and a barrel file for aggregated exports. The schema follows Option B architecture — pgTable definitions in domain files, relations in a `schema/relations/` subfolder, aggregated through `schema/index.ts`.
 
 ## Glossary
 

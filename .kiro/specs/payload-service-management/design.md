@@ -346,7 +346,7 @@ serviceType: {
 
 ### Service Card Collection (Unchanged, Out of Scope)
 
-`apps/cms/src/collections/ServiceCard.ts` (slug `service-card`) is the homepage marketing card feature ("See what Royal Glow can do for you"). It is display-only, has no `durationMinutes`/`pricePaise` integer fields, no sync hook, and no relationship to the booking engine. **No changes are made to this collection.** It is documented here only to make explicit that it was never actually in conflict with this migration.
+`apps/cms/src/collections/ServiceCard.ts` (slug `service-card`) is the homepage marketing card feature ("See what wecut can do for you"). It is display-only, has no `durationMinutes`/`pricePaise` integer fields, no sync hook, and no relationship to the booking engine. **No changes are made to this collection.** It is documented here only to make explicit that it was never actually in conflict with this migration.
 
 ---
 

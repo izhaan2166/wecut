@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Admin Portal Redesign re-skins and restructures the Royal Glow admin portal
+The Admin Portal Redesign re-skins and restructures the wecut admin portal
 (`apps/admin`, served at `admin.theroyalglow.in`) into a cohesive, premium
 SaaS-grade admin/CRM interface. Every admin route is redesigned so that all UI
 is composed from the **canonical shadcn/ui component set** (owned source copied
@@ -19,7 +19,7 @@ models, API contracts, business logic, route paths, or the RBAC access-control
 model. The shared design tokens in `@rgss/ui`
 (`packages/ui/src/styles/theme.css`) remain the single source of truth. Because
 `apps/admin/components.json` is configured with `baseColor: neutral`, the
-redesign **remaps the shadcn theme CSS variables onto the existing Royal Glow
+redesign **remaps the shadcn theme CSS variables onto the existing wecut
 brand tokens** so every shadcn component inherits the warm cocoa/gold brand
 identity rather than the default neutral palette. The redesign consumes and maps
 those tokens rather than redefining brand colours, fonts, or radii.
@@ -66,7 +66,7 @@ from 375px to 1920px.
 - **Theme_Variable_Mapping**: The set of shadcn theme CSS variables (e.g.
   `--background`, `--foreground`, `--primary`, `--muted`, `--border`, `--ring`,
   `--radius`) redefined in `apps/admin` to resolve to named Brand_Tokens values
-  so Component_Library components render in the Royal Glow brand identity.
+  so Component_Library components render in the wecut brand identity.
 - **Family_Values**: The three guiding UX principles applied by the redesign —
   Simplicity, Fluidity, and Delight (defined below).
 - **Simplicity**: Gradual revelation — surfacing controls and detail only as
@@ -124,7 +124,7 @@ from 375px to 1920px.
 ### Requirement 1: Brand Token Consumption and shadcn Theme Mapping
 
 **User Story:** As the salon owner, I want every shadcn component in the
-redesigned admin portal to render in the established Royal Glow brand identity,
+redesigned admin portal to render in the established wecut brand identity,
 so that the admin tool feels like a premium, on-brand part of my business rather
 than a generic neutral template.
 
@@ -343,7 +343,7 @@ access stays controlled after the redesign.
 7. IF the signed-in user's Role_Level is unresolved, unknown, or absent, THEN THE
    Sidebar SHALL treat the user as the minimum Role_Level (0) when filtering
    navigation entries.
-8. THE Sidebar SHALL render the Royal Glow logo and admin label at the top of the
+8. THE Sidebar SHALL render the wecut logo and admin label at the top of the
    panel.
 9. THE Admin_Design_System SHALL preserve the existing route paths defined by the
    Root-Path Convention without introducing an `/admin` prefix.

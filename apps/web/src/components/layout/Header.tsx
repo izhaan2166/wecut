@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : Header
  * Scope        : Layout
  *
@@ -112,19 +112,11 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
     >
       <div className="container mx-auto flex h-20 max-w-[1280px] items-center justify-between px-4 md:px-8">
         {/* ── Logo ── */}
-        <Link href="/" className="flex items-center gap-3" aria-label="Royal Glow — Go to homepage">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt="Royal Glow logo"
-            width={40}
-            height={40}
-            className="size-10 object-contain"
-          />
-          {/* Two-line brand lockup: wordmark + Salon & Spa descriptor */}
+        <Link href="/" className="flex items-center" aria-label="wecut — Go to homepage">
+          {/* Text-only brand lockup: wordmark + Salon & Spa descriptor */}
           <span className="flex flex-col leading-none">
             <span className="font-display text-[19px] font-black tracking-tight text-cocoa-dark">
-              Royal Glow
+              wecut
             </span>
             <span className="mt-1 font-ui text-[10px] font-semibold uppercase tracking-[0.22em] text-warm-gray">
               Salon &amp; Spa

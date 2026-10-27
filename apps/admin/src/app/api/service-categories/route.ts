@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 21-06-2026 & Updated - 22-06-2026
  *
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : GET /api/service-categories — POST retired (410 Gone)
  * Scope        : API — Admin service category catalogue (read-only)
  *

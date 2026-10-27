@@ -1,7 +1,7 @@
 // @vitest-environment node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : waitlist-routes.test
  * Scope        : Unit tests for the admin Waitlist API routes
  *

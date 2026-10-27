@@ -1,6 +1,6 @@
 # Knowledge Base — Index
 
-The single key to all project documentation for **Royal Glow Salon & Spa (RGSS)**.
+The single key to all project documentation for **wecut Salon & Spa (RGSS)**.
 Architecture, planning, operational references, and the issue guide (`ISSUES.md`)
 live here. `README.md` lives in the repo root; `CONTRIBUTING.md` lives in `.github/`.
 

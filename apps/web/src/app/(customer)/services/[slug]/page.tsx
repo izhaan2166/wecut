@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 08-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ServiceDetailPage
  * Scope        : Customer Pages
  *
@@ -61,7 +61,7 @@ function serviceTypeLabel(type: 'salon' | 'spa'): string {
 // Fallback description when a service has none recorded — keeps JSON-LD and
 // metadata populated without inventing marketing copy per service.
 function describeService(name: string, categoryName: string): string {
-  return `${name} — a premium ${categoryName.toLowerCase()} service at Royal Glow Salon & Spa, Bengaluru. Book your appointment today.`
+  return `${name} — a premium ${categoryName.toLowerCase()} service at wecut Salon & Spa, Bengaluru. Book your appointment today.`
 }
 
 // Pre-render the known active service slugs at build (same source the sitemap
@@ -194,7 +194,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                 Ready to book {service.name}?
               </h2>
               <p className="font-sans text-[16px] leading-[1.6] text-warm-gray mt-3 max-w-[420px] mx-auto">
-                Reserve your appointment and experience Royal Glow for yourself.
+                Reserve your appointment and experience wecut for yourself.
               </p>
               <Button
                 asChild
@@ -202,7 +202,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                 size="lg"
                 className="mt-7 rounded-full font-ui text-xs uppercase tracking-[0.5px]"
               >
-                <Link href={bookHref} aria-label={`Book ${service.name} at Royal Glow`}>
+                <Link href={bookHref} aria-label={`Book ${service.name} at wecut`}>
                   Book Now
                 </Link>
               </Button>

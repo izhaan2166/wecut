@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 25-06-2026 & Updated - 25-06-2026
  *
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : ably client loader (customer)
  * Scope        : Realtime (client)
  *

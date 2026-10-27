@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 11-06-2026 & Updated - 11-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : font-consistency (preservation property test)
  * Scope        : Bugfix — font-consistency-fix (Property 2: Preservation)
  *

@@ -1,7 +1,7 @@
 // @vitest-environment node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : staff-mgmt.test
  * Scope        : Unit tests for the admin Staff management API routes
  *

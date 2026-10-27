@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : RootLayout
  * Scope        : Application Shell
  *
@@ -16,7 +16,7 @@
  * - Register service worker for PWA
  *
  * Features / Functionality :
- * - Brand title template (%s | Royal Glow Salon & Spa)
+ * - Brand title template (%s | wecut Salon & Spa)
  * - Open Graph + Twitter Card meta tags
  * - en_IN locale targeting
  *
@@ -44,15 +44,15 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Royal Glow Salon & Spa — Premium Salon & Spa in Bengaluru',
-    template: '%s | Royal Glow Salon & Spa',
+    default: 'wecut Salon & Spa — Premium Salon & Spa in Bengaluru',
+    template: '%s | wecut Salon & Spa',
   },
   description: DESCRIPTION,
   openGraph: {
-    title: 'Royal Glow Salon & Spa — Premium Salon & Spa in Bengaluru',
+    title: 'wecut Salon & Spa — Premium Salon & Spa in Bengaluru',
     description: DESCRIPTION,
     url: SITE_URL,
-    siteName: 'Royal Glow Salon & Spa',
+    siteName: 'wecut Salon & Spa',
     locale: 'en_IN',
     type: 'website',
     // Default social-share image (1200x630). metadataBase resolves this to an
@@ -62,13 +62,13 @@ export const metadata: Metadata = {
         url: '/og-default.jpg',
         width: 1200,
         height: 630,
-        alt: 'Royal Glow Salon & Spa',
+        alt: 'wecut Salon & Spa',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Royal Glow Salon & Spa — Premium Salon & Spa in Bengaluru',
+    title: 'wecut Salon & Spa — Premium Salon & Spa in Bengaluru',
     description: DESCRIPTION,
     images: ['/og-default.jpg'],
   },

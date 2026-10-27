@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : assert-token-presence
  * Scope        : Build-time Brand-Token presence gate (admin-portal-redesign)
  *

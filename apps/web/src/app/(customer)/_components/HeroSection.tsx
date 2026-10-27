@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 12-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : HeroSection
  * Scope        : Customer Pages
  *
@@ -98,7 +98,7 @@ export function HeroSection({ image = null }: HeroSectionProps) {
                 = 3.69:1, below the 4.5:1 WCAG AA floor for this 10px bold text.
                 Full deep-gold clears it comfortably. */}
             <p className="mb-6 font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-deep-gold">
-              Royal Glow Salon &amp; Spa
+              wecut Salon &amp; Spa
             </p>
 
             {/* Headline — each phrase is a non-wrapping block so it always
@@ -120,7 +120,7 @@ export function HeroSection({ image = null }: HeroSectionProps) {
             {/* CTA Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
               <Button asChild variant="gold" size="lg" className="font-ui font-bold">
-                <Link href="/?book=1" aria-label="Book an appointment at Royal Glow">
+                <Link href="/?book=1" aria-label="Book an appointment at wecut">
                   Book Now
                   <ArrowRight data-icon="inline-end" aria-hidden="true" />
                 </Link>

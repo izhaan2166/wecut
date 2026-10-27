@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 07-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : Footer
  * Scope        : Layout
  *
@@ -83,7 +83,7 @@ export function Footer() {
           <div className="md:col-span-4 space-y-8 max-w-xs">
             <div className="space-y-4">
               <h2 className="font-display font-black text-2xl tracking-tight text-cocoa-dark">
-                Royal Glow Salon &amp; SPA
+                wecut Salon &amp; SPA
               </h2>
               <div className="space-y-1">
                 <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink">
@@ -195,7 +195,7 @@ export function Footer() {
         {/* ── Bottom Bar ── */}
         <div className="border-t border-outline-gray pt-8 flex flex-col md:flex-row justify-between items-center gap-5">
           <span className="font-ui text-[10px] font-bold uppercase tracking-widest text-warm-gray">
-            © 2026 Royal Glow Salon &amp; Spa
+            © 2026 wecut Salon &amp; Spa
           </span>
           <nav
             aria-label="Legal links"

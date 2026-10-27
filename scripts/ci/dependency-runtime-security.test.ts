@@ -28,7 +28,7 @@ const roundTrip = withDOM((window) => {
   })
   editor.update(() => {
     const document = new window.DOMParser().parseFromString(
-      '<p>Royal Glow <strong>salon</strong> &amp; spa</p>', 'text/html',
+      '<p>wecut <strong>salon</strong> &amp; spa</p>', 'text/html',
     )
     $getRoot().append(...$generateNodesFromDOM(editor, document))
   }, { discrete: true })
@@ -42,7 +42,7 @@ const roundTrip = withDOM((window) => {
     }
   })
 })
-assert.deepEqual(roundTrip, { text: 'Royal Glow salon & spa', bold: 'salon' })
+assert.deepEqual(roundTrip, { text: 'wecut salon & spa', bold: 'salon' })
 
 // GHSA-834v-8h66-3h79: invalid import aliases must not become executable default
 // initializers. The JSON dependency is a data URL; the only payload is a marker
@@ -134,7 +134,7 @@ function runProbe(source: string): unknown {
 describe('installed CMS transitive dependency runtimes', () => {
   it('preserves Lexical HTML conversion and blocks Happy DOM import alias injection', () => {
     expect(runProbe(lexicalProbe)).toEqual({
-      roundTrip: { text: 'Royal Glow salon & spa', bold: 'salon' },
+      roundTrip: { text: 'wecut salon & spa', bold: 'salon' },
       aliasExecuted: false,
     })
   }, 15_000)

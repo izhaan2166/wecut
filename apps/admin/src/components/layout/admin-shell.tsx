@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : AdminShell
  * Scope        : Admin Portal — App_Shell (Sidebar + Top_Bar + content)
  *

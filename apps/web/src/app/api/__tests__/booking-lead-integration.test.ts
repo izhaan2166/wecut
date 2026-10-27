@@ -1,7 +1,7 @@
 // @vitest-environment node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : booking-lead-integration.test
  * Scope        : Integration tests — booking + lead happy paths
  *

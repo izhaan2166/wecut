@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 21-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : Users Manager
  * Scope        : Admin Portal — User / RBAC administration
  *

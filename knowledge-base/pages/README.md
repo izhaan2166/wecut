@@ -1,6 +1,6 @@
 # Pages & Routes — Application Map
 
-> Index and navigation guide for the complete route specification of **Royal Glow Salon & Spa**.
+> Index and navigation guide for the complete route specification of **wecut Salon & Spa**.
 
 **Domain:** `theroyalglow.in`
 **Subdomains:** `admin.theroyalglow.in` (Payload CMS) · `docs.theroyalglow.in` (Mintlify) · `status.theroyalglow.in` (BetterStack)

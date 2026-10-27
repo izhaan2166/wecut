@@ -1,7 +1,7 @@
 import { defineConfig } from 'checkly'
 import { Frequency } from 'checkly/constructs'
 
-// Checkly synthetic-monitoring project config for Royal Glow Salon & Spa.
+// Checkly synthetic-monitoring project config for wecut Salon & Spa.
 //
 // This is delivered as CODE. Activating these checks is an OPS step: it needs
 // a Checkly account + `npx checkly deploy` (see `launch-checklist.md`). The
@@ -18,7 +18,7 @@ import { Frequency } from 'checkly/constructs'
 const TARGET_URL = process.env.CHECKLY_TARGET_URL ?? 'https://theroyalglow.in'
 
 export default defineConfig({
-  projectName: 'Royal Glow Salon & Spa',
+  projectName: 'wecut Salon & Spa',
   logicalId: 'rgss',
   checks: {
     // Sensible per-check defaults; each check overrides its own frequency to

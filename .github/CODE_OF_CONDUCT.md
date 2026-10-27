@@ -3,7 +3,7 @@
 ## Our Pledge
 
 We as members, contributors, and leaders pledge to make participation in the
-**Royal Glow Salon & Spa** project and our community a harassment-free
+**wecut Salon & Spa** project and our community a harassment-free
 experience for everyone, regardless of age, body size, disability, ethnicity,
 sex characteristics, gender identity and expression, level of experience,
 education, socio-economic status, nationality, personal appearance, race,
@@ -52,7 +52,7 @@ decisions when appropriate.
 
 This Code of Conduct applies within all community spaces — including the GitHub
 repository, issue tracker, pull requests, discussions, and any other channels
-operated by Royal Glow Salon & Spa — and also applies when an individual is
+operated by wecut Salon & Spa — and also applies when an individual is
 officially representing the project in public spaces.
 
 ## Enforcement

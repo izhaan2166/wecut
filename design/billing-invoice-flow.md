@@ -171,7 +171,7 @@ Receptionist marks booking "Completed" (checkout panel)
 │  ┌── PDF PAGE (A4, branded) ────────────────────────────────────────┐   │
 │  │                                                                   │   │
 │  │  ┌─────────────────────────────────────────────────────────────┐ │   │
-│  │  │  👑 Royal Glow Salon & SPA           TAX INVOICE            │ │   │
+│  │  │  👑 wecut Salon & SPA           TAX INVOICE            │ │   │
 │  │  │  1st Floor, Narmada Complex                                  │ │   │
 │  │  │  Rayasandra Main Road, Bengaluru 560099                     │ │   │
 │  │  │  GSTIN: 29XXXXX1234A1Z5                                     │ │   │
@@ -214,7 +214,7 @@ Receptionist marks booking "Completed" (checkout panel)
 │  │                                                                   │   │
 │  │  ─────────────────────────────────────────────────────────────── │   │
 │  │  This is a computer-generated invoice.                           │   │
-│  │  Royal Glow Salon & SPA · theroyalglow.in                       │   │
+│  │  wecut Salon & SPA · theroyalglow.in                       │   │
 │  └───────────────────────────────────────────────────────────────────┘   │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -385,15 +385,15 @@ Invoice created (POST /api/bookings/[id]/complete)
 │                                                                   │
 │  Template: invoice-receipt.tsx (React Email)                      │
 │                                                                   │
-│  From: Royal Glow <hello@theroyalglow.in>                        │
+│  From: wecut <hello@theroyalglow.in>                        │
 │  To: priya.sharma@gmail.com                                      │
-│  Subject: "Your invoice from Royal Glow — #INV1262605001"        │
+│  Subject: "Your invoice from wecut — #INV1262605001"        │
 │                                                                   │
 │  Body:                                                            │
 │  ┌────────────────────────────────────────────────────────────┐  │
 │  │  Hi Priya! 👑                                              │  │
 │  │                                                             │  │
-│  │  Thank you for visiting Royal Glow Salon & SPA!            │  │
+│  │  Thank you for visiting wecut Salon & SPA!            │  │
 │  │                                                             │  │
 │  │  Services: Classic Haircut, Waxing Full Arms               │  │
 │  │  Total Paid: ₹1,300.00 (Cash)                             │  │
@@ -405,7 +405,7 @@ Invoice created (POST /api/bookings/[id]/complete)
 │  │  [ Leave a Review → ]                                      │  │
 │  │                                                             │  │
 │  │  See you next time!                                         │  │
-│  │  — Team Royal Glow                                          │  │
+│  │  — Team wecut                                          │  │
 │  └────────────────────────────────────────────────────────────┘  │
 │                                                                   │
 │  Attachment: INV1262605001.pdf (from R2 buffer)                  │

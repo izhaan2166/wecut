@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 28-06-2026 & Updated - 28-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : amount-in-words
  * Scope        : Business Logic — Invoicing
  *

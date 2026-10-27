@@ -1,7 +1,7 @@
 # Booking System Skill
 
 ## Description
-Domain-specific skill for implementing the Royal Glow booking system — state machine, availability calculation, slot management, and the 4-step booking dialog.
+Domain-specific skill for implementing the wecut booking system — state machine, availability calculation, slot management, and the 4-step booking dialog.
 
 ## Activation
 - When working on booking-related files

@@ -2,12 +2,12 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 29-06-2026 & Updated - 29-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : scripts/provision-betterstack
  * Scope        : Ops — BetterStack uptime + status page provisioning
  *
  * Description  : Idempotently provisions the BetterStack Uptime resources for
- *                Royal Glow Salon & Spa via the Uptime API v2:
+ *                wecut Salon & Spa via the Uptime API v2:
  *                  1. 10 HTTP monitors (the 10 free-tier slots from
  *                     observability.md)
  *                  2. 5 job heartbeats (nightly sales, membership expiry,
@@ -272,7 +272,7 @@ async function ensureStatusPage(): Promise<string | null> {
     'POST',
     '/status-pages',
     withTeam({
-      company_name: 'Royal Glow Salon & Spa',
+      company_name: 'wecut Salon & Spa',
       company_url: `https://${DOMAIN}`,
       contact_url: `mailto:hello@${DOMAIN}`,
       subdomain: STATUS_SUBDOMAIN,

@@ -2,7 +2,7 @@
 
 ## Why Ably
 
-Royal Glow customers and staff see booking status changes, schedule updates, and leave notifications **instantly — without any page reload or manual refresh**. Ably maintains a persistent WebSocket connection in the browser. When the server publishes an event, Ably pushes it to all subscribers in ~50ms. React state updates in response — the UI changes in place.
+wecut customers and staff see booking status changes, schedule updates, and leave notifications **instantly — without any page reload or manual refresh**. Ably maintains a persistent WebSocket connection in the browser. When the server publishes an event, Ably pushes it to all subscribers in ~50ms. React state updates in response — the UI changes in place.
 
 **Example:** Receptionist approves a booking in the admin app (`admin.theroyalglow.in`). The customer is sitting on `/bookings`. Their status badge changes from "Pending" to "Confirmed" automatically, with no interaction required on their end.
 

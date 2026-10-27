@@ -2,14 +2,14 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 27-09-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : OnboardingForm
  * Scope        : Authentication UI
  *
  * Description  : Client form for collecting phone, DOB, gender, and consent
  *                preferences during first-time user onboarding. Rebuilt on the
  *                shadcn/ui Input, Label, Switch, and Button primitives with the
- *                Royal Glow brand tokens and font system.
+ *                wecut brand tokens and font system.
  *
  * Responsibilities :
  * - Collect and validate profile fields (phone, DOB, gender)

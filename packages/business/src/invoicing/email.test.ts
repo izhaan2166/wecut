@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : invoicing/email.test
  * Scope        : Unit tests for buildInvoiceEmailHtml
  *

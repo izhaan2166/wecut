@@ -1,7 +1,7 @@
 // @vitest-environment node
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : bookings/[id] route.test
  * Scope        : Property-based tests — GET /api/bookings/[id]
  *

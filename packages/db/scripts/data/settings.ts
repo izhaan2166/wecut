@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : settings
  * Scope        : Seed Data — System Settings
  *
@@ -32,7 +32,7 @@
  ************************************************************/
 
 export const systemSettings = [
-  { key: 'salon_name', value: 'Royal Glow Salon & Spa' },
+  { key: 'salon_name', value: 'wecut Salon & Spa' },
   { key: 'salon_phone', value: '+91 63601 35720' },
   { key: 'salon_email', value: 'hello@theroyalglow.in' },
   {

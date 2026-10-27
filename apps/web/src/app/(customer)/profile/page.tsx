@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : ProfilePage
  * Scope        : Customer Pages
  *
@@ -49,7 +49,7 @@ import { SignOutButton } from './sign-out-button'
 
 export const metadata: Metadata = {
   title: 'My Profile',
-  description: 'Manage your Royal Glow account.',
+  description: 'Manage your wecut account.',
   robots: { index: false, follow: false },
 }
 

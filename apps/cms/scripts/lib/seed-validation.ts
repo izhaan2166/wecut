@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 29-07-2026 & Updated - 29-07-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : seed-validation (scripts/lib)
  * Scope        : CMS Operations Script — Seed Pre-flight Guards
  *

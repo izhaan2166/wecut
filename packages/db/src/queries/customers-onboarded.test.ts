@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (packages/db)
+ * Project      : wecut-webapp (packages/db)
  * Module Name  : customers-onboarded.test
  * Scope        : Walk-in customer lookup — onboarded customers only
  *

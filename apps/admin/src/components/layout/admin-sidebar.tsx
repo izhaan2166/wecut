@@ -1,12 +1,12 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : AdminSidebar
  * Scope        : Admin UI — Navigation
  *
  * Description  : Role-filtered admin navigation built on the canonical shadcn
  *                Sidebar composition (the `sidebar-07` structure): a
- *                `SidebarHeader` brand lockup (logo + "Royal Glow" / "Admin
+ *                `SidebarHeader` brand lockup (logo + "wecut" / "Admin
  *                Portal", linking to the dashboard), a scrollable
  *                `SidebarContent` whose nav SECTIONS are COLLAPSIBLE parents
  *                (section icon + rotating chevron) with their items as
@@ -45,7 +45,6 @@
 'use client'
 
 import { ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BranchSwitcher } from '@/components/layout/branch-switcher'
@@ -99,20 +98,10 @@ export function AdminSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild className="hover:bg-sidebar-accent">
-              <Link href="/" aria-label="Royal Glow Admin Portal — dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center overflow-hidden rounded-lg border border-outline-gray bg-canvas-white">
-                  <Image
-                    src="/logo.png"
-                    alt="Royal Glow"
-                    width={32}
-                    height={32}
-                    className="size-8 object-contain"
-                    priority
-                  />
-                </div>
+              <Link href="/" aria-label="wecut Admin Portal — dashboard">
                 <div className="grid flex-1 text-left leading-tight">
                   <span className="truncate font-display text-sm font-semibold text-cocoa-dark">
-                    Royal Glow
+                    wecut
                   </span>
                   <span className="truncate font-ui text-[11px] uppercase tracking-[0.16em] text-dusty-gray">
                     Admin Portal

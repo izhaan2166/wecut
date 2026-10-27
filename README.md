@@ -1,11 +1,11 @@
-# Royal Glow Salon & Spa
+# wecut Salon & Spa
 
 <p align="center">
-  <a href="https://theroyalglow.in"><img src="./.github/assets/banner.png" alt="Royal Glow Salon & Spa"></a>
+  <a href="https://theroyalglow.in"><img src="./.github/assets/banner.png" alt="wecut Salon & Spa"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/workflows/ci.yml"><img src="https://github.com/royalglowsalonspa/theroyalglow-webapp/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/izhaan2166/wecut/actions/workflows/ci.yml"><img src="https://github.com/izhaan2166/wecut/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"></a>
   <a href="./.github/CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg" alt="Code of Conduct"></a>
   <a href="./.github/SECURITY.md"><img src="https://img.shields.io/badge/Security-Policy-blue.svg" alt="Security Policy"></a>
@@ -16,7 +16,7 @@
   <a href="https://status.theroyalglow.in/"><img src="https://uptime.betterstack.com/status-badges/v1/monitor/2wfr3.svg" alt="Service status"></a>
 </p>
 
-A TypeScript monorepo for **Royal Glow Salon & Spa by Roshini**: the customer website, booking experience, staff operations, content authoring, and invoice PDF service. Shared packages hold validation contracts, business rules, database access, and common UI utilities.
+A TypeScript monorepo for **wecut Salon & Spa by Roshini**: the customer website, booking experience, staff operations, content authoring, and invoice PDF service. Shared packages hold validation contracts, business rules, database access, and common UI utilities.
 
 [Website](https://theroyalglow.in) · [Book an appointment](https://theroyalglow.in/?book=1) · [Visit the store](https://share.google/xAhEVaQlvnNqoGibZ) · [Knowledge base](knowledge-base/INDEX.md) · [Issues and labels](knowledge-base/ISSUES.md)
 
@@ -82,8 +82,8 @@ Exact versions belong in each workspace manifest and `bun.lock`. Hosting definit
 Use Git, the Bun version declared by `packageManager`, and Node.js for the Node-based tools. The invoicing bundle targets Node 22. Docker and cloud CLIs are needed only for their respective workflows.
 
 ```bash
-git clone https://github.com/royalglowsalonspa/theroyalglow-webapp.git
-cd theroyalglow-webapp
+git clone https://github.com/izhaan2166/wecut.git
+cd wecut-webapp
 bun install --frozen-lockfile
 ```
 

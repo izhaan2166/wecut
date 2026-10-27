@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (admin)
+ * Project      : wecut-webapp (admin)
  * Module Name  : RootLayout
  * Scope        : Application Shell
  *
@@ -37,10 +37,10 @@ import '@/styles/globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Royal Glow Admin',
-    template: '%s | Royal Glow Admin',
+    default: 'wecut Admin',
+    template: '%s | wecut Admin',
   },
-  description: 'Royal Glow Salon & Spa — admin portal.',
+  description: 'wecut Salon & Spa — admin portal.',
   robots: { index: false, follow: false },
 }
 

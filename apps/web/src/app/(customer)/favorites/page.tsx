@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 07-06-2026 & Updated - 07-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : FavoritesPage
  * Scope        : Customer Pages
  *
@@ -39,7 +39,7 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: 'My Favorites',
-  description: 'Your saved Royal Glow services and rituals.',
+  description: 'Your saved wecut services and rituals.',
   robots: { index: false, follow: false },
 }
 

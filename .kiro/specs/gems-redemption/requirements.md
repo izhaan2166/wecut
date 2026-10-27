@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This feature adds **online gems redemption** to the Royal Glow Salon & Spa (RGSS) customer website (`apps/web`). Gems **earning** is already implemented (booking completion awards 1 gem per ₹100 on `service` invoices) and is explicitly out of scope here — this spec covers **redemption only**.
+This feature adds **online gems redemption** to the wecut Salon & Spa (RGSS) customer website (`apps/web`). Gems **earning** is already implemented (booking completion awards 1 gem per ₹100 on `service` invoices) and is explicitly out of scope here — this spec covers **redemption only**.
 
 Redemption happens exclusively through the dedicated gems catalogue at the customer route `/gems`, never at normal booking checkout. The model for this is the McDonald's India points programme: gems are redeemable only against a curated set menu of services, not applied as a discount on every purchase.
 

@@ -1,7 +1,7 @@
 # Drizzle ORM + Neon PostgreSQL Skill
 
 ## Description
-Guides correct Drizzle ORM schema definitions, query patterns, and Neon PostgreSQL conventions for the Royal Glow project.
+Guides correct Drizzle ORM schema definitions, query patterns, and Neon PostgreSQL conventions for the wecut project.
 
 ## Activation
 - When working on files in `packages/db/`

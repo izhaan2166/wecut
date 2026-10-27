@@ -1,4 +1,4 @@
-# OWASP ZAP baseline rule tuning for the Royal Glow public site.
+# OWASP ZAP baseline rule tuning for the wecut public site.
 # Format: <ruleId>\t<action: WARN|IGNORE|FAIL>\t<comment>
 # Informational/low-signal alerts that don't apply to a server-rendered,
 # consent-gated marketing site are downgraded to WARN so the baseline scan

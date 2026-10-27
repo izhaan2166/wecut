@@ -573,8 +573,8 @@ identity.
 
 | Stage | Result |
 |---|---|
-| PR 1 (expand) | [#182](https://github.com/royalglowsalonspa/theroyalglow-webapp/pull/182) merged as `1a4f552`, CI green |
-| PR 2 (upgrade + contract) | [#185](https://github.com/royalglowsalonspa/theroyalglow-webapp/pull/185) merged as `aef0d2a`, CI green |
+| PR 1 (expand) | [#182](https://github.com/izhaan2166/wecut/pull/182) merged as `1a4f552`, CI green |
+| PR 2 (upgrade + contract) | [#185](https://github.com/izhaan2166/wecut/pull/185) merged as `aef0d2a`, CI green |
 | Migration `0001` | applied to dev, test, pprd, prod |
 | Migration `0002` | applied to dev, test, pprd, prod |
 | Production deploy | run `33499561308`, success, health check passed |
@@ -684,4 +684,4 @@ One feature PR into `dev` per change is the only PR needed.
 - [database.md](./database.md) — schema conventions
 - [`.kiro/steering/migration-discipline.md`](../.kiro/steering/migration-discipline.md) — generate → review → commit → migrate
 - [Better Auth 1.7 upgrade guide](https://better-auth.com/docs/guides/1-7-upgrade-guide) — upstream source (note §2.4: documents an unreleased option)
-- PR [#174](https://github.com/royalglowsalonspa/theroyalglow-webapp/pull/174) — the 1.6.26 emergency rollback and its revert pattern
+- PR [#174](https://github.com/izhaan2166/wecut/pull/174) — the 1.6.26 emergency rollback and its revert pattern

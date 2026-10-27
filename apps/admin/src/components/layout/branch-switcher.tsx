@@ -1,11 +1,11 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : BranchSwitcher
  * Scope        : Admin Portal — App Shell / Sidebar footer
  *
  * Description  : The shadcn `sidebar-07` TeamSwitcher pattern, repurposed as a
- *                Royal Glow BRANCH switcher and placed in the sidebar FOOTER
+ *                wecut BRANCH switcher and placed in the sidebar FOOTER
  *                (bottom-left). The active branch (Rayasandra) is operational
  *                and selectable; a second branch (Marathahalli) is shown as
  *                "Coming Soon" and is disabled — it is planned but not yet

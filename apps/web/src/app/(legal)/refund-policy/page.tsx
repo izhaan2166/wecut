@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : RefundPolicyPage
  * Scope        : Legal Pages
  *
@@ -34,7 +34,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata = buildMetadata({
   title: 'Refund & Cancellation Policy',
   description:
-    'Royal Glow Salon & Spa refund and cancellation policy — cancellation windows, no-show and rescheduling rules, membership hour expiry, and how to request a refund.',
+    'wecut Salon & Spa refund and cancellation policy — cancellation windows, no-show and rescheduling rules, membership hour expiry, and how to request a refund.',
   path: '/refund-policy',
   robotsIndex: true,
 })
@@ -56,9 +56,9 @@ export default function RefundPolicyPage() {
         </p>
         <p className="mt-6">
           This policy explains how cancellations, rescheduling, no-shows, and refunds work at{' '}
-          {BUSINESS.name} ("Royal Glow", "we", "us", or "our"). It forms part of our Terms of
-          Service. Because most services are paid at our counter after the service is rendered, this
-          policy mainly applies to prepaid items such as memberships and any advance payments.
+          {BUSINESS.name} ("wecut", "we", "us", or "our"). It forms part of our Terms of Service.
+          Because most services are paid at our counter after the service is rendered, this policy
+          mainly applies to prepaid items such as memberships and any advance payments.
         </p>
       </header>
 

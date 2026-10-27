@@ -1,6 +1,6 @@
 # Sitemap — Complete Information Architecture & Site Hierarchy
 
-> Comprehensive map of all ~104 routes, navigation structures, user flows, and URL conventions for the Royal Glow Salon & SPA application (`theroyalglow.in`).
+> Comprehensive map of all ~104 routes, navigation structures, user flows, and URL conventions for the wecut Salon & SPA application (`theroyalglow.in`).
 
 ---
 
@@ -181,13 +181,13 @@ theroyalglow.in
 **Desktop — Full horizontal nav:**
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ [Royal Glow Logo]   Services  Offers  About  Contact  Blog  FAQ            │
+│ [wecut Logo]   Services  Offers  About  Contact  Blog  FAQ            │
 │                                                          [Sign In] [Book Now]│
 └─────────────────────────────────────────────────────────────────────────────┘
 
 When signed in:
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ [Royal Glow Logo]   Services  Offers  About  Contact  Blog  FAQ            │
+│ [wecut Logo]   Services  Offers  About  Contact  Blog  FAQ            │
 │                                              [Avatar ▼] [Book Now]          │
 │                                              ├── My Profile                 │
 │                                              ├── My Bookings                │
@@ -228,7 +228,7 @@ Hamburger overlay:
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                             │
-│  ROYAL GLOW SALON & SPA                                                     │
+│  WECUT SALON & SPA                                                     │
 │                                                                             │
 │  Quick Links        Legal              Connect            Hours             │
 │  ──────────────     ──────────────     ──────────────     ──────────────    │
@@ -240,7 +240,7 @@ Hamburger overlay:
 │  Contact                                                                    │
 │                                                                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  © 2026 Royal Glow Salon & SPA. All rights reserved.  [Cookie Preferences] │
+│  © 2026 wecut Salon & SPA. All rights reserved.  [Cookie Preferences] │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -249,7 +249,7 @@ Hamburger overlay:
 
 ```
 ┌──────────────────────────┐
-│  [Royal Glow Admin]      │
+│  [wecut Admin]      │
 │  ════════════════════     │
 │                           │
 │  OVERVIEW                 │
@@ -297,7 +297,7 @@ Hamburger overlay:
 Mobile bottom (not a tab bar — just a sticky CTA):
 ┌──────────────────────────────────┐
 │                                  │
-│  [ ★ Book Now — Royal Glow ]     │  ← Opens /?book=1 dialog
+│  [ ★ Book Now — wecut ]     │  ← Opens /?book=1 dialog
 │                                  │
 └──────────────────────────────────┘
 ```
@@ -636,7 +636,7 @@ Page                            Breadcrumbs
 │  Non-existent page           │  → Custom 404 page                   │
 │  (e.g., /xyz)               │    "Page not found"                  │
 │                              │    [Go to Homepage] button            │
-│                              │    Royal Glow branding                │
+│                              │    wecut branding                │
 │                              │                                      │
 │  Unauthenticated access      │  → Redirect to /sign-in             │
 │  (e.g., /profile, /bookings)│    returnTo param preserved          │
@@ -704,7 +704,7 @@ Page                            Breadcrumbs
 ```
 ┌─────────────────────────────────────────┐
 │                                         │
-│         [Royal Glow Logo]               │
+│         [wecut Logo]               │
 │                                         │
 │         ┌─────────────────┐             │
 │         │      404        │             │

@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : staff-redirect
  * Scope        : Shared — Staff Self-Service Subdomain Redirect Mapping
  *

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 01-08-2026 & Updated - 01-08-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : banners.test
  * Scope        : CMS Integration — Tests
  *

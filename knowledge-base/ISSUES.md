@@ -1,12 +1,12 @@
 # Understanding and working with issues
 
 This guide helps contributors and coding agents read, classify, and work on issues
-in **royalglowsalonspa/theroyalglow-webapp**. It explains the repository's label
+in **izhaan2166/wecut**. It explains the repository's label
 names, workflow, and technical vocabulary.
 
-Use [GitHub Issues](https://github.com/royalglowsalonspa/theroyalglow-webapp/issues)
+Use [GitHub Issues](https://github.com/izhaan2166/wecut/issues)
 for current work, evidence, discussions, and status. Use the
-[GitHub label directory](https://github.com/royalglowsalonspa/theroyalglow-webapp/labels)
+[GitHub label directory](https://github.com/izhaan2166/wecut/labels)
 for the live label definitions. GitHub stores labels independently of repository
 files; editing this guide does not create or change labels on GitHub.
 
@@ -144,7 +144,7 @@ codes express this repository's triage conventions, not a promised response time
 
 Use these queries in the repository's GitHub Issues search. Quote label names
 because they contain spaces. Each query can also be prefixed with
-`repo:royalglowsalonspa/theroyalglow-webapp` when searching across GitHub.
+`repo:izhaan2166/wecut` when searching across GitHub.
 
 | Find | Search query |
 | --- | --- |
@@ -484,7 +484,7 @@ particular defect is still present.
 
 | Term | Meaning in this project |
 | --- | --- |
-| RGSS | Royal Glow Salon & Spa, the business served by this repository. |
+| RGSS | wecut Salon & Spa, the business served by this repository. |
 | Monorepo / workspace | Related apps and shared packages maintained together. A workspace has its own package manifest and dependencies. |
 | `apps/web` | Customer-facing website, booking experience, account pages, and public API routes. |
 | `apps/admin` | Staff and management portal, operational APIs, and background-job handlers. |

@@ -1,6 +1,6 @@
 ---
 title: Security
-description: How Royal Glow protects customer data — input validation, rate limiting, security headers, file uploads, webhooks, consent, and role-based access.
+description: How wecut protects customer data — input validation, rate limiting, security headers, file uploads, webhooks, consent, and role-based access.
 icon: shield
 ---
 
@@ -11,7 +11,7 @@ icon: shield
   together so one gap never becomes a breach.
 </Info>
 
-Royal Glow handles real people's personal details — names, phone numbers,
+wecut handles real people's personal details — names, phone numbers,
 dates of birth, booking history, and invoices. Keeping that data safe is not an
 afterthought; it is built into every layer of the platform. This page explains,
 in plain terms first and then in technical detail, the controls that protect the
@@ -155,7 +155,7 @@ unnoticed.
 
 ## Consent & privacy — DPDP Act (India)
 
-Royal Glow operates under India's **Digital Personal Data Protection (DPDP) Act**.
+wecut operates under India's **Digital Personal Data Protection (DPDP) Act**.
 Data is stored on Indian servers and is not shared with third-party
 organisations. Consent is explicit and granular:
 
@@ -204,7 +204,7 @@ third-party service. The session cookie is hardened:
 | `Secure` | `true` | `true` | Sent only over HTTPS |
 | `SameSite` | `Lax` | `Lax` | Not sent on cross-site requests (CSRF defence) |
 
-Because Google OAuth runs on Royal Glow's own domain, the callback at
+Because Google OAuth runs on wecut's own domain, the callback at
 `theroyalglow.in/api/auth/callback/google` keeps the session first-party. See
 [Authentication](/content/docs/authentication) for the full sign-in design.
 

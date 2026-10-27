@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : MobileNav
  * Scope        : Layout
  *
@@ -339,7 +339,7 @@ export function MobileNav({ isOpen, onClose, pathname, user }: MobileNavProps) {
         <div className="flex items-center justify-between h-16 px-5 border-b border-cloud-gray">
           <span className="flex flex-col leading-none">
             <span className="font-display font-black text-lg text-cocoa-dark tracking-tight">
-              Royal Glow
+              wecut
             </span>
             <span className="font-ui font-semibold text-[9px] uppercase tracking-[0.22em] text-warm-gray mt-1">
               Salon &amp; Spa

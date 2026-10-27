@@ -3,7 +3,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-08-2026 & Updated - 04-08-2026
  *
- * Project      : theroyalglow-webapp (apps/web)
+ * Project      : wecut-webapp (apps/web)
  * Module Name  : gems/redeem/route.test
  * Scope        : Route tests — POST /api/gems/redeem (Gems Redemption)
  *

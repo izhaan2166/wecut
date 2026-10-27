@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 09-06-2026 & Updated - 09-06-2026
  *
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : routes (a11y test)
  * Scope        : Admin — Representative redesigned routes accessibility
  *

@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-09-2026 & Updated - 04-09-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : drift/__tests__/live-fork (test support)
  * Scope        : Schema Drift Remediation — disposable Neon fork harness
  *

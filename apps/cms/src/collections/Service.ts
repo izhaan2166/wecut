@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 08-06-2026 & Updated - 15-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : Service
  * Scope        : CMS Collections — Operational Booking Catalogue
  *

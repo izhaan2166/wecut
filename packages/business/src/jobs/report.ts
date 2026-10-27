@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 04-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : report
  * Scope        : Business Logic — Background Jobs
  *
@@ -144,7 +144,7 @@ function formatBody(data: DailyReportData): string {
 // Daily sales report body (job 13).
 export function formatDailyReport(data: DailyReportData): string {
   const header = [
-    '📊 Royal Glow — Daily Sales Report',
+    '📊 wecut — Daily Sales Report',
     `Date: ${formatDateIN(data.date)} (${WEEKDAY.format(data.date)})`,
     DIVIDER,
     '',
@@ -179,7 +179,7 @@ function formatSigned(paise: number): string {
 // week-over-week comparison line against the previous week's totals.
 export function formatWeeklyReport(data: WeeklyReportData, previous: WeeklyReportData): string {
   const header = [
-    '📊 Royal Glow — Weekly Sales Report',
+    '📊 wecut — Weekly Sales Report',
     `Week: ${formatDateIN(data.periodStart)} – ${formatDateIN(data.periodEnd)}`,
     DIVIDER,
     '',

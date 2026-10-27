@@ -2,7 +2,7 @@
 
 ## Overview
 
-Royal Glow Salon & Spa is a **fully digital business ecosystem** — not just a website. It covers every operational and customer-facing touchpoint of the business.
+wecut Salon & Spa is a **fully digital business ecosystem** — not just a website. It covers every operational and customer-facing touchpoint of the business.
 
 ---
 
@@ -83,7 +83,7 @@ Onboarding form:
       ☑ Required: "I agree to the Privacy Policy. My data is stored securely
                   on Indian servers and will not be shared with any
                   third-party organization." (links to /privacy)
-      ☐ Optional: "Help us improve Royal Glow — allow anonymous usage
+      ☐ Optional: "Help us improve wecut — allow anonymous usage
                   analytics." (analytics consent — DPDP Act)
       ☐ Optional: "Send me offers, updates & promotions via email
                   and notifications." (marketing consent — DPDP Act)
@@ -322,7 +322,7 @@ If the customer drops off, receptionist follows up from `admin.theroyalglow.in/l
 - Used only by Meta/Instagram ad traffic. Never link homepage CTAs, GMB, Google Maps, or the in-store QR to `/book`.
 - **No navigation menu, no header links** — only one action on this page
 - No sign-in prompt — cold traffic won't sign in
-- Trust signals above the fold: Royal Glow name, 4.9★ 86 reviews, Bengaluru
+- Trust signals above the fold: wecut name, 4.9★ 86 reviews, Bengaluru
 - 3 fields only — Name, Phone, Service interest (dropdown)
 - CTA button text: **"Continue to Booking"** (not "Submit" — tells them what happens next)
 - After submit: brief thank-you message → redirect into the homepage booking dialog with the lead context
@@ -331,7 +331,7 @@ If the customer drops off, receptionist follows up from `admin.theroyalglow.in/l
 **Wireframe:**
 ```
 ┌─────────────────────────────────────┐
-│  Royal Glow Salon & Spa             │
+│  wecut Salon & Spa             │
 │  ⭐ 4.9 · 86 reviews · Bengaluru    │
 │                                     │
 │  "Tell us what you're looking for"  │
@@ -646,7 +646,7 @@ No online payment gateway at launch. Payment is collected physically by the rece
 - Receptionist marks payment as received at checkout (selects Cash, UPI, or Card)
 - Generate branded PDF invoice on checkout
 - Email invoice automatically to customer via Resend (with PDF attachment)
-- Invoice includes: service(s), staff, duration, amount (GST-inclusive), payment mode, date, Royal Glow branding
+- Invoice includes: service(s), staff, duration, amount (GST-inclusive), payment mode, date, wecut branding
 - Revenue tracking per service / staff member / day
 - Daily sales summary emailed to owner via QStash nightly job (includes Cash / UPI / Card breakdown)
 
@@ -702,7 +702,7 @@ All tiers give access to **all SPA services** (Standard, Premium, VVIP). Hours a
 - Expiry auto-calculated: `start_date + validity_days`
 - Membership created → `membership_purchase` invoice generated (₹ amount)
 - Invoice emailed to customer via Resend
-- Customer notified: "Your Royal Glow SPA Membership is active!"
+- Customer notified: "Your wecut SPA Membership is active!"
 - **No gems earned on membership purchase**
 
 **Recording a session:**
@@ -775,7 +775,7 @@ Custom `admin.theroyalglow.in/users` page built on Better Auth admin APIs.
 The site is installable on a customer's phone — icon on homescreen, app-like experience, no app store.
 
 **Features:**
-- `manifest.json` with Royal Glow branding, theme colour, icons
+- `manifest.json` with wecut branding, theme colour, icons
 - Service worker caches: service menu + prices, contact page, hours, gallery thumbnails, homepage shell
 - Offline access to cached content (service menu, contact, prices) — works on bad network
 - Add-to-homescreen prompt shown after 2nd visit (not first — first visit feels pushy)
@@ -792,8 +792,8 @@ Browser push notifications for appointment reminders — no app required, works 
 **Notifications sent:**
 | Notification | Timing | Content |
 |-------------|--------|--------|
-| Appointment reminder | 24h before | "Your [service] at Royal Glow is tomorrow at [time]" |
-| Appointment reminder | 1h before | "Your appointment at Royal Glow starts in 1 hour" |
+| Appointment reminder | 24h before | "Your [service] at wecut is tomorrow at [time]" |
+| Appointment reminder | 1h before | "Your appointment at wecut starts in 1 hour" |
 | Booking confirmed | Immediately | "Booking confirmed! [service], [date], [time]" |
 | Booking rescheduled | Immediately | "Your appointment has been moved to [new time]" |
 
@@ -950,7 +950,7 @@ Required by Indian law (DPDP Act 2023) and standard business practice.
 **Level 2 (expanded, in-place):**
 - Three rows, each with a labelled toggle:
   - _Necessary_ — "Session & security" — toggle locked ON, greyed out, non-clickable
-  - _Analytics_ — "Improve Royal Glow (PostHog, Clarity)" — toggle default OFF
+  - _Analytics_ — "Improve wecut (PostHog, Clarity)" — toggle default OFF
   - _Marketing_ — "Personalised offers (Meta Pixel)" — toggle default OFF
   - `[Save Preferences]` button saves and dismisses
 
@@ -993,7 +993,7 @@ Discovery → Visit theroyalglow.in → Sign in (Google OAuth)
 → Visit salon → Service completed → Invoice (email + PDF)
 → Gems earned on paid amount
 → Follow-up marketing email (if opted in)
-→ 2nd visit prompt: "Add Royal Glow to homescreen"
+→ 2nd visit prompt: "Add wecut to homescreen"
 ```
 
 ### Staff Journey

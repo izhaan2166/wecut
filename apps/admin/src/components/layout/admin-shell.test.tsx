@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : AdminShell (component test)
  * Scope        : Admin Portal — App_Shell composition + overlay drawer
  *

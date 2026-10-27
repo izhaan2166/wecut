@@ -1,4 +1,4 @@
-# Design Flows — Royal Glow Salon & SPA
+# Design Flows — wecut Salon & SPA
 
 > Visual design reference for every user interaction, state transition, and page layout in the application. Uses ASCII wireframes and flow diagrams to communicate design intent to any design tool, agent, or team member.
 

@@ -72,7 +72,7 @@
 │                  │                                                        │
 │  booking_        │  Title: "Booking Confirmed! ✓"                       │
 │  confirmed       │  Body: "Your appointment on {date} at {time} is      │
-│                  │         confirmed. See you at Royal Glow!"            │
+│                  │         confirmed. See you at wecut!"            │
 │                  │  Action: Opens /bookings/{id}                        │
 │                  │  Icon: ✓ green checkmark                             │
 │                  │  Trigger: Receptionist approves booking               │
@@ -80,7 +80,7 @@
 ├──────────────────┼──────────────────────────────────────────────────────┤
 │                  │                                                        │
 │  reminder_24h    │  Title: "Reminder: Tomorrow at {time}"               │
-│                  │  Body: "{services} at Royal Glow, {branch}.          │
+│                  │  Body: "{services} at wecut, {branch}.          │
 │                  │         We're looking forward to seeing you!"         │
 │                  │  Action: Opens /bookings/{id}                        │
 │                  │  Icon: 🔔 bell                                        │
@@ -319,7 +319,7 @@ RULES:
 ┌─────────────────────────────────────────────────────────────────────────┐
 │  Header (Admin):                                                         │
 │  ┌───────────────────────────────────────────────────────────────────┐  │
-│  │  👑 Royal Glow Admin          /bookings  /customers  /leads       │  │
+│  │  👑 wecut Admin          /bookings  /customers  /leads       │  │
 │  │                                                           🔔(3) 👤│  │
 │  └───────────────────────────────────────────────────────────────────┘  │
 │                                                           │              │

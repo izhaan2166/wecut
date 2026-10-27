@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 10-06-2026 & Updated - 10-06-2026
  *
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : slide-over-panel.test
  * Scope        : Component tests for the SlideOverPanel primitive
  *

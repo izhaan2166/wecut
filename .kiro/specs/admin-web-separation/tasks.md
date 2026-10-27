@@ -100,7 +100,7 @@ verification last.
   - [x] 4.1 Create the `/me` self-service layout
     - Create `apps/admin/src/app/me/layout.tsx`: resolve the session server-side and
       `redirect()` to the web origin if absent (defence-in-depth complementing edge gating)
-    - Set `robots: { index: false, follow: false }` (noindex) and a `%s | Royal Glow` title
+    - Set `robots: { index: false, follow: false }` (noindex) and a `%s | wecut` title
       template; rely on `AdminShell` + `filterNavByLevel` for the self-service-only sidebar
     - _Requirements: 1.3_
 

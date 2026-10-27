@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : middleware-access-matrix.test
  * Scope        : Example-based access-matrix unit tests for the RBAC core
  *

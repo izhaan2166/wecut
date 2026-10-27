@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 26-06-2026 & Updated - 26-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : RedeemFlow
  * Scope        : Loyalty Programme (Gems Redemption UI)
  *

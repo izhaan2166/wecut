@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-10-2026 & Updated - 04-10-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : drift/__tests__/runner-gated-apply.test
  * Scope        : Unit tests — the ORCHESTRATION-layer Req 5.5 gate
  *

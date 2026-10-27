@@ -1,7 +1,7 @@
-# Royal Glow CMS
+# wecut CMS
 
 `@rgss/cms` provides the Payload content editor, public content APIs, and
-bookable service catalogue authoring for Royal Glow Salon & Spa. The configured
+bookable service catalogue authoring for wecut Salon & Spa. The configured
 production origin is `https://cms.theroyalglow.in`; local development uses port
 `3002`. The staff operations portal is a separate app in `apps/admin`.
 
@@ -121,7 +121,7 @@ locally but is not durable storage on Render. The media collection allows JPEG,
 PNG, and WebP, requires alt text, and generates 400/800/1600-pixel image variants.
 
 Resend is optional in the config. Without an API key, real email delivery is not
-configured. Sender defaults are `contact@theroyalglow.in` and `Royal Glow Salon & Spa`.
+configured. Sender defaults are `contact@theroyalglow.in` and `wecut Salon & Spa`.
 The Blueprint also lists `NEXT_PUBLIC_R2_PUBLIC_URL`, but the current CMS Payload
 storage configuration does not read it; distinguish hosting declarations from
 variables actually used by the app.

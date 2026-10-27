@@ -1,6 +1,6 @@
-# Contributing to Royal Glow Salon & Spa
+# Contributing to wecut Salon & Spa
 
-Thanks for your interest in the **theroyalglow-webapp** codebase. This document
+Thanks for your interest in the **wecut-webapp** codebase. This document
 covers how we work — branching, commits, code review, and how to get a
 pull request merged.
 
@@ -45,8 +45,8 @@ Prerequisites:
 First run:
 
 ```bash
-git clone https://github.com/royalglowsalonspa/theroyalglow-webapp.git
-cd theroyalglow-webapp
+git clone https://github.com/izhaan2166/wecut.git
+cd wecut-webapp
 bun install --frozen-lockfile
 cp .env.example .env.local   # then fill in the four _RGSS credentials
 bun run dev                  # spins up web (3000) + admin (3001) + cms (3002)

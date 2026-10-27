@@ -347,7 +347,7 @@ Desktop differences:
 │              └─────────────────┘                     │
 │                                                      │
 │      No upcoming bookings.                           │
-│      Ready for your next Royal Glow moment?          │
+│      Ready for your next wecut moment?          │
 │                                                      │
 │           [ Book Now ]                               │
 │                                                      │

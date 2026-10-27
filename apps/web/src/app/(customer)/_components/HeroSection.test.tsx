@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 12-06-2026 & Updated - 12-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : HeroSection (component test)
  * Scope        : Customer Pages — Homepage Hero
  *
@@ -34,7 +34,7 @@ import { HeroSection } from './HeroSection'
 
 const CMS_IMAGE: ResolvedMedia = {
   url: 'https://pub-40c9806a7ea146c9b0469960f8b84d94.r2.dev/banner/hero.jpg',
-  alt: 'Royal Glow treatment suite lit by warm evening light',
+  alt: 'wecut treatment suite lit by warm evening light',
   width: 1240,
   height: 1120,
 }
@@ -73,7 +73,7 @@ describe('HeroSection hero image', () => {
     expect(img?.hasAttribute('alt')).toBe(true)
 
     // No stale descriptive alt survives on the fallback path.
-    expect(screen.queryByAltText('Royal Glow salon interior — warm, premium atmosphere')).toBeNull()
+    expect(screen.queryByAltText('wecut salon interior — warm, premium atmosphere')).toBeNull()
   })
 
   it('never lazy-loads the hero image (it is the homepage LCP element)', () => {

@@ -33,7 +33,7 @@ cron** (it resets a Neon branch, which is a control-plane op, not in-DB SQL).
 
 ## Overview
 
-Royal Glow uses two tools for scheduled and event-driven background work:
+wecut uses two tools for scheduled and event-driven background work:
 
 | Tool | Runs inside | Use for | Free tier |
 |------|------------|---------|-----------|
@@ -304,8 +304,8 @@ WHERE id = :account_id;
 
 **Customer experience:**
 - Booking at Wednesday 4:00 PM
-- **Tuesday 4:00 PM:** "Your appointment at Royal Glow is tomorrow at 16:00" — push + email
-- **Wednesday 3:00 PM:** "Your appointment at Royal Glow starts in 1 hour" — push + email
+- **Tuesday 4:00 PM:** "Your appointment at wecut is tomorrow at 16:00" — push + email
+- **Wednesday 3:00 PM:** "Your appointment at wecut starts in 1 hour" — push + email
 
 Only sends if `appointment_reminders_enabled = true` on the customer profile.
 
@@ -385,7 +385,7 @@ Only fires if `membership_alerts_enabled = true` on customer profile.
 
 **Report format:**
 ```
-📊 Royal Glow — Daily Sales Report
+📊 wecut — Daily Sales Report
 Date: DD/MM/YYYY (Weekday)
 ─────────────────────────────────────
 
@@ -492,7 +492,7 @@ These are not on a schedule. They are enqueued by API routes with a delay when a
 
 **Why 24h delay:** The visit is still fresh in the customer's mind, but the ask is no longer happening at the counter. That gives enough breathing room without waiting so long that response intent drops.
 
-**Customer receives:** "How was your [Service] at Royal Glow? Help us grow — leave a review: [Google Maps link]"
+**Customer receives:** "How was your [Service] at wecut? Help us grow — leave a review: [Google Maps link]"
 
 ---
 
@@ -540,7 +540,7 @@ These are not on a schedule. They are enqueued by API routes with a delay when a
 
 **What it does:** Sends a final "Your membership has expired" email via Resend with a renewal prompt and a small incentive.
 
-**Customer receives:** "Your Royal Glow SPA Membership has expired. Unused hours have been forfeited. Renew today and enjoy priority booking for your first session."
+**Customer receives:** "Your wecut SPA Membership has expired. Unused hours have been forfeited. Renew today and enjoy priority booking for your first session."
 
 ---
 

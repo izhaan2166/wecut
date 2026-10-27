@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Phase 6 delivers the automation layer of the Royal Glow Salon & Spa (RGSS) platform: the 19 background jobs defined in `background-jobs.md`, plus the notification delivery layer left as a seam in Phase 5. All jobs run as **QStash** HTTP-triggered routes (14 scheduled + 4 triggered, delivered as `/api/jobs/...` Next.js routes), plus 1 GitHub Actions cron job. pg_cron was retired (Neon free-tier compute sleeps — QStash wakes it via HTTP POST). Scheduled QStash jobs run on a fixed cadence; triggered QStash jobs are enqueued with a delay by the business event that fires them.
+Phase 6 delivers the automation layer of the wecut Salon & Spa (RGSS) platform: the 19 background jobs defined in `background-jobs.md`, plus the notification delivery layer left as a seam in Phase 5. All jobs run as **QStash** HTTP-triggered routes (14 scheduled + 4 triggered, delivered as `/api/jobs/...` Next.js routes), plus 1 GitHub Actions cron job. pg_cron was retired (Neon free-tier compute sleeps — QStash wakes it via HTTP POST). Scheduled QStash jobs run on a fixed cadence; triggered QStash jobs are enqueued with a delay by the business event that fires them.
 
 Consistent with Phases 4–5, every external integration (QStash publish/verify, Web Push, Resend email, Slack webhook, BetterStack heartbeats) is behind a guarded extension point: with no provider keys configured, each job runs its database logic, logs the intended send, pings its (no-op) heartbeat, and returns success — so the whole phase builds, typechecks, and runs. When keys are configured the same code delivers for real.
 

@@ -1,5 +1,5 @@
 /************************************************************
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : lib/admin/toast
  * Scope        : Admin — Toast helpers
  *

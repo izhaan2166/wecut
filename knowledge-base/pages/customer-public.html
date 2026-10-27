@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer-Facing Public Pages — Royal Glow Salon & Spa</title>
+    <title>Customer-Facing Public Pages — wecut Salon & Spa</title>
     <style>
         :root {
             --purple: #6B4C9A;
@@ -567,7 +567,7 @@
     <!-- Header -->
     <header class="header">
         <h1>Customer-Facing Public Pages</h1>
-        <p class="subtitle">Royal Glow Salon & Spa — Marketing & Discovery Layer</p>
+        <p class="subtitle">wecut Salon & Spa — Marketing & Discovery Layer</p>
         <span class="badge-count">&#9670; 8 Public Pages &bull; No Auth Required &bull; SEO-Optimized</span>
     </header>
 
@@ -625,7 +625,7 @@
                 <!-- Properties -->
                 <table class="props-table">
                     <tr><th>Rendering</th><td>SSR (dynamic — personalised CTA if signed in)</td></tr>
-                    <tr><th>Title</th><td><code>&lt;title&gt;Royal Glow Salon &amp; SPA — Premium Beauty in Bengaluru&lt;/title&gt;</code></td></tr>
+                    <tr><th>Title</th><td><code>&lt;title&gt;wecut Salon &amp; SPA — Premium Beauty in Bengaluru&lt;/title&gt;</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>LocalBusiness</code> + <code>Organization</code> + <code>WebSite</code> (with SearchAction) + <code>FAQPage</code></td></tr>
                     <tr><th>OG Image</th><td>Custom branded default (<code>/opengraph-image</code>)</td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in</code></td></tr>
@@ -683,7 +683,7 @@
                 <div class="page-title-block">
                     <h2 class="page-title">Services</h2>
                     <code class="page-route">/services</code>
-                    <p class="page-purpose">Browse all services with prices. Primary discovery page for what Royal Glow offers.</p>
+                    <p class="page-purpose">Browse all services with prices. Primary discovery page for what wecut offers.</p>
                 </div>
                 <div class="badges">
                     <span class="badge badge-ssr">Client Fetch</span>
@@ -695,7 +695,7 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>Next.js page shell with a client-side catalogue fetch</td></tr>
-                    <tr><th>Title</th><td><code>Services &amp; Prices | Royal Glow Salon &amp; SPA</code></td></tr>
+                    <tr><th>Title</th><td><code>Services &amp; Prices | wecut Salon &amp; SPA</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>LocalBusiness</code> + <code>BreadcrumbList</code> + <code>Service</code> per service + <code>FAQPage</code></td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/services</code></td></tr>
                     <tr><th>Data Source</th><td><code>GET /api/services</code> reads Neon directly through Drizzle (no Redis cache; 5-minute Upstash cache planned)</td></tr>
@@ -751,7 +751,7 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>SSR (dynamic — offers change frequently)</td></tr>
-                    <tr><th>Title</th><td><code>Current Offers &amp; Combos | Royal Glow Salon &amp; SPA</code></td></tr>
+                    <tr><th>Title</th><td><code>Current Offers &amp; Combos | wecut Salon &amp; SPA</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>LocalBusiness</code> + <code>BreadcrumbList</code> + <code>Event</code> per active offer</td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/offers</code></td></tr>
                     <tr><th>Data Source</th><td><code>offer</code> table filtered by <code>start_date &lt;= now AND end_date &gt;= now</code></td></tr>
@@ -800,7 +800,7 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>ISR (1h revalidation — content from Payload CMS)</td></tr>
-                    <tr><th>Title</th><td><code>About Royal Glow Salon &amp; SPA — Our Story</code></td></tr>
+                    <tr><th>Title</th><td><code>About wecut Salon &amp; SPA — Our Story</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>LocalBusiness</code> + <code>BreadcrumbList</code> + <code>Person</code> per staff member</td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/about</code></td></tr>
                     <tr><th>Data Source</th><td>Payload CMS REST API (<code>/api/pages/about</code>)</td></tr>
@@ -838,7 +838,7 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>SSG (static — contact info rarely changes)</td></tr>
-                    <tr><th>Title</th><td><code>Contact &amp; Location | Royal Glow Salon &amp; SPA Bengaluru</code></td></tr>
+                    <tr><th>Title</th><td><code>Contact &amp; Location | wecut Salon &amp; SPA Bengaluru</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>LocalBusiness</code> (full, with <code>geo</code>, <code>openingHoursSpecification</code>) + <code>BreadcrumbList</code></td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/contact</code></td></tr>
                     <tr><th>Offline</th><td>PWA cached by service worker — accessible without internet</td></tr>
@@ -891,7 +891,7 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>ISR (1h revalidation)</td></tr>
-                    <tr><th>Title</th><td><code>Beauty &amp; Wellness Blog | Royal Glow Salon &amp; SPA</code></td></tr>
+                    <tr><th>Title</th><td><code>Beauty &amp; Wellness Blog | wecut Salon &amp; SPA</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>LocalBusiness</code> + <code>BreadcrumbList</code></td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/blog</code></td></tr>
                     <tr><th>Data Source</th><td>Payload CMS REST API (<code>/api/posts?limit=12&amp;page=X</code>)</td></tr>
@@ -928,9 +928,9 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>ISR (1h revalidation)</td></tr>
-                    <tr><th>Title</th><td><code>[Article Title] | Royal Glow Blog</code> (dynamic)</td></tr>
+                    <tr><th>Title</th><td><code>[Article Title] | wecut Blog</code> (dynamic)</td></tr>
                     <tr><th>JSON-LD</th><td><code>BlogPosting</code> + <code>BreadcrumbList</code> + <code>LocalBusiness</code></td></tr>
-                    <tr><th>OG Image</th><td>Per-post generated OG image (title + Royal Glow branding)</td></tr>
+                    <tr><th>OG Image</th><td>Per-post generated OG image (title + wecut branding)</td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/blog/[slug]</code></td></tr>
                     <tr><th>Data Source</th><td>Payload CMS rich text field</td></tr>
                 </table>
@@ -980,7 +980,7 @@
             <div class="page-card-body">
                 <table class="props-table">
                     <tr><th>Rendering</th><td>SSG (static — no loading/error states needed)</td></tr>
-                    <tr><th>Title</th><td><code>Frequently Asked Questions | Royal Glow Salon &amp; SPA</code></td></tr>
+                    <tr><th>Title</th><td><code>Frequently Asked Questions | wecut Salon &amp; SPA</code></td></tr>
                     <tr><th>JSON-LD</th><td><code>FAQPage</code> + <code>BreadcrumbList</code> + <code>LocalBusiness</code></td></tr>
                     <tr><th>Canonical</th><td><code>https://theroyalglow.in/faq</code></td></tr>
                     <tr><th>Offline</th><td>PWA cached by service worker</td></tr>
@@ -1026,7 +1026,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Royal Glow Salon &amp; Spa — Customer Public Pages Specification</p>
+        <p>wecut Salon &amp; Spa — Customer Public Pages Specification</p>
         <p style="margin-top: 0.4rem;">Part of the <a href="README.html">Pages Architecture</a> documentation</p>
     </footer>
 

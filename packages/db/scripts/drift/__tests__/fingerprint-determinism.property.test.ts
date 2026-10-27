@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 29-07-2026 & Updated - 29-07-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : drift/__tests__/fingerprint-determinism.property.test
  * Scope        : Property 1: Fingerprint determinism / order-independence
  *

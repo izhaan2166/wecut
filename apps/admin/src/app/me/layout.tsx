@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp (apps/admin)
+ * Project      : wecut-webapp (apps/admin)
  * Module Name  : MeLayout (staff self-service)
  * Scope        : Admin Portal — Staff Self-Service
  *
@@ -30,8 +30,8 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Royal Glow',
-    default: 'Self-Service | Royal Glow',
+    template: '%s | wecut',
+    default: 'Self-Service | wecut',
   },
   robots: { index: false, follow: false },
 }

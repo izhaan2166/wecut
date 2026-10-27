@@ -2,7 +2,7 @@
  * Author       : KATABATHUNI BOSE
  * Date         : Created - 04-06-2026 & Updated - 08-06-2026
  *
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : BookingsList
  * Scope        : Booking Management
  *
@@ -259,7 +259,7 @@ export function BookingsList() {
       {visible.length === 0 ? (
         <p className="py-8 font-sans text-[15px] text-dusty-gray">
           {tab === 'upcoming'
-            ? 'No upcoming bookings. Ready for your next Royal Glow moment?'
+            ? 'No upcoming bookings. Ready for your next wecut moment?'
             : 'No past bookings yet.'}
         </p>
       ) : (

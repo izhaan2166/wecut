@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-// Royal Glow admin: rail↔drawer breakpoint is the canonical shadcn 768px
+// wecut admin: rail↔drawer breakpoint is the canonical shadcn 768px
 // (Tailwind `md`). This MUST match the `md:` visibility classes in the Sidebar
 // primitive's desktop branch — otherwise, between 768px and the breakpoint the
 // hook reports "mobile" (rendering the Sheet overlay) while the markup expects

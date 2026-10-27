@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Project      : theroyalglow-webapp
+ * Project      : wecut-webapp
  * Module Name  : filter-bar
  * Scope        : Admin — FilterBar primitive
  *

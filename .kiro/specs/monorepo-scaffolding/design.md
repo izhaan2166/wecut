@@ -2,7 +2,7 @@
 
 ## Overview
 
-This design covers the complete foundation scaffold for the Royal Glow Salon & Spa monorepo. The goal is a fully buildable, lintable, type-safe monorepo skeleton using Turborepo + Bun workspaces, with Next.js 16.2.9 as the primary web application, shared packages for business logic, database, types, errors, and logging, and a fully integrated design token system via Tailwind CSS v4 + shadcn/ui.
+This design covers the complete foundation scaffold for the wecut Salon & Spa monorepo. The goal is a fully buildable, lintable, type-safe monorepo skeleton using Turborepo + Bun workspaces, with Next.js 16.2.9 as the primary web application, shared packages for business logic, database, types, errors, and logging, and a fully integrated design token system via Tailwind CSS v4 + shadcn/ui.
 
 The scaffold produces zero runtime functionality — it establishes the architectural skeleton, tooling configuration, and dependency graph that all subsequent phases build upon.
 
@@ -28,7 +28,7 @@ graph TD
 ### Directory Structure
 
 ```
-theroyalglow-webapp/
+wecut-webapp/
 ├── .husky/
 │   └── pre-commit                 # lint-staged trigger
 ├── apps/
@@ -171,7 +171,7 @@ Enforcement mechanism: TypeScript module resolution fails if a dependency is not
 
 ```jsonc
 {
-  "name": "theroyalglow-webapp",
+  "name": "wecut-webapp",
   "private": true,
   "type": "module",
   "workspaces": ["apps/*", "packages/*", "docs"],
@@ -524,9 +524,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-### shadcn/ui + Royal Glow Theme Integration
+### shadcn/ui + wecut Theme Integration
 
-shadcn/ui components use CSS variables for theming. The Royal Glow tokens are mapped via the `@layer base` block in `globals.css`. When shadcn components reference `--primary`, `--background`, etc., they resolve to our design tokens:
+shadcn/ui components use CSS variables for theming. The wecut tokens are mapped via the `@layer base` block in `globals.css`. When shadcn components reference `--primary`, `--background`, etc., they resolve to our design tokens:
 
 ```css
 @layer base {
@@ -550,7 +550,7 @@ shadcn/ui components use CSS variables for theming. The Royal Glow tokens are ma
 }
 ```
 
-This means shadcn/ui components (Button, Card, Dialog, etc.) automatically use Royal Glow colors without per-component overrides.
+This means shadcn/ui components (Button, Card, Dialog, etc.) automatically use wecut colors without per-component overrides.
 
 ---
 

@@ -83,7 +83,7 @@ export function Footer() {
           <div className="md:col-span-4 space-y-8 max-w-xs">
             <div className="space-y-4">
               <h2 className="font-display font-black text-2xl tracking-tight text-cocoa-dark">
-                wecut Salon &amp; SPA
+                WeCut Salon &amp; SPA
               </h2>
               <div className="space-y-1">
                 <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink">

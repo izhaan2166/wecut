@@ -60,7 +60,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
             href="/"
             className="font-display text-2xl text-cocoa-dark tracking-tight transition-colors duration-200 hover:text-gold-ink"
           >
-            wecut
+            WeCut
           </Link>
         </div>
       </header>
@@ -72,7 +72,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       <footer className="mt-auto bg-cocoa-dark text-canvas-white">
         <div className="mx-auto max-w-[760px] px-5 py-12">
           <Link href="/" className="font-display text-xl text-canvas-white tracking-tight">
-            wecut
+            WeCut
           </Link>
 
           <address className="mt-4 space-y-1 font-sans text-[15px] text-dusty-gray not-italic leading-[1.6]">

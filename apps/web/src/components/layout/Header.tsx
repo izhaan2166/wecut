@@ -7,16 +7,13 @@
  * Scope        : Layout
  *
  * Description  : Site-wide header. White/90 glass background, logo (image +
- *                wordmark), desktop nav links, and an auth-aware right side:
- *                a direct "Sign in" button (launches Google OAuth instantly,
- *                no /sign-in page) when logged out, or the account menu when
- *                logged in. Also mounts the Google One Tap prompt for guests.
+ *                wordmark), desktop nav links, and the account menu when
+ *                logged in. There is no sign-in button or One Tap prompt.
  *                Rebuilt on the shadcn/ui Button primitive with lucide icons.
  *
  * Responsibilities :
  * - Render logo (40×40 image + Cabinet Grotesk wordmark)
  * - Render desktop nav: Services, Offers, About, Contact, Blog
- * - Logged out: "Sign in" button → Google OAuth directly + One Tap prompt
  * - Logged in: UserMenu dropdown (notifications, bookings, etc. live inside it)
  * - Add scroll-triggered border shadow
  * - Toggle mobile nav panel
@@ -25,20 +22,18 @@
  *                lucide-react
  * Layer        : Presentation (Layout)
  *
- * Dependencies : @/components/ui/button, UserMenu, GoogleOneTap, useSession,
- *                startGoogleSignIn, MobileNav, lucide-react
+ * Dependencies : @/components/ui/button, UserMenu, useSession, MobileNav,
+ *                lucide-react
  ************************************************************/
 
 'use client'
 
-import { ChevronDown, Loader2, Menu } from 'lucide-react'
+import { ChevronDown, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { GoogleOneTap } from '@/components/auth/GoogleOneTap'
 import { Button } from '@/components/ui/button'
 import { useSession } from '@/lib/auth-client'
-import { startGoogleSignIn } from '@/lib/google-signin'
 import { cn } from '@/lib/utils'
 import { MobileNav } from './MobileNav'
 import { UserMenu } from './UserMenu'
@@ -61,8 +56,6 @@ type HeaderUser = {
 export function Header({ initialUser = null }: { initialUser?: HeaderUser | null }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isSigningIn, setIsSigningIn] = useState(false)
-  const [signInError, setSignInError] = useState<string | null>(null)
   const pathname = usePathname()
   const { data: session, isPending } = useSession()
   // First paint uses the server-resolved user (no signed-out → avatar flash on
@@ -89,20 +82,6 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  async function handleSignIn() {
-    try {
-      setIsSigningIn(true)
-      setSignInError(null)
-      await startGoogleSignIn()
-    } catch (err) {
-      // Surface the failure instead of silently resetting — a swallowed error
-      // here is what makes the button look like it "does nothing".
-      setIsSigningIn(false)
-      setSignInError(err instanceof Error ? err.message : 'Sign in failed. Please try again.')
-      console.error('[auth] Google sign-in failed:', err)
-    }
-  }
-
   return (
     <header
       className={cn(
@@ -112,11 +91,11 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
     >
       <div className="container mx-auto flex h-20 max-w-[1280px] items-center justify-between px-4 md:px-8">
         {/* ── Logo ── */}
-        <Link href="/" className="flex items-center" aria-label="wecut — Go to homepage">
+        <Link href="/" className="flex items-center" aria-label="WeCut — Go to homepage">
           {/* Text-only brand lockup: wordmark + Salon & Spa descriptor */}
           <span className="flex flex-col leading-none">
             <span className="font-display text-[19px] font-black tracking-tight text-cocoa-dark">
-              wecut
+              WeCut
             </span>
             <span className="mt-1 font-ui text-[10px] font-semibold uppercase tracking-[0.22em] text-warm-gray">
               Salon &amp; Spa
@@ -146,25 +125,7 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
           <div className="hidden items-center md:flex">
             <UserMenu user={user} />
           </div>
-        ) : (
-          <Button
-            type="button"
-            variant="gold"
-            size="lg"
-            onClick={handleSignIn}
-            disabled={isSigningIn}
-            className="hidden px-8 font-ui font-bold md:inline-flex"
-          >
-            {isSigningIn ? (
-              <>
-                <Loader2 className="animate-spin" aria-hidden="true" />
-                Signing in…
-              </>
-            ) : (
-              'Sign in'
-            )}
-          </Button>
-        )}
+        ) : null}
 
         {/* ── Mobile right side ── */}
         <div className="flex items-center gap-2 md:hidden">
@@ -195,18 +156,7 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
               )}
               <ChevronDown className="size-4 text-warm-gray" aria-hidden="true" />
             </button>
-          ) : (
-            // Logged out: explicit Sign in CTA (fallback when One Tap doesn't prompt).
-            <Button
-              type="button"
-              variant="gold"
-              onClick={handleSignIn}
-              disabled={isSigningIn}
-              className="font-ui font-bold"
-            >
-              {isSigningIn ? 'Signing in…' : 'Sign in'}
-            </Button>
-          )}
+          ) : null}
 
           {/* Hamburger — shown while signed out / loading; hidden once signed in
               (the avatar opens the same drawer). */}
@@ -226,22 +176,6 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
           )}
         </div>
       </div>
-
-      {/* Google One Tap — only for confirmed signed-out guests */}
-      {!user && <GoogleOneTap />}
-
-      {/* Sign-in failure banner — keeps a failed OAuth launch visible instead
-          of leaving the button looking inert. */}
-      {signInError && (
-        <div className="container mx-auto max-w-[1280px] px-4 md:px-8">
-          <p
-            role="alert"
-            className="mb-2 mt-1 rounded-lg border border-red-200 bg-red-50 px-4 py-2 font-ui text-sm text-red-700"
-          >
-            {signInError}
-          </p>
-        </div>
-      )}
 
       {/* Mobile Navigation */}
       <MobileNav

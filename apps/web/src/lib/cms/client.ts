@@ -431,8 +431,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-10-12T08:00:00.000Z',
     updatedAt: '2024-10-12T08:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1571291903893-c6152b2efc22?auto=format&fit=crop&q=80&w=800',
-      alt: 'Back view of vivid electric-blue dyed hair',
+      url: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=800',
+      alt: 'Professional hair wash and color treatment',
       width: 800,
       height: 500,
     },
@@ -446,7 +446,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'Discover the professional rituals and essential products needed to maintain vibrant, salon-fresh hair color long after your appointment.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1571291903893-c6152b2efc22?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>The Science of Hair Color Fade</h2>
@@ -474,8 +474,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-10-08T09:00:00.000Z',
     updatedAt: '2024-10-08T09:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1745327883348-8d78cb4661b0?auto=format&fit=crop&q=80&w=800',
-      alt: 'Warm basalt stones resting along a relaxed back',
+      url: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&q=80&w=800',
+      alt: 'Relaxing hot stone massage therapy',
       width: 800,
       height: 500,
     },
@@ -489,7 +489,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'Melt away tension and improve circulation with this ancient wellness practice. Learn why stone therapy is a cornerstone of deep relaxation.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1745327883348-8d78cb4661b0?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>Ancient Healing with Modern Solace</h2>
@@ -514,8 +514,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-10-05T10:00:00.000Z',
     updatedAt: '2024-10-05T10:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80&w=800',
-      alt: 'Client relaxing on a blue towel with a rich cream mask',
+      url: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=800',
+      alt: 'Luxury skincare bottles and natural cream',
       width: 800,
       height: 500,
     },
@@ -529,7 +529,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'Building a consistent routine is the foundation of a lasting glow. We break down the essential steps for morning and evening care.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>The Power of Consistency</h2>
@@ -563,8 +563,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-09-28T11:00:00.000Z',
     updatedAt: '2024-09-28T11:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1600685890506-593fdf55949b?auto=format&fit=crop&q=80&w=800',
-      alt: 'Bride in red bridal attire with ornate gold jewellery and veil',
+      url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800',
+      alt: 'Beautiful bride with elegant hair styling',
       width: 800,
       height: 500,
     },
@@ -578,7 +578,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'Your wedding day look starts months in advance. Learn how to prepare your hair for optimal health, styling hold, and undeniable radiance.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1600685890506-593fdf55949b?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>The Journey to Bridal Radiance</h2>
@@ -603,8 +603,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-09-20T08:00:00.000Z',
     updatedAt: '2024-09-20T08:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1619607146034-5a05296c8f9a?auto=format&fit=crop&q=80&w=800',
-      alt: 'Rows of colourful nail polish bottles on gold shelves',
+      url: 'https://images.unsplash.com/photo-1604654894610-df4906b1850a?auto=format&fit=crop&q=80&w=800',
+      alt: 'Premium manicured nails with chrome finish',
       width: 800,
       height: 500,
     },
@@ -618,7 +618,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'From chrome finishes to minimalist line art, discover the hottest nail trends that will elevate your style this season.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1619607146034-5a05296c8f9a?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1604654894610-df4906b1850a?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>Elevate Your Fingertips</h2>
@@ -640,8 +640,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-09-15T09:00:00.000Z',
     updatedAt: '2024-09-15T09:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1653443667522-a5b0eafb7082?auto=format&fit=crop&q=80&w=800',
-      alt: 'Glowing skin lit with pink and blue light',
+      url: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800',
+      alt: 'Skincare products in a clean fresh layout',
       width: 800,
       height: 500,
     },
@@ -655,7 +655,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'Humidity and rain can play havoc with your skin. Keep your glow intact with these dermatologist-approved monsoon skincare habits.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1653443667522-a5b0eafb7082?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>Navigating Monsoon Humidity</h2>
@@ -671,8 +671,8 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
     publishedAt: '2024-09-02T10:00:00.000Z',
     updatedAt: '2024-09-02T10:00:00.000Z',
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1470259078422-826894b933aa?auto=format&fit=crop&q=80&w=800',
-      alt: 'Woman flipping long glossy hair in motion',
+      url: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800',
+      alt: 'Healthy shiny hair strands close up',
       width: 800,
       height: 500,
     },
@@ -686,7 +686,7 @@ const MOCK_POSTS_RAW: Omit<BlogPost, 'readingMinutes'>[] = [
       metaDescription:
         'Unlock the secrets to your hair type. Learn how hair porosity and texture dictate the products and cuts that will serve you best.',
       ogImageUrl:
-        'https://images.unsplash.com/photo-1470259078422-826894b933aa?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800',
     },
     bodyHtml: `
       <h2>The Foundation of Hair Care</h2>
@@ -858,8 +858,8 @@ export const FALLBACK_OFFERS: Offer[] = [
     description: 'Refresh your glow with our signature skincare rituals.',
     discountLabel: '20% OFF',
     image: {
-      url: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800',
-      alt: '20% off facials at wecut — glowing facial mask treatment',
+      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChf_-S9qaSgh4ChgD4vHvHOXi0JaNdY6sbENglW-QFs2Y4_PxRHayjVgKBYvET6H1oc_jFCq-SpkAlMqZvATcX4vqOf_4Qv7lowJ0Z-yUpijd-prJwrxZL009WIpMoejD5h8E1v_-VX8fFsNU1Xw-qZCSpfkKGZXC8nFE4r2FGwMDV6aDAqywKydJi6rijlY3TMDjBOuQh3RIWyVZSVNguwgQ-dDaXeufdUkyJX6-zPdZ_AFn-rgIWM6Tpw4_aG2tbZyj4RDWqDmM',
+      alt: '20% off facials at wecut — skincare treatment',
       width: null,
       height: null,
     },
@@ -874,8 +874,8 @@ export const FALLBACK_OFFERS: Offer[] = [
     description: 'Unwind a little deeper, on the house.',
     discountLabel: 'Free add-on',
     image: {
-      url: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=800',
-      alt: 'Free head massage offer at wecut Spa — deep relaxation massage',
+      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDHedetGHswV5AvpWgVH4EwLo9_l2a4jGr_COWOvJIYh1S1t5nt6KYk_ERnSYzSlgQFVu-dClz4Ywcr6J5hT3fvWKZPoUQWt8Bw0Q7rDOmZp_8GxX0DDyqmt5p2yXE9RjXHzB6TRqveNgRpqTQS5VvXUcjda0g2-Nv3jDjp14f5HQW8rHnmgy3OXM3DCbhgWiuFZVF_Kk3EQ5GnGqLP0xBGMo-qR8C6yIgSEaPMB3L000XhYHYhsEj-8VEuCjzHXntthSt61iFilQA',
+      alt: 'Free head massage offer at wecut Spa',
       width: null,
       height: null,
     },
@@ -915,10 +915,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Hair',
     fromPrice: '₹500',
     bookingHref: '/services#haircut',
-    imageAlt: 'Bold multicoloured hair styling at wecut Salon',
+    imageAlt: 'Professional hair styling at wecut Salon',
     image: {
-      url: 'https://images.unsplash.com/photo-1554519515-242161756769?auto=format&fit=crop&q=80&w=800',
-      alt: 'Bold multicoloured hair styling at wecut Salon',
+      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFTeivZU8LWDtg3w4QyhdnYdO7ClTd0NMYng9j-WdftV_EAGAci_BRb0riH6AP1ozu-uu7yf8HecmVVIYfeoqsO8bUS-L1tmeLpT4R2aY2MFBcDEcBJfHUb5OsACUndPHplAIEtT3ViZ6GAgUjH6LpaTyEhhdZ8f-mSdd4-dK05Ch7ovDP-PbhmhPMdqwMS0kdMK4llg45nS_JOWUf9jat6Rf_F3TLkfAUZmy1WgFGiHD9qFIQJ98SZJCEceMxxRY5cr4YY88T-gY',
+      alt: 'Professional hair styling at wecut Salon',
       width: null,
       height: null,
     },
@@ -928,10 +928,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Spa',
     fromPrice: '₹1,499',
     bookingHref: '/services#spa',
-    imageAlt: 'Hot stone spa ritual with fresh flowers at wecut',
+    imageAlt: 'Luxury spa treatment at wecut',
     image: {
-      url: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&q=80&w=800',
-      alt: 'Hot stone spa ritual with fresh flowers at wecut',
+      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZasmXlzNTRSrg_OR0jZFSrGXvcLd9jTCCEs2zzuTKxivasTAvIz-_UG6LI1C2u-L9kqDTvL3H9V9NQkNpahwhy0nqtTy42b7WG79I_OBeVID5PdpO8RrepTsicR84S-3WBVjyV9vSuFS52O8VrXC3QAzeUFmgmSXJ_qKV34NXixljTGYUIvjNqmctILdgFykX2jJ-mmC8bAv9V9X5e9pTcLMvHchNWPoiGq_xWWiRv2tt2TcmENwrkhdFNE5VXC02go2i_W_PxTs',
+      alt: 'Luxury spa treatment at wecut',
       width: null,
       height: null,
     },
@@ -941,10 +941,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Bridal',
     fromPrice: '₹2,500',
     bookingHref: '/services#bridal',
-    imageAlt: 'Indian bridal look with gold jewellery and henna at wecut',
+    imageAlt: 'Elegant Indian bridal makeup at wecut',
     image: {
-      url: 'https://images.unsplash.com/photo-1610173827043-9db50e0d8ef9?auto=format&fit=crop&q=80&w=800',
-      alt: 'Indian bridal look with gold jewellery and henna at wecut',
+      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC8w_Rdj8cu_NrcFjxGQmzAH61tYak6FEB5RtbTOEvIMQd50thOeF0TQvIWR-Am9y_lMXtdsy-C2x85kkH66qkTupeAYgLFRLlqM7Pj34dtR_dWcP5UejQAXH68ym48EYh4Ksms64FYgykRmLPSEGO9sxNkrAWnPzLRiJU4qTLOhjxRNTQkZ5IY3tHBadUiD7O4eLsgNIdsdL7r4T8WrOHB1phWjtrf8Z2ECbVbPj-EskCq641BsEDa4REkm6QrFvIJdPdhan1Hjx8',
+      alt: 'Elegant Indian bridal makeup at wecut',
       width: null,
       height: null,
     },
@@ -954,10 +954,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Nails',
     fromPrice: '₹800',
     bookingHref: '/services#nails',
-    imageAlt: 'Ornate navy and gold nail art at wecut Salon',
+    imageAlt: 'Premium nail art at wecut Salon',
     image: {
-      url: 'https://images.unsplash.com/photo-1754799670312-8e7da8e40ad7?auto=format&fit=crop&q=80&w=800',
-      alt: 'Ornate navy and gold nail art at wecut Salon',
+      url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB1DUVyiMfSF07pyFdu4aNeoXPdm72DWD40kVE9iIScW17pYqaWTs6-Lf_VP7vhCNV8SwsBozQkfOR__it01_TLzLm6UiSEZgIm3iRZuH9cMLd1SG0etrkuaQVQSYj-w28ww5QhXEF3AFYa9-CcJd5aDjSmtUpH_ioR3P8pz_ckCwpWTzaGiaIPejTI4RYbK2ZhOjwOLboHAHYXjlC1rn0cd9uXzfA_QEgA8xBQYQbYGpITgYHogc5SDypjmc4Rp2XwHTsbCKeq92c',
+      alt: 'Premium nail art at wecut Salon',
       width: null,
       height: null,
     },

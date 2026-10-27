@@ -45,7 +45,6 @@
 'use client'
 
 import { ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { BranchSwitcher } from '@/components/layout/branch-switcher'
@@ -100,16 +99,6 @@ export function AdminSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild className="hover:bg-sidebar-accent">
               <Link href="/" aria-label="wecut Admin Portal — dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center overflow-hidden rounded-lg border border-outline-gray bg-canvas-white">
-                  <Image
-                    src="/logo.png"
-                    alt="wecut"
-                    width={32}
-                    height={32}
-                    className="size-8 object-contain"
-                    priority
-                  />
-                </div>
                 <div className="grid flex-1 text-left leading-tight">
                   <span className="truncate font-display text-sm font-semibold text-cocoa-dark">
                     wecut

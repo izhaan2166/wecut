@@ -1,0 +1,279 @@
+---
+title: High-Level Design
+description: Architecture overview, technology decisions matrix, data model, auth design, and API patterns for Royal Glow.
+icon: network
+---
+
+## Executive Summary
+
+Royal Glow Salon & Spa is a premium beauty and wellness establishment in Bengaluru, India. This document describes the high-level design of the full-stack digital operations platform.
+
+<Info>
+  Royal Glow uses a **monolithic modular** monorepo on Next.js 16 + Neon. The customer and admin apps run on AWS Lambda behind CloudFront through SST, with Cloudflare retained for authoritative DNS and R2 storage. The platform is designed for 20k–50k users, India-first (DPDP, IST, paise, GST 18%), with Lighthouse ≥95 performance and 100 accessibility/SEO.
+</Info>
+
+### Scale Targets
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Registered users` | `20,000–50,000` | Future-proof target |
+| `Daily active users` | `50–200` | Expected steady state |
+| `Concurrent users (peak)` | `50` | Load-test target |
+| `Application routes` | `~104 pages` | Customer (web) + admin (incl. staff self-service) + API |
+| `Database tables` | `38` | 15 Drizzle schema files |
+| `API endpoints` | `~90 route handlers` | Thin orchestrators across web + admin + jobs |
+| `Background jobs` | `19` | Scheduled + triggered + cron |
+
+### Key Constraints
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Solo developer` | `constraint` | No microservices, minimal ops overhead, single consistent stack |
+| `₹0/month infrastructure` | `constraint` | All free tiers at launch |
+| `India-first` | `constraint` | DPDP Act, IST timezone, INR (paise), GST 18% |
+| `Premium brand` | `constraint` | Lighthouse ≥95 performance, 100 accessibility/SEO |
+
+## Architecture Overview
+
+### Layered Monorepo
+
+```text
+Presentation  →  API (thin)  →  Business Logic  →  Data Access  →  Database
+apps/{web,admin}  apps/{web,admin}/api  packages/business  packages/db  Neon PostgreSQL
+```
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Presentation` | `apps/web + apps/admin (app, components)` | May import: business, db, types, errors. Must not import: nothing restricted. |
+| `API (thin)` | `apps/web/app/api + apps/admin/app/api` | May import: business, db, types, errors. Must not import: UI components. |
+| `Business Logic` | `packages/business` | May import: types, errors. Must not import: db, framework, UI. |
+| `Data Access` | `packages/db` | May import: types. Must not import: business, framework, UI. |
+| `Types/Validation` | `packages/types` | May import: nothing. Must not import: everything else. |
+
+### Hosting Topology
+
+```text
+Browser/PWA
+    │ HTTPS
+    ▼
+Cloudflare authoritative DNS (DNS only; no application compute)
+    │
+    ├── theroyalglow.in ──────── CloudFront ── Lambda (apps/web)
+    └── admin.theroyalglow.in ── CloudFront ── Lambda (apps/admin)
+                                      │
+                                      ├── SST sst.aws.Nextjs / OpenNext
+                                      ├── Neon PostgreSQL (dev/test/pprd/prod)
+                                      ├── Upstash Redis + QStash (rate limiting + jobs)
+                                      ├── Ably (realtime)
+                                      └── Cloudflare R2 (images, PDFs, backups)
+
+Unchanged workloads:
+    ├── Render Singapore (Payload CMS at cms.theroyalglow.in)
+    └── Cloud Run (@rgss/invoicing PDF render service)
+```
+
+## Technology Decisions Matrix
+
+| Category | Choice | Key Reason |
+| --- | --- | --- |
+| Framework | Next.js 16 (App Router) | SSR + SSG + API routes in one framework |
+| Toolchain | Bun | Fast installs, scripts, and monorepo workspace support |
+| Database | Neon PostgreSQL 16 | Branching, serverless, all jobs via QStash |
+| ORM | Drizzle ORM | Pure TypeScript, no runtime binary |
+| Auth | Better Auth | Self-hosted, Google OAuth, RBAC plugin |
+| Web + Admin Compute | AWS Lambda + CloudFront via SST `sst.aws.Nextjs` | ARM64 SSR Lambda and CloudFront distribution per app; OpenNext packaging |
+| CMS Hosting | Render (Singapore) | Payload CMS remains on its existing Node service |
+| PDF Rendering | Google Cloud Run | Existing invoicing service remains separate |
+| Realtime | Ably | 6M messages/mo free vs Pusher's 200k/day |
+| CMS | Payload CMS v3 | Self-hosted Next.js plugin, zero vendor lock-in |
+| Email (transactional) | Resend | Modern DX, React Email templates |
+| Email (marketing) | Brevo | Unsubscribe management, DPDP-compliant |
+| Rate Limiting + Queue | Upstash Redis + QStash | Redis stores distributed API rate-limit state; QStash runs background jobs. Catalogue and availability responses are not cached. |
+| File Storage | Cloudflare R2 | S3-compatible, zero egress fees; unchanged by AWS compute |
+| Analytics | PostHog | 1M events/mo, feature flags, DPDP-compliant |
+| Error Monitoring | Sentry | Guarded web/admin browser capture, wrapped API exceptions, and optional Cloud Run invoicing capture. Payload CMS and production source-map upload are not currently wired. |
+| Validation | Zod | TypeScript-native inference, industry standard |
+| Styling | Tailwind CSS v4 | Utility-first, design tokens |
+| Components | shadcn/ui + Radix | Copy-paste ownership, Radix accessibility |
+
+## Data Architecture
+
+### Database Strategy
+
+**Neon PostgreSQL 16** with Git-like branching.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `prod` | `Production` | Never reset |
+| `pprd` | `Pre-production` | Auto-reset daily from prod + PII stripped |
+| `test` | `QA / CI` | Wiped and reseeded every CI run |
+| `dev` | `Development` | Developer sandbox |
+
+### Data Model Overview (38 tables)
+
+| Domain | Tables | Key Entities |
+| --- | --- | --- |
+| Auth | 4 | `user`, `session`, `account`, `verification` |
+| Profiles | 2 | `customer_profile`, `staff_profile` |
+| Services | 3 | `service_category`, `service`, `service_staff` |
+| Scheduling | 4 | `staff_schedule`, `staff_time_off`, `holiday`, `waitlist` |
+| Bookings | 4 | `booking`, `booking_service`, `booking_note`, `booking_history` |
+| Billing | 2 | `invoice`, `invoice_item` |
+| SPA Memberships | 2 | `spa_membership`, `spa_membership_tier` |
+| Offers | 3 | `offer`, `offer_service`, `offer_redemption` |
+| CRM/Leads | 5 | `lead`, `lead_note`, `customer_tag`, `customer_tag_assignment`, `customer_note` |
+| Loyalty | 2 | `loyalty_account`, `loyalty_transaction` |
+| Notifications | 2 | `notification`, `push_subscription` |
+| Branches | 1 | `branch` |
+| System | 5 | `daily_sales_summary`, `monthly_gst_summary`, `audit_log`, `system_setting`, `feature_flag_override` |
+
+### Key Data Conventions
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Primary keys` | `text via nanoid()` | Prevents enumeration attacks |
+| `Money` | `integer (paise)` | ₹1,000.00 = 100000 |
+| `Timestamps` | `timestamptz` | Stored UTC, displayed IST |
+| `Date display` | `DD/MM/YYYY` | en-IN locale |
+| `Currency display` | `₹1,00,000.00` | Indian numbering |
+| `Soft deletes` | `not used` | Hard deletes with audit_log |
+| `Naming` | `snake_case` | Singular table names |
+| `Enums` | `native CREATE TYPE` | PostgreSQL enums |
+| `Snapshots` | `frozen` | Price/name on invoice_item and booking_service |
+| `GST` | `18% inclusive` | base = price ÷ 1.18 |
+
+### Current Data Paths and Planned Cache
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Current source` | `Neon PostgreSQL` | `/api/services` reads catalogue rows directly; `/api/availability` reads business-hours settings directly. |
+| `Current Redis use` | `Upstash Redis` | Distributed API rate-limit state only; no catalogue or availability response cache. |
+| `Planned cache` | `Upstash Redis` | Five-minute catalogue and conflict-aware availability caches may be added later; Neon remains authoritative. |
+
+## Authentication & Authorization
+
+### Auth Architecture
+
+<Tabs>
+
+<Tab title="Provider & Sessions">
+
+- **Provider:** Google OAuth 2.0 only (no email/password)
+- **Sessions:** PostgreSQL `session` table (HttpOnly, Secure, SameSite=Lax cookies)
+- **CSRF:** Built-in via Better Auth
+- **Token type:** Session-based (not JWT) — revocable, server-validated
+
+</Tab>
+
+<Tab title="RBAC Model">
+
+Six roles in ascending privilege:
+
+```text
+Customer → Staff → Receptionist → Manager → Owner → Developer
+```
+
+| Role | Access |
+| --- | --- |
+| Customer | Public pages, own bookings/profile/gems |
+| Staff | Own schedule, assigned booking notes, leave requests |
+| Receptionist | Lowest admin role — bookings, billing, memberships, leave approvals |
+| Manager | Full operational access — staff, services, reports, settings |
+| Owner | Full business access including `admin.theroyalglow.in/users` |
+| Developer | Everything + `admin.theroyalglow.in/integrations`, `admin.theroyalglow.in/logs` |
+
+</Tab>
+
+<Tab title="OAuth Flow">
+
+<Steps>
+
+<Step title="Initiate">
+User clicks "Sign in with Google".
+</Step>
+
+<Step title="Consent">
+Redirect to the Google consent screen (shows "Royal Glow Salon & Spa").
+</Step>
+
+<Step title="Callback">
+User grants consent and Google calls back with an auth code.
+</Step>
+
+<Step title="Exchange">
+Better Auth exchanges the code for tokens and creates/finds the user in the DB.
+</Step>
+
+<Step title="Session">
+A session is created and an HttpOnly cookie is set.
+</Step>
+
+<Step title="Route">
+Has a `customer_profile`? YES → homepage. NO → `/onboarding`.
+</Step>
+
+</Steps>
+
+</Tab>
+
+</Tabs>
+
+## API Design
+
+### Thin API Layer Pattern
+
+```text
+Request → Parse → Zod Validate → Business Logic → Response
+```
+
+API routes are thin orchestrators. No database queries in route handlers.
+
+### Standard Response Shape
+
+```typescript
+// Success
+{ success: true, data: T, meta?: { page, totalPages, totalCount } }
+
+// Error
+{ success: false, error: { code, message, statusCode, requestId, retryable?, details? } }
+```
+
+### API Groups
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Auth` | `catch-all per app` | Better Auth on web + admin (`/api/auth/[...all]`) |
+| `Customer` | `~20 endpoints` | theroyalglow.in/api — authenticated + public |
+| `Admin` | `~50 endpoints` | admin.theroyalglow.in/api — role-gated |
+| `Background Jobs` | `19 jobs` | admin.theroyalglow.in/api/jobs — QStash signature |
+| `Webhooks` | `signature-verified` | Inbound integration webhooks |
+
+## Non-Functional Requirements
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Latency` | `< 100ms` | Global response time |
+| `Availability` | `99.9%` | Uptime |
+| `Security` | `DPDP Act 2023` | India privacy compliance |
+| `Lighthouse Performance` | `≥ 95` | CI gate |
+| `Lighthouse Accessibility` | `100` | CI gate |
+| `Lighthouse SEO` | `100` | CI gate |
+| `Cost` | `₹0/month` | Infrastructure |
+| `Scalability` | `50 concurrent` | Peak users |
+| `RPO` | `~0 seconds` | Neon PITR |
+| `RTO` | `< 5 minutes` | Recovery time objective |
+| `Accessibility` | `WCAG 2.1 AA` | Compliance level |
+
+## Related Pages
+
+<Columns cols={2}>
+  <Card title="Low-Level Design" href="/content/docs/system-design/low-level-design">
+  State machines, sequences, indexes, and security implementation
+</Card>
+  <Card title="Data Model" href="/content/docs/data-model">
+  All 38 tables, enums, and ID formats
+</Card>
+  <Card title="Architecture" href="/content/docs/architecture">
+  Condensed architecture overview
+</Card>
+</Columns>

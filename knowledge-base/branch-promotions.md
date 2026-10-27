@@ -1,0 +1,175 @@
+# Branch promotions and CI recovery
+
+## Current branch policy
+
+Feature and dependency work enters `dev` once through a reviewed pull request.
+Squash is the default; explicitly retained source commits use one structural
+merge, as described in [CONTRIBUTING](../.github/CONTRIBUTING.md). Renovate's update
+batches and major approvals are in [dependency automation](dependency-automation.md).
+The intended gate is `.github/rulesets/dev.json` (an approving review plus
+the required status checks); it is not imported yet, see Validation prerequisites.
+The `test`, `pprd`, and `prod` branches receive the exact same commits
+through `.github/workflows/promote.yml`; environment promotion PRs are not used.
+Fast-forward promotion preserves commit SHAs, messages, and ancestry. Branches may
+temporarily point to different releases while validation is in progress.
+
+Run **Promote validated commit** in GitHub Actions, select the **dev** branch and
+the final target (`test`, `pprd`, or `prod`). The workflow captures `github.sha`,
+runs full CI and CodeQL, runs integration checks, advances `test`, runs load and
+security checks, advances `pprd`, and requires explicit `approve_production` confirmation from `katbose` at dispatch before advancing `prod`. Earlier targets stop sooner.
+
+Every update verifies the immediately preceding branch still points at the tested
+SHA and the destination is its ancestor. Divergence fails; there is no force push,
+merge commit, reset, or rebase. If the source moves, start a new validation run.
+Concurrent promotion runs are serialized and do not cancel an active release.
+Reusable CI includes the caller workflow name in its concurrency group, keeping
+ordinary `dev` push checks separate from promotion validation on the same ref.
+
+Workflow pushes use `GITHUB_TOKEN`, so GitHub does not trigger push workflows.
+The production job explicitly dispatches Deploy AWS with the exact validated SHA
+and dispatches Release Please. Branch advancement and successful deployment are
+separate results; inspect the deployment run before claiming the release is live.
+External branch-connected services must also be checked after promotion.
+
+Release Please opens version/changelog PRs against `dev`. Publication runs after
+promotion on `prod`, and only while both refs match the run SHA. No release commit
+is created directly on `prod`. This avoids a reverse-sync merge and preserves the
+fast-forward invariant.
+Dev and production release runs are serialized. When a merged PR still carries
+`autorelease: pending`, dev waits for production publication before calculating
+another version, preventing a duplicate release from unreleased history.
+
+## Validation prerequisites
+
+Production approval is currently an explicit dispatch checkbox restricted to `katbose`.
+GitHub rejected environment-reviewer configuration with HTTP 403 because the
+current login lacks repository admin rights. An administrator can add an
+environment reviewer gate later; no such gate is claimed to be active.
+Importable environment rulesets are under `.github/rulesets`. Environment
+rulesets forbid deletion and non-fast-forward updates, and do not require
+promotion PRs. The `dev` PR policy remains separate.
+
+The `test`, `pprd`, and `prod` rulesets require check runs that only a promotion
+run creates: `ci / CI Success`, `codeql / Analyze (javascript-typescript)`,
+`integration / Integration Success`, and, for `pprd`/`prod`,
+`load-security / Load & Security Success`. Checks from a reusable workflow are
+named `<caller job> / <job>`, so renaming a job in `promote.yml` means updating
+these files. Once imported, a commit that has not passed a promotion run cannot
+be pushed to those branches, even by hand. Ordinary `dev` push CI reports only
+the unprefixed `CI Success`.
+
+As of 2026-09-28 none of these files is imported. The only active ruleset,
+"protect main branch", had an empty target list and protected no branch, so all
+four environment branches accepted force pushes. Only the repository owner
+account (`royalglowsalonspa`) can manage rulesets; collaborators cannot.
+`dev.json` also requires `codecov/project`, which Codecov has not reported on
+recent pull requests (#248, #251, #252, #254, #256, and #257 report only
+`codecov/patch`). Importing it unchanged would block every merge into `dev`.
+
+Integration and Playwright need `DATABASE_URL_TEST`; live load and ZAP checks need
+`PPRD_URL`. As of the 2026-09-09 audit those secrets were absent, so these jobs
+explicitly skip. An aggregate success with a preflight skip is not evidence of
+live integration or load validation. Database migration workflows remain separate.
+
+## CI root causes reviewed on 2026-09-09
+
+| PRs | Finding | Resolution |
+| --- | --- | --- |
+| #216, #218–#223 | Separate Vitest runner/provider upgrades mixed versions 4 and 5 across workspaces. Failures included missing snapshot state, `coverageFilesDirectory is required`, and coverage payload type mismatches. | Integrate the coupled upgrades together; pin runner and coverage provider to 5.0.0 and group future Vitest updates across workspaces. |
+| #216, #220 | Vitest 5 no longer inherits `jest.Matchers`; `toHaveNoViolations` became a TypeScript error. | Declare the matcher using `vitest.Matchers`, keeping the existing runtime accessibility assertions. |
+| #214 | Sentry 10.73.0 imports a bundler plugin that calls `fileURLToPath` on a non-file URL during test collection. | Retain Sentry 10.70.0, exclude the demonstrated broken release, and keep the other compatible updates. |
+| #215, #217, #219, #221 | Their reviewed checks had no independent implementation failure beyond the dependency audit. | Validate the updates in the combined dependency tree, including the Checkly major upgrade. |
+| #224 and current dev | Audit included baseline-browser-mapping and two joi advisories as well as Payload. | Regenerate the lockfile and upgrade joi to 18.2.5. Only the approved Payload finding remains. |
+
+The original PR branch commits are retained in the integration history. Their
+initial red checks are historical evidence; validation of the final combined tree
+is required before it enters `dev` and is promoted.
+
+## Strict dependency audit
+
+CI runs plain `bun audit`, without advisory exceptions or severity filters.
+Every reported vulnerability or audit execution failure blocks this gate.
+The historical Payload 3.88.0 exception and its wrapper have been removed.
+
+Payload and its six direct companion packages are pinned together at 3.90.2.
+The 3.90.2 patch adds no CMS migration. An environment still before 3.90.0
+needs the generated CMS password-reset migration before serving the new
+runtime. The explicit `Users.access.unlock` denial remains an application
+policy: Payload's newer default permits users of the admin collection to unlock
+accounts, which is broader than this repository's policy. Tests cover that boundary.
+See [auth/CMS dependency upgrades](./auth-cms-dependency-upgrades.md) for validation
+and migration order. A clean audit does not prove a migration or deployment ran.
+
+References: [Vitest 5 migration](https://main.vitest.dev/guide/migration/),
+[Payload advisory](https://github.com/advisories/GHSA-jg8r-5jh2-v2xj),
+[GitHub workflow triggering](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+
+Release Please's first dev run exposed a GitHub GraphQL internal error when fetching ten commits with associated PR/file data. The official query reproduced the failure at the same cursor with batch size 10 and succeeded with batch size 1. The config now uses commit-batch-size 1; release search depth and bootstrap history are preserved.
+
+
+A subsequent run also hit the transient error with one commit per page. Release Please retries HTTP 502 but propagates GitHub's HTTP-200 GraphQL internal errors immediately. A Node preload now retries only read queries with this exact transient error (or gateway 502/503/504), up to three times with backoff. Mutations, authorization failures, other hosts, and permanent errors are never retried or suppressed. The retry tests cover these boundaries.
+
+The first live promotion workflow test exposed a shared `ci-refs/heads/dev`
+concurrency group: promotion run 34383921845 cancelled ordinary push CI run
+34383730967, causing its aggregate check to fail. CI now includes
+`github.workflow` in the group and only cancels superseded PR/push runs, so
+promotion validation and ordinary CI can finish independently.
+
+Follow-up review on 2026-09-10 covered PRs #230, #232, and #233. PR #232 moved
+`better-auth` to 1.7.3 while the root override held `@better-auth/core` at 1.7.2,
+causing missing `checksSchema` exports and both app builds to fail. Aligning core
+exposed a second problem: 1.7.3 no longer writes `account.issuer`, while our
+database contract requires it. Lighthouse reproduced HTTP 500 with
+`unexpected-required-column: account.issuer`. The 1.7.3 cleanup makes issuer
+nullable and replaces its unique index with the provider/account key. Both apps
+and core move together to 1.7.3, after migration 0003 reaches each database.
+The contract test now detects required application columns absent from Better
+Auth's model; it reproduced this failure before the schema correction.
+See [the cleanup runbook](./better-auth-1.7.3-cleanup.md) before promotion.
+Hono's override follows its requested 4.13.7 upgrade; compatible updates are retained.
+
+Reference: [Better Auth 1.7 upgrade guide](https://github.com/better-auth/better-auth/blob/main/docs/content/docs/guides/1-7-upgrade-guide.mdx).
+
+Release PR #231 incorrectly repeated the already published 0.2.0 history as
+0.3.0 because a dev release scan started before production publication finished.
+It was superseded; serialized release runs and the merged-pending-release guard
+prevent that race on subsequent promotions.
+
+A merge gate also waited for `codecov/project` while Codecov was configured to
+wait for other checks, so the two blocked each other. Coverage now reports
+independently of other CI statuses (`require_ci_to_pass: false` in `.github/codecov.yml`).
+The project/patch coverage thresholds and the separate `CI Success` requirement
+are unchanged; no failed test or coverage threshold is waived by this reporting
+change. The merge gate involved was Mergify, which has since been removed;
+`.github/rulesets/dev.json` lists the same coverage contexts (not imported yet;
+see Validation prerequisites).
+
+## Release tag orphaned by a force push (2026-09-27)
+
+Release PR #253 (0.3.0) merged into `dev` as merge commit `d4846451`. That commit
+was pushed to `test`, `pprd`, and `prod` by hand instead of through
+`promote.yml`, and the `prod` push published v0.3.0 on it. Twelve minutes later
+all four branches were force-pushed back to the PR head `e499ca03`. Both commits
+have the same tree, but `d4846451` was no longer in any branch's history.
+
+Release Please looks for the tagged commit in `dev` history. It never found it
+(`Expected 1 commits, only found 0`), scanned back to its 500-commit limit, and
+proposed 0.4.0 with changes released long before (PRs #255 and #257).
+
+Recovery: the v0.3.0 tag was re-pointed to `e499ca03`. The tree is identical, and
+the published release and its notes are unchanged. A manual Release Please run on
+`dev` then rebuilt #257 as 0.3.1 from six commits. The same repair applies
+whenever a release tag falls out of history and an equivalent commit exists on
+`dev`:
+
+```sh
+gh api -X PATCH repos/royalglowsalonspa/theroyalglow-webapp/git/refs/tags/vX.Y.Z \
+  -f sha=<equivalent commit on dev> -F force=true
+gh workflow run release-please.yml --ref dev
+```
+
+Prevention: the release workflow now fails before Release Please runs if the
+manifest version's tag is not an ancestor of the run commit. Once imported, the
+environment rulesets block force pushes and hand-pushed, unvalidated commits.
+Never force-push an environment branch. To undo a promotion, land a forward
+revert on `dev` and promote it.

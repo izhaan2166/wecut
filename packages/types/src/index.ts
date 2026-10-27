@@ -1,0 +1,49 @@
+/************************************************************
+ * Author       : KATABATHUNI BOSE
+ * Date         : Created - 04-06-2026 & Updated - 04-06-2026
+ *
+ * Project      : theroyalglow-webapp
+ * Module Name  : types/index
+ * Scope        : Shared Types & Validation
+ *
+ * Description  : Barrel export for all Zod schemas and TypeScript
+ *                types shared across the monorepo.
+ *
+ * Responsibilities :
+ * - Re-export all domain-specific validation schemas
+ * - Provide single import path for consumers
+ *
+ * Features / Functionality :
+ * - API response schemas, booking, membership, customer, lead,
+ *   schedule, notification, offer types
+ *
+ * Tech Stack   : TypeScript, Zod
+ * Layer        : Shared Package
+ *
+ * Dependencies : All domain type modules
+ *
+ * Notes        : None
+ ************************************************************/
+
+export * from './admin-booking'
+export * from './api'
+export * from './audit'
+export * from './audit'
+export * from './booking'
+export * from './branch'
+export * from './contact'
+export * from './customer'
+export * from './invoice'
+export * from './invoice-pdf'
+export * from './lead'
+export * from './loyalty'
+export * from './membership'
+export * from './notification'
+export * from './offer'
+export * from './reports'
+export * from './schedule'
+export * from './service'
+export * from './settings'
+export * from './staff'
+export * from './user'
+export * from './waitlist'

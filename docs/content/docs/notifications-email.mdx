@@ -1,0 +1,212 @@
+---
+title: Notifications & Email
+description: How Royal Glow reaches customers and staff — transactional email via Resend, marketing email via Brevo, React Email templates, and browser Web Push notifications.
+icon: mail
+---
+
+<Info>
+  **In one line:** Royal Glow reaches people through **email** (the durable
+  record — Resend for transactional, Brevo for marketing) and **Web Push** (the
+  instant nudge). All three are guarded extension points: with a key absent the
+  send is a no-op that logs and returns cleanly.
+</Info>
+
+Royal Glow keeps people informed through two channels: **email** (the durable
+record — confirmations, invoices, reminders, offers) and **Web Push** (the
+instant nudge that lands on a phone or laptop even when the site is closed).
+This page covers how each is wired up and which service handles what.
+
+<Info>
+  Email and push are **guarded extension points**. Each helper reads its keys
+  directly behind a truthy guard — Resend behind `RESEND_API_KEY`, Brevo behind
+  `BREVO_API_KEY`, and Web Push behind the VAPID keys. With a key absent, the
+  send is a no-op that logs and returns cleanly, so the app builds and runs with
+  no email or push configured.
+</Info>
+
+## Why two email services
+
+Because authentication is Google OAuth only, the app sends **zero auth emails** —
+no password resets, no magic links. Every email is a business event. Those split
+naturally into two very different infrastructure problems, so they use two
+services.
+
+| Concern | Transactional | Marketing |
+| --- | --- | --- |
+| Volume | Low, 1-to-1 | High, 1-to-many |
+| Speed | Instant delivery critical | Scheduled / batched |
+| Attachments | Yes (PDF invoices) | No |
+| Unsubscribe management | Not required | **Legally required** |
+| Deliverability focus | Individual inbox | Bulk sender reputation |
+
+## Email providers
+
+**Resend** handles transactional mail; **Brevo** handles marketing. The split is
+strict — invoices and confirmations never go through the marketing pipeline, and
+promotional blasts never go through the transactional one.
+
+<Tabs>
+<Tab title="Resend — transactional">
+
+Resend is built for instant, reliable 1-to-1 delivery, has first-class support
+for PDF attachments (invoices), and integrates natively with React Email. Its
+free tier — **3,000 emails/month, 100/day** — covers the entire launch phase.
+All transactional mail is sent `from` `hello@theroyalglow.in`.
+
+| Email | Triggered by |
+| --- | --- |
+| Welcome / onboarding | Onboarding completed |
+| Booking confirmation (pending) | Booking created |
+| Booking approved / rejected | Receptionist confirms or rejects |
+| Appointment reminder (24h / 1h) | Scheduled reminder job |
+| Invoice — service | Booking moves to `completed` (+ PDF) |
+| Invoice — membership purchase / session | Membership created / session recorded (+ PDF) |
+| Membership expiry reminder (30d / 7d / 1d) | Daily expiry job |
+| Membership expired | Auto-expire job |
+
+</Tab>
+<Tab title="Brevo — marketing">
+
+Brevo is built for bulk sending to subscriber lists and, critically, manages
+**unsubscribe automatically** — a legal requirement for marketing email under
+CAN-SPAM, GDPR, and India's DPDP Act. Its free tier is **300 emails/day with
+unlimited contacts**.
+
+| Email | Triggered by |
+| --- | --- |
+| Post-service follow-up | 2 days after a completed booking |
+| Re-engagement (inactive 60+ days) | Brevo automation |
+| Seasonal / festival offer | Manual campaign |
+| New offer announcement | Owner publishes an offer |
+| Membership renewal nudge | 7 days after a membership expired |
+
+</Tab>
+</Tabs>
+
+<Warning>
+  Marketing email requires explicit consent. A customer is only added to Brevo
+  lists when they tick the marketing consent box at onboarding
+  (`marketing_consent = true`). Transactional email — invoices and booking
+  confirmations — is always sent and cannot be fully disabled.
+</Warning>
+
+## React Email templates
+
+Transactional templates are built with **React Email** as typed `.tsx`
+components in `packages/emails/`, styled in Royal Glow's brand. They receive
+strongly typed props (money as integer **paise**, dates as **DD/MM/YYYY**) and
+render to HTML at send time.
+
+<Tree>
+  <Tree.Folder name="packages/emails" defaultOpen>
+    <Tree.File name="welcome.tsx — Onboarding complete" />
+    <Tree.File name="booking-confirmation.tsx — Booking pending" />
+    <Tree.File name="booking-approved.tsx — Confirmed: staff, pricing, calendar" />
+    <Tree.File name="booking-rejected.tsx — Rejected: reason + rebook CTA" />
+    <Tree.File name="appointment-reminder.tsx — 24h / 1h reminder" />
+    <Tree.File name="invoice-service.tsx — Service invoice (Salon + SPA non-member)" />
+    <Tree.File name="invoice-membership-purchase.tsx — Membership enrolment invoice" />
+    <Tree.File name="invoice-membership-session.tsx — ₹0 session confirmation" />
+    <Tree.File name="membership-expiry-reminder.tsx — 30d / 7d / 1d expiry warning" />
+    <Tree.File name="membership-expired.tsx — Expired: renewal CTA" />
+    <Tree.File name="membership-hours-update.tsx — Periodic hours-remaining nudge" />
+  </Tree.Folder>
+</Tree>
+
+A typical send generates the invoice PDF, then hands the React component and the
+attachment to Resend:
+
+```ts
+await resend.emails.send({
+  from: 'Royal Glow <hello@theroyalglow.in>',
+  to: customer.email,
+  subject: `Hey ${customer.firstName}, your Royal Glow receipt is ready.`,
+  react: InvoiceServiceEmail(props),
+  attachments: [{
+    filename: `RoyalGlow-Invoice-${invoice.invoiceNumber}.pdf`,
+    content: pdfBuffer,
+  }],
+})
+```
+
+<Info>
+  Brevo marketing emails do **not** use React Email. They are designed in
+  Brevo's drag-and-drop editor and managed entirely in the Brevo dashboard, so
+  marketing content can change without a deploy.
+</Info>
+
+## Web Push notifications
+
+Web Push delivers a short, tappable alert to a customer's device — booking
+confirmed, reminder due, gems earned — even when the tab is closed. It uses the
+browser's native Push API and the VAPID protocol; no third-party push vendor is
+involved.
+
+### Subscription flow
+
+<Steps>
+<Step title="Permission">
+The browser's native prompt is shown _after_ the customer's first successful
+booking, not on first load.
+</Step>
+<Step title="Subscribe">
+Once granted, the service worker calls
+`pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: VAPID_PUBLIC_KEY })`,
+returning a `PushSubscription`.
+</Step>
+<Step title="Store">
+The client posts it to `POST /api/push/subscribe`, which upserts a row in the
+`push_subscription` table keyed by `endpoint` and bound to the signed-in user.
+</Step>
+<Step title="Send">
+When an event fires, the server fetches the user's subscriptions and the
+`web-push` library signs and delivers the payload; the service worker shows the
+notification.
+</Step>
+</Steps>
+
+### Storage
+
+`POST /api/push/subscribe` persists the subscription serialised by the browser's
+`PushManager`:
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `endpoint` | `string` | Yes | Push service URL — the upsert key |
+| `keys.p256dh` | `string` | Yes | Client public key |
+| `keys.auth` | `string` | Yes | Client auth secret |
+| `userId` | `string` | Yes | Bound to the session user |
+
+`DELETE /api/push/subscribe` soft-unsubscribes by deactivating the row for a
+given endpoint. Both routes are session-scoped, so one user can never touch
+another's subscriptions. See the
+[Notifications & Realtime API](/content/docs/api-reference/notifications) for the full
+request and response contracts.
+
+<Info>
+  Web Push is gated on the **VAPID keys** (`VAPID_PUBLIC_KEY` /
+  `VAPID_PRIVATE_KEY`). When they are absent, subscription and delivery no-op and
+  log — the booking still succeeds, it simply sends no push. Reminder jobs always
+  check the customer's preferences before sending, and skip a booking that is no
+  longer confirmed.
+</Info>
+
+## Related links
+
+<Columns cols={2}>
+  <Card title="Notifications & Realtime API" href="/content/docs/api-reference/notifications">
+  POST /api/push/subscribe and the in-app notification feed.
+</Card>
+  <Card title="Realtime (Ably)" href="/content/docs/realtime">
+  Live in-page updates — the instant counterpart to push.
+</Card>
+  <Card title="Background Jobs" href="/content/docs/background-jobs">
+  The scheduled jobs that trigger reminders and marketing email.
+</Card>
+  <Card title="Jobs API" href="/content/docs/api-reference/jobs">
+  The job endpoints that send reminders and follow-ups.
+</Card>
+  <Card title="Environment Variables" href="/content/docs/environment-variables">
+  Resend, Brevo, and VAPID keys.
+</Card>
+</Columns>

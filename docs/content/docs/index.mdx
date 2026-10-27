@@ -1,0 +1,155 @@
+---
+title: Overview
+description: The complete documentation for the Royal Glow Salon & Spa platform — for engineers, operators, and anyone in the organisation.
+icon: compass
+mode: wide
+keywords:
+  - Royal Glow
+  - salon platform
+  - documentation
+  - booking system
+  - Bengaluru
+---
+
+
+<div className="rg-hero">
+  <span className="rg-hero-eyebrow">Royal Glow platform</span>
+
+  <p className="rg-hero-title">Everything that runs the salon, documented in one place.</p>
+
+  <p className="rg-hero-lead">
+    Bookings, billing, memberships, loyalty, CRM, scheduling, and the automation behind
+    them. Written for engineers and operators alike — every page opens in plain language
+    before it goes deep.
+  </p>
+
+  <ul className="rg-facts">
+    <li>60 pages</li>
+    <li>38 database tables</li>
+    <li>19 background jobs</li>
+    <li>India-first</li>
+  </ul>
+</div>
+
+## Start where you are
+
+<Columns cols={2}>
+  <Card title="Understand the business" icon="users" href="/content/docs/product/business-overview">
+    What the platform does and who uses it. No technical background needed — start here
+    if you run the salon rather than build it.
+  </Card>
+
+  <Card title="Run it locally" icon="terminal" href="/content/docs/getting-started">
+    Install the monorepo and boot every app. Everything builds with zero secrets
+    configured, so you can be running in minutes.
+  </Card>
+
+  <Card title="Go deeper on the build" icon="layers" href="/content/docs/architecture">
+    Architecture, the 38-table data model, and the API reference — how the system is
+    actually put together.
+  </Card>
+
+  <Card title="Ship and operate" icon="rocket" href="/content/docs/operations">
+    The runbook, deployment pipeline, and branch strategy for when it is time to
+    release or something needs fixing at 2am.
+  </Card>
+</Columns>
+
+## What is Royal Glow?
+
+Royal Glow Salon & Spa is a premium beauty and wellness business in Bengaluru,
+India. This platform is its full digital operations system — a single,
+integrated product covering the customer-facing website and booking experience,
+the staff and admin portal, and all the automation behind the scenes.
+
+## Find your way around
+
+<Columns cols={3}>
+  <Card title="Project status" icon="activity" href="/content/docs/project-status">
+    Build and production-readiness snapshot — what is done and what is left.
+  </Card>
+
+  <Card title="Product" icon="users" href="/content/docs/product/index">
+    What the platform does, who uses it, and how — in plain language.
+  </Card>
+
+  <Card title="Features" icon="sparkles" href="/content/docs/features/index">
+    Booking, memberships, gems, offers, CRM, billing, and the rest, feature by feature.
+  </Card>
+
+  <Card title="Getting started" icon="terminal" href="/content/docs/getting-started">
+    Set up and run the project on your machine.
+  </Card>
+
+  <Card title="Tech stack" icon="boxes" href="/content/docs/tech-stack">
+    Every technology used, and why it was chosen over the alternatives.
+  </Card>
+
+  <Card title="Architecture" icon="workflow" href="/content/docs/architecture">
+    How the system is structured, layered, and hosted.
+  </Card>
+
+  <Card title="System design" icon="layers" href="/content/docs/system-design/index">
+    High-level and low-level design — diagrams, flows, and decisions.
+  </Card>
+
+  <Card title="API reference" icon="plug" href="/content/docs/api-reference/index">
+    Every endpoint, with requests, responses, and error codes.
+  </Card>
+
+  <Card title="Data model" icon="database" href="/content/docs/data-model">
+    The 38-table schema — tables, enums, and the conventions that govern them.
+  </Card>
+
+  <Card title="Security & compliance" icon="shield-check" href="/content/docs/security">
+    How customer data is protected and India's DPDP Act is honoured.
+  </Card>
+
+  <Card title="Operations" icon="wrench" href="/content/docs/operations">
+    Running, monitoring, deploying, and recovering the platform.
+  </Card>
+
+  <Card title="Glossary & FAQ" icon="library" href="/content/docs/glossary">
+    Plain-language definitions, plus quick answers to common questions.
+  </Card>
+</Columns>
+
+## How this documentation is organised
+
+The sidebar splits into three tabs. Pick the one that matches what you came for.
+
+| Tab | For whom | What it covers |
+| --- | --- | --- |
+| **Documentation** | Everyone | Overview, the product and the people who use it, every feature, plus the glossary and FAQ |
+| **Engineering** | Developers | Setup, stack, architecture, system design, standards, application surface, platform services, quality and security, operations |
+| **API reference** | Developers and agents | All ten endpoint groups, with the shared JSON envelope and error codes |
+
+## At a glance
+
+<Columns cols={2}>
+  <Card title="Four apps" icon="grid-2x2">
+    The customer site (`apps/web`), the admin portal (`apps/admin`), the marketing CMS
+    (`apps/cms`), and the invoicing service (`apps/invoicing`) — plus shared `packages/`.
+  </Card>
+
+  <Card title="India-first" icon="indian-rupee">
+    INR pricing held in paise, GST 18% inclusive, IST timezone, DD/MM/YYYY dates, and
+    DPDP Act compliance.
+  </Card>
+
+  <Card title="₹0 per month at launch" icon="piggy-bank">
+    Every external service runs on a free tier, and this documentation site is hosted by
+    Mintlify at no cost.
+  </Card>
+
+  <Card title="Built by one developer" icon="user">
+    A deliberately monolithic modular monorepo. Strict layer boundaries give the
+    modularity without the operational overhead of microservices.
+  </Card>
+</Columns>
+
+<Info>
+  **Reading this cold?** [Business overview](/content/docs/product/business-overview) is the
+  gentlest entry point, and [Getting started](/content/docs/getting-started) is the fastest
+  way to see it running.
+</Info>

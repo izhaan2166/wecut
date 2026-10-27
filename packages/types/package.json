@@ -1,0 +1,20 @@
+{
+  "name": "@rgss/types",
+  "version": "0.3.2",
+  "packageManager": "bun@1.4.4",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "fast-check": "^4.10.2",
+    "typescript": "7.0.2"
+  }
+}

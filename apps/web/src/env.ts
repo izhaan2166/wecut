@@ -1,0 +1,149 @@
+/************************************************************
+ * Author       : KATABATHUNI BOSE
+ * Date         : Created - 04-06-2026 & Updated - 04-06-2026
+ *
+ * Project      : theroyalglow-webapp
+ * Module Name  : env
+ * Scope        : Environment Configuration
+ *
+ * Description  : Build-time validated environment variables using t3-env
+ *                with Zod schemas for both server and client variables.
+ *
+ * Responsibilities :
+ * - Define and validate all server-side env vars at build time
+ * - Define and validate all NEXT_PUBLIC_ client-side env vars
+ * - Provide a single typed import for the entire app
+ *
+ * Features / Functionality :
+ * - 30+ server vars (DB, OAuth, APIs, jobs, monitoring)
+ * - 6 client vars (URLs, keys for browser-side SDKs)
+ * - SKIP_ENV_VALIDATION escape hatch for CI/Docker builds
+ *
+ * Tech Stack   : @t3-oss/env-nextjs, Zod
+ * Layer        : Infrastructure (Configuration)
+ *
+ * Dependencies : @t3-oss/env-nextjs, zod
+ *
+ * Notes        :
+ * - Never use process.env directly — always import from this file
+ * - Background job vars are optional so builds never fail without them
+ ************************************************************/
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
+
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    // REQUIRED (Tier 0 #0.7): Better Auth signs/encrypts sessions with this.
+    // If it were optional/undefined, Better Auth would fall back to an
+    // ephemeral/insecure secret — sessions would not survive a restart and
+    // would be forgeable. Must be the SAME value as apps/admin so the shared
+    // `.theroyalglow.in` session cookie validates across both applications.
+    BETTER_AUTH_SECRET: z.string().min(32),
+    BETTER_AUTH_URL: z.string().url(),
+    BETTER_AUTH_API_KEY: z.string().min(1).optional(),
+    GOOGLE_OAUTH_CLIENT_ID: z.string().min(1),
+    GOOGLE_OAUTH_CLIENT_SECRET: z.string().min(1),
+    RESEND_API_KEY: z.string().startsWith('re_'),
+    // OPTIONAL: destination inbox for /contact enquiries. When unset the
+    // contact route falls back to the public address shown on the page, so the
+    // build never requires it (mirrors the other optional server vars).
+    CONTACT_INBOX_EMAIL: z.string().email().optional(),
+    ABLY_PRIVATE_KEY: z.string().min(1),
+    UPSTASH_REDIS_REST_URL: z.string().url(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+    R2_ACCESS_KEY_ID: z.string().min(1),
+    R2_SECRET_ACCESS_KEY: z.string().min(1),
+    R2_BUCKET_NAME: z.string().min(1),
+    // OPTIONAL: Meta CAPI server token. Blank at launch (no Meta ad account
+    // yet). lib/meta/capi.ts reads process.env directly and no-ops when unset,
+    // so making this optional prevents a cold-start configuration failure.
+    META_PIXEL_ACCESS_TOKEN: z.string().min(1).optional(),
+    QSTASH_TOKEN: z.string().min(1),
+    QSTASH_CURRENT_SIGNING_KEY: z.string().min(1),
+    QSTASH_NEXT_SIGNING_KEY: z.string().min(1),
+    VAPID_PRIVATE_KEY: z.string().min(1),
+    // Background jobs (Phase 6) — all optional so the build never requires them
+    VAPID_SUBJECT: z.string().optional(),
+    SLACK_WEBHOOK_URL: z.string().url().optional(),
+    DAILY_REPORT_EMAIL_RECIPIENTS: z.string().optional(),
+    BETTER_STACK_HEARTBEAT_NIGHTLY_SALES: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_MEMBERSHIP_EXPIRY: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_SESSION_CLEANUP: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_PPRD_SYNC: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_REMINDERS: z.string().url().optional(),
+    // pg_cron → QStash migrated job heartbeats (all optional). SESSION_CLEANUP
+    // above is reused by the session-cleanup job.
+    BETTER_STACK_HEARTBEAT_SALES_SUMMARY: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_MEMBERSHIP_EXPIRE: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_OFFER_EXPIRE: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_GEMS_EXPIRE: z.string().url().optional(),
+    BETTER_STACK_HEARTBEAT_MONTHLY_GST: z.string().url().optional(),
+    // Invoice PDF render service (Cloud Run, apps/invoicing). OPTIONAL so the
+    // app builds/runs without it — the invoice-pdf job degrades gracefully to a
+    // no-attachment email when either of these is unset.
+    INVOICING_SERVICE_URL: z.string().url().optional(),
+    INVOICE_PDF_HMAC_SECRET: z.string().min(1).optional(),
+  },
+  client: {
+    NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_ADMIN_URL: z.string().url().optional(),
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().min(1),
+    NEXT_PUBLIC_ABLY_KEY: z.string().min(1),
+    NEXT_PUBLIC_META_PIXEL_ID: z.string().min(1).optional(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string().startsWith('phc_'),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().url(),
+    NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().min(1),
+  },
+  runtimeEnv: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    BETTER_AUTH_API_KEY: process.env.BETTER_AUTH_API_KEY,
+    GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+    GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    CONTACT_INBOX_EMAIL: process.env.CONTACT_INBOX_EMAIL,
+    ABLY_PRIVATE_KEY: process.env.ABLY_PRIVATE_KEY,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
+    R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
+    R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
+    META_PIXEL_ACCESS_TOKEN: process.env.META_PIXEL_ACCESS_TOKEN,
+    QSTASH_TOKEN: process.env.QSTASH_TOKEN,
+    QSTASH_CURRENT_SIGNING_KEY: process.env.QSTASH_CURRENT_SIGNING_KEY,
+    QSTASH_NEXT_SIGNING_KEY: process.env.QSTASH_NEXT_SIGNING_KEY,
+    VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+    VAPID_SUBJECT: process.env.VAPID_SUBJECT,
+    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+    DAILY_REPORT_EMAIL_RECIPIENTS: process.env.DAILY_REPORT_EMAIL_RECIPIENTS,
+    BETTER_STACK_HEARTBEAT_NIGHTLY_SALES: process.env.BETTER_STACK_HEARTBEAT_NIGHTLY_SALES,
+    BETTER_STACK_HEARTBEAT_MEMBERSHIP_EXPIRY: process.env.BETTER_STACK_HEARTBEAT_MEMBERSHIP_EXPIRY,
+    BETTER_STACK_HEARTBEAT_SESSION_CLEANUP: process.env.BETTER_STACK_HEARTBEAT_SESSION_CLEANUP,
+    BETTER_STACK_HEARTBEAT_PPRD_SYNC: process.env.BETTER_STACK_HEARTBEAT_PPRD_SYNC,
+    BETTER_STACK_HEARTBEAT_REMINDERS: process.env.BETTER_STACK_HEARTBEAT_REMINDERS,
+    BETTER_STACK_HEARTBEAT_SALES_SUMMARY: process.env.BETTER_STACK_HEARTBEAT_SALES_SUMMARY,
+    BETTER_STACK_HEARTBEAT_MEMBERSHIP_EXPIRE: process.env.BETTER_STACK_HEARTBEAT_MEMBERSHIP_EXPIRE,
+    BETTER_STACK_HEARTBEAT_OFFER_EXPIRE: process.env.BETTER_STACK_HEARTBEAT_OFFER_EXPIRE,
+    BETTER_STACK_HEARTBEAT_GEMS_EXPIRE: process.env.BETTER_STACK_HEARTBEAT_GEMS_EXPIRE,
+    BETTER_STACK_HEARTBEAT_MONTHLY_GST: process.env.BETTER_STACK_HEARTBEAT_MONTHLY_GST,
+    INVOICING_SERVICE_URL: process.env.INVOICING_SERVICE_URL,
+    INVOICE_PDF_HMAC_SECRET: process.env.INVOICE_PDF_HMAC_SECRET,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_ADMIN_URL: process.env.NEXT_PUBLIC_ADMIN_URL,
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_ABLY_KEY: process.env.NEXT_PUBLIC_ABLY_KEY,
+    NEXT_PUBLIC_META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  },
+  // Treat '' as "not set". GitHub Actions renders an unset `vars.FOO` as an
+  // EMPTY STRING in a workflow `env:` block, so every optional variable that
+  // has no repo variable arrives as '' rather than absent. Without this, `''`
+  // fails `.url()` and the whole module throws at import — which on Lambda is
+  // a 500 on every request, and in CI a build failure with no obvious cause.
+  emptyStringAsUndefined: true,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+})

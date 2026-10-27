@@ -1,0 +1,151 @@
+---
+title: Environment Variables
+description: Environment-variable ownership, validation, and deployment boundaries for the Royal Glow platform.
+icon: sliders-horizontal
+---
+
+Royal Glow has four application contracts: `apps/web`, `apps/admin`, `apps/cms`, and `apps/invoicing`. The web and admin apps run on AWS Lambda + CloudFront through SST, the CMS stays on Render, and invoicing stays on Google Cloud Run. Cloudflare remains the authoritative DNS provider and R2 storage provider; it does not host application compute.
+
+<Warning>
+  No single table is the complete environment contract. Use each app's validator or configuration file as the source of truth. Web and admin use `@t3-oss/env-nextjs`; invoicing parses `process.env` with Zod at startup; Payload, Sentry configuration, SST, and workflows also own variables outside those two Next.js validators.
+</Warning>
+
+<Info>
+  Optional integrations degrade gracefully only where their implementation explicitly guards missing configuration. For example, optional Sentry DSNs disable Sentry and optional invoice-service caller settings produce an invoice email without a PDF attachment. Never assume every missing integration variable is safe.
+</Info>
+
+## Quick Start
+
+<Steps>
+<Step title="Create app-local files">
+
+```powershell
+Copy-Item .env.example apps/web/.env.local
+Copy-Item apps/admin/.env.example apps/admin/.env.local
+Copy-Item apps/cms/.env.example apps/cms/.env.local
+```
+
+`apps/web/.env.example` does not exist. The root `.env.example` is the starting template for the customer app.
+
+</Step>
+<Step title="Reconcile with authoritative contracts">
+
+Check the relevant source before filling values:
+
+- `apps/web/src/env.ts`
+- `apps/admin/src/env.ts`
+- `apps/cms/src/payload.config.ts`
+- `apps/invoicing/src/env.ts`
+- `sst.config.ts`
+- active workflows under `.github/workflows/`
+
+</Step>
+<Step title="Generate VAPID keys if push is enabled">
+
+```powershell
+bunx web-push generate-vapid-keys
+```
+
+</Step>
+<Step title="Validate the affected app">
+
+```powershell
+bun run --filter=@rgss/web typecheck
+bun run --filter=@rgss/admin typecheck
+bun run --filter=@rgss/invoicing typecheck
+```
+
+Required values are validated when their owning module loads. Builds and cold starts can therefore fail when a required value is absent or malformed.
+
+</Step>
+</Steps>
+
+## Source-of-Truth Files
+
+| Scope | Authoritative contract | Local template | Validation behavior |
+| --- | --- | --- | --- |
+| Customer app | `apps/web/src/env.ts` | root `.env.example` | t3-env + Zod at build/runtime module load |
+| Admin app | `apps/admin/src/env.ts` | `apps/admin/.env.example` | t3-env + Zod at build/runtime module load |
+| Payload CMS | `apps/cms/src/payload.config.ts` and storage configuration | `apps/cms/.env.example` | Payload/config startup checks |
+| Invoice renderer | `apps/invoicing/src/env.ts` | no committed app-specific template | Zod parse at service startup |
+| AWS + DNS deployment | `sst.config.ts`, `.github/workflows/deploy-aws.yml` | GitHub secrets/variables + SST secrets | workflow and SST deployment checks |
+| DB migrations | migration workflows and `packages/db/drizzle.config.ts` | GitHub environment secrets | direct, unpooled connection required |
+
+Some framework bootstrap files intentionally read `process.env` directly. Current examples include the Sentry config files, which must initialize before app modules can import typed env helpers. Do not copy that exception into ordinary application code.
+
+## Core Ownership
+
+### Database
+
+| Variable | Owners | Requirement |
+| --- | --- | --- |
+| `DATABASE_URL` | web, admin, CMS | Application query connection. Web and admin use the same Neon branch for an environment. |
+| `DATABASE_URL_UNPOOLED` | admin, migration workflows | Required by admin's current validator and mandatory for migration/DDL workflows. It is not part of the web validator. |
+
+Migrations use the direct Neon endpoint. Never substitute the pgBouncer/pooled URL for DDL.
+
+### Authentication
+
+`BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_OAUTH_CLIENT_ID`, and `GOOGLE_OAUTH_CLIENT_SECRET` are owned by both Next.js apps. `BETTER_AUTH_SECRET` must be byte-identical across web and admin within one environment so the `.theroyalglow.in` session cookie remains valid.
+
+### Invoice PDF Service
+
+| Variable | Callers | Invoice service |
+| --- | --- | --- |
+| `INVOICING_SERVICE_URL` | Optional in web and admin | Not used by the service itself |
+| `INVOICE_PDF_HMAC_SECRET` | Optional until the integration is enabled; must match the service | Required |
+| `R2_BUCKET_NAME`, `R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PUBLIC_BASE_URL` | Not the caller contract | Required by `apps/invoicing/src/env.ts` |
+| `SENTRY_DSN` | Not the caller contract | Optional; Sentry is disabled when absent |
+
+The caller intentionally falls back to sending the invoice email without a PDF attachment when the URL or shared HMAC secret is absent.
+
+### Sentry
+
+| Variable | Owner | Requirement |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SENTRY_DSN` | web Sentry bootstrap files | Optional direct read; web Sentry is disabled when absent |
+| `NEXT_PUBLIC_ADMIN_SENTRY_DSN` | admin validator/bootstrap | Optional; admin Sentry is disabled when absent |
+| `SENTRY_DSN` | invoicing service | Optional |
+| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` | CI/source-map upload when configured | Workflow-only, not app-runtime contracts |
+| `COMMIT_SHA`, `APP_ENV` | Sentry release/environment metadata | Optional deployment metadata |
+
+### Cloudflare Boundary
+
+Cloudflare variables remain for two active capabilities only:
+
+| Capability | Variables | Where used |
+| --- | --- | --- |
+| Authoritative DNS | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_DEFAULT_ACCOUNT_ID` | GitHub Actions/SST deployment only; DNS records and ACM validation |
+| R2 object storage | `R2_*`, `NEXT_PUBLIC_R2_PUBLIC_URL`, `R2_PUBLIC_BASE_URL` as required by each owner | CMS media, invoice PDFs, and backup workflows |
+
+The DNS token must have only the zone permissions SST needs. Do not inject DNS credentials into either Next.js app. Workers, Pages, Wrangler, and KV compute contracts are retired.
+
+## Other Integration Contracts
+
+Web and admin validators currently own required auth, Ably, Upstash Redis, and QStash values. Web additionally owns required Resend, R2 access, VAPID, PostHog, and customer-facing public values. Optional web values include Meta CAPI, report destinations, heartbeat URLs, and invoice-service caller settings. Admin additionally owns optional invoice-service caller settings and its optional Sentry DSN.
+
+Exact requiredness can change. Check the current Zod schema rather than copying a static list from this page.
+
+## Platform Injection
+
+| Platform | Where to set values | Applied to |
+| --- | --- | --- |
+| AWS Lambda + CloudFront through SST | SST Secrets for server values; GitHub Actions variables for `NEXT_PUBLIC_*` build values | `apps/web`, `apps/admin` |
+| Cloudflare DNS during AWS deploy | GitHub Actions secret `CLOUDFLARE_API_TOKEN` and variable `CLOUDFLARE_DEFAULT_ACCOUNT_ID` | DNS records only |
+| Render | Service environment settings | `apps/cms` |
+| Google Cloud Run | Service environment and secret settings | `apps/invoicing` |
+| GitHub Actions environments | Per-branch Neon and workflow secrets | migrations, backups, schedule registration, deploys |
+
+Production platforms inject values; committed `.env` files are not used in production.
+
+## Secret Safety
+
+- Never commit `.env.local`, `.dev.vars`, credentials, tokens, or private keys.
+- Keep public identifiers separate from secrets; `NEXT_PUBLIC_*` values are embedded in browser bundles.
+- Use different Neon URLs per `dev`, `test`, `pprd`, and `prod`.
+- Rotate a credential immediately if it appears in logs, terminal output, screenshots, or chat context.
+- Preserve `.dev.vars` ignore rules even though Wrangler is retired; they protect plaintext secrets.
+
+## Inventory Maintenance
+
+Do not maintain a hand-counted total. Validators, guarded bootstrap reads, SST resources, and workflow-only variables evolve independently. When a contract changes, update its source file, relevant template, deployment wiring, and this ownership guide in the same change.

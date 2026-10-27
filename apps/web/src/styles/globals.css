@@ -1,0 +1,249 @@
+/************************************************************
+ * Author       : KATABATHUNI BOSE
+ * Date         : Created - 04-06-2026 & Updated - 08-06-2026
+ *
+ * Project      : theroyalglow-webapp
+ * Module Name  : globals
+ * Scope        : Global Styles
+ *
+ * Description  : Global CSS for the customer app. Imports Tailwind v4 and the
+ *                shared @rgss/ui design-token theme (single source of truth for
+ *                brand colours, fonts, radii, shadows, shadcn/ui custom props,
+ *                and the accessible base layer). This file now holds ONLY
+ *                app-specific component animations and utilities.
+ *
+ * Responsibilities :
+ * - Import Tailwind CSS v4
+ * - Import the shared design tokens from @rgss/ui/theme.css
+ * - Provide app-specific component animations (account menu, marquee) and the
+ *   scrollbar-hide + horizontal scroll-hint affordance utilities
+ *
+ * Features / Functionality :
+ * - Radix dropdown (account menu) origin-aware scale-in/out
+ * - scrollbar-hide utility for horizontal carousels
+ * - Horizontal scroll-hint nudge animation
+ * - Infinite horizontal brand marquee (mobile)
+ *
+ * Tech Stack   : Tailwind CSS v4, PostCSS
+ * Layer        : Frontend
+ *
+ * Dependencies : tailwindcss, @rgss/ui (theme.css)
+ *
+ * Notes        : Design tokens live once in @rgss/ui/theme.css. Do NOT
+ *                redefine brand colours/fonts/radii here — edit the shared
+ *                theme so apps/web and apps/admin stay in sync.
+ ************************************************************/
+
+/* The brand font stylesheets are NOT imported here. A CSS @import forces the
+   browser to fetch and parse this file before it can even discover them, then
+   fetch the fonts — a serialised chain that delayed first paint. They are now
+   <link rel="preconnect"> + <link rel="stylesheet"> in the root layout
+   (src/app/layout.tsx), so they are visible in the initial HTML and load in
+   parallel. Keep them there; re-adding an @import here reintroduces the stall. */
+@import "tailwindcss";
+@import "@rgss/ui/theme.css";
+@import "./shadcn-theme.css";
+
+/* shadcn dark-variant hook. The customer site is light-only (no theme toggle
+   mounted), so no `.dark` palette is defined — the variant is declared for
+   component compatibility and resolves to the `:root` Brand-Token bindings. */
+@custom-variant dark (&:is(.dark *));
+
+/* ── Display-font weight default (font-consistency fix) ──
+   Cabinet Grotesk (`--font-display`) is loaded ONLY at weights 800 and 900.
+   Any element using the `font-display` utility WITHOUT an explicit font-weight
+   utility would otherwise request weight 400 — which isn't loaded — and render
+   at a fallen-back/synthesised weight that looks visibly different from the
+   homepage's heavy display headings.
+
+   This base-layer rule gives every `font-display` element a real, loaded weight
+   (800 / extrabold) by default. It lives in `@layer base`, so any explicit
+   weight utility (`font-black` → 900, `font-bold`, `font-medium`, etc., which
+   Tailwind emits in the higher `utilities` layer) still wins. The homepage —
+   whose headings all carry explicit weights — is therefore unchanged, while
+   every previously-unweighted display heading/number across the site now
+   matches the homepage's Cabinet Grotesk treatment. Body (`font-sans`) and UI
+   (`font-ui`) elements are unaffected. */
+@layer base {
+  .font-display {
+    font-weight: 800;
+  }
+}
+
+/* ── Radix dropdown (account menu) — origin-aware scale-in ──
+   Scales from the trigger via Radix's transform-origin var, never from
+   scale(0). Exit is faster than enter. Reduced-motion is handled by the
+   global block in the shared theme (durations collapse to ~0). */
+@keyframes rg-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes rg-menu-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+.rg-menu[data-state="open"] {
+  animation: rg-menu-in 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.rg-menu[data-state="closed"] {
+  animation: rg-menu-out 130ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ── Hide native scrollbars on horizontal carousels (keep scrollability) ── */
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Horizontal scroll affordance — a gentle "swipe right" nudge on the
+   carousel arrow hint. Motivated motion: signals the row is scrollable. ── */
+@keyframes rg-nudge-x {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.rg-scroll-hint {
+  animation: rg-nudge-x 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rg-scroll-hint {
+    animation: none !important;
+  }
+}
+
+/* ── Infinite horizontal marquee (BrandLogosSection mobile) ──
+   The track is 2 × brand-row wide. We translate -50% so it shifts exactly
+   one brand-row to the left, then jumps back to 0 — completely seamless. */
+@keyframes rg-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.rg-marquee-track {
+  animation: rg-marquee 20s linear infinite;
+}
+
+/* Pause on hover / focus so users can read each brand clearly */
+.rg-marquee-track:hover,
+.rg-marquee-track:focus-within {
+  animation-play-state: paused;
+}
+
+/* Reduced-motion: stop the animation; all brands remain visible */
+@media (prefers-reduced-motion: reduce) {
+  .rg-marquee-track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ── shadcn Accordion expand/collapse (Radix content-height driven) ──
+   Registered as Tailwind v4 animation tokens so the Accordion primitive's
+   `data-[state=open]:animate-accordion-down` utilities resolve. Reduced-motion
+   is handled by the global block in the shared theme (durations collapse). */
+@theme {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* ── shadcn Dialog enter/exit (Radix data-state driven) ──
+   Registered as Tailwind v4 animation tokens so the Dialog primitive's
+   `data-[state=open]:animate-dialog-*` / `data-[state=closed]:animate-dialog-*`
+   utilities resolve — mirrors the accordion mechanism above (this project has
+   no tailwindcss-animate, so the `animate-in`/`zoom-in-95` family is unavailable).
+   The content keyframes bake in the `translate(-50%, -50%)` centering so the
+   zoom scales about the dialog's own centre and never drifts. Reduced-motion is
+   handled by the global block in the shared @rgss/ui theme (durations collapse). */
+@theme {
+  --animate-dialog-overlay-in: rg-dialog-overlay-in 200ms ease-out;
+  --animate-dialog-overlay-out: rg-dialog-overlay-out 150ms ease-in;
+  --animate-dialog-content-in: rg-dialog-content-in 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  --animate-dialog-content-out: rg-dialog-content-out 150ms ease-in;
+}
+
+@keyframes rg-dialog-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rg-dialog-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes rg-dialog-content-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes rg-dialog-content-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}

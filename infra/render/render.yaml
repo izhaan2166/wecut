@@ -1,0 +1,383 @@
+# ============================================================================
+# Render Blueprint — Royal Glow Salon & Spa CMS (apps/cms)
+# ----------------------------------------------------------------------------
+# This file lives at `infra/render/render.yaml`, NOT the repository root. Render
+# defaults to `render.yaml` at the root, so the Blueprint MUST carry a matching
+# custom Blueprint Path — set it on the Blueprint's Settings page in the Render
+# Dashboard. Custom Blueprint paths are supported since Feb 2026; see
+# https://render.com/docs/infrastructure-as-code
+# If the dashboard path and this location disagree, blueprint syncs fail; the
+# already-running service keeps serving, but blueprint-driven updates stop
+# applying until they match.
+#
+# MOVED: this was previously `.github/render.yaml`. A Blueprint still pointing
+# at the old path stops syncing until its Blueprint Path is updated to
+# `infra/render/render.yaml`. `.github/` is GitHub's own config directory
+# (workflows, templates); infrastructure definitions belong under `infra/`
+# alongside `infra/aws/`.
+#
+# The deployed service's code lives in apps/cms, independent of this file's path.
+#
+# It defines a SINGLE web service that hosts the Payload CMS v3 app
+# (Next.js 16 wrapped with withPayload) at cms.theroyalglow.in.
+#
+# Stack specifics this Blueprint accounts for:
+#   - Bun monorepo (Turborepo + Bun workspaces). Deps for every workspace are
+#     installed once from the repo root, so the build runs `bun install` at the
+#     root, then builds only the @rgss/cms workspace.
+#   - Neon PostgreSQL (pooled DATABASE_URL) for Payload's `cms` schema.
+#   - Cloudflare R2 via @payloadcms/storage-s3 for media uploads.
+#
+# Secrets are NEVER committed: every sensitive var is declared `sync: false`,
+# which makes Render prompt for it in the dashboard (and keeps it out of git).
+# ============================================================================
+
+services:
+  # --------------------------------------------------------------------------
+  # CMS web service
+  # --------------------------------------------------------------------------
+  - type: web
+    name: rgss-cms
+    runtime: node # Bun is invoked manually in the commands below; Render's
+    # node runtime gives us a Linux box with build tooling. Bun is provided on
+    # Render's native node runtime via the BUN_VERSION env var (see envVars).
+    region: singapore # Free tier, closest to the India-first audience.
+    plan: free
+    branch: prod # Auto-deploy from the `prod` branch (matches git flow:
+    # dev -> test -> pprd -> prod). Change in the dashboard if needed.
+
+    # ----- Build -----------------------------------------------------------
+    # Bun workspaces hoist all deps to the root node_modules, so we install
+    # once at the repo root with the committed lockfile, then build ONLY the
+    # CMS workspace via Turborepo's --filter. This avoids building sibling apps
+    # (web/admin/docs) we don't deploy here.
+    #
+    # `bun run --filter=@rgss/cms build` is the Bun-native workspace filter and
+    # works from the repo root; it resolves the workspace by its package name
+    # (`@rgss/cms` from apps/cms/package.json) and runs its `build` script
+    # (`next build`). The `^build` Turbo dep means workspace packages it relies
+    # on (packages/*) are built first.
+    buildCommand: bun install --frozen-lockfile && bun run --filter=@rgss/cms build
+
+    # ----- Start -----------------------------------------------------------
+    # Render injects $PORT and expects the service to bind to it. The default
+    # apps/cms `start` (`next start`) uses a fixed port, so we use the added
+    # `start:prod` script which runs `next start -p ${PORT:-3002}`. We cd into
+    # the workspace because `next start` must run from the app dir (reads its
+    # .next build output). Never hardcode 3002 in production.
+    #
+    # FREE-TIER MIGRATION: `preDeployCommand` only runs on PAID Render instance
+    # types, so on the free plan migrations would never apply and the `cms`
+    # schema stays empty (relation "cms.users" does not exist -> 500 on /admin).
+    # We therefore run `payload migrate` here, before `start:prod`. `payload
+    # migrate` is idempotent (it records applied migrations in a Payload
+    # migrations table), so re-running it on every cold start is safe and a
+    # no-op once applied. DATABASE_URL MUST be the Neon UNPOOLED host (no
+    # "-pooler") — Payload's DDL hangs over pgBouncer. When you upgrade to a
+    # paid instance, move this back to `preDeployCommand` below and drop the
+    # `bun run migrate &&` prefix here.
+    startCommand: cd apps/cms && bun run migrate && bun run start:prod
+
+    # ----- Release / pre-deploy migration (PAID instances only) ------------
+    # Runs AFTER a successful build and BEFORE the new instance goes live.
+    # Applies committed Payload migrations to Neon over DATABASE_URL. If this
+    # fails, the deploy is aborted and the old instance keeps serving.
+    # DISABLED on the free plan (pre-deploy is a paid-only feature). Migration
+    # currently happens in `startCommand` above. Re-enable this and remove the
+    # migrate prefix from startCommand after upgrading to a paid instance type.
+    # preDeployCommand: cd apps/cms && bun run migrate
+
+    # ----- Health check ----------------------------------------------------
+    # `/` redirects to `/admin`; `/admin` serves the Payload admin login (HTTP
+    # 200) even when unauthenticated, so it is a reliable liveness signal that
+    # the Next.js server + Payload mounted correctly. Render treats any 2xx/3xx
+    # as healthy.
+    healthCheckPath: /admin
+
+    # ----- Environment variables -------------------------------------------
+    envVars:
+      # Bun version Render installs on the node runtime. `latest` is an
+      # officially supported value (https://render.com/docs/bun-version) and is
+      # used deliberately so this never drifts from CI, which also floats. A
+      # concrete pin here previously went stale: it still read 1.3.13 in the
+      # running service long after the repo moved on.
+      - key: BUN_VERSION
+        value: latest
+
+      # Node prod mode (Next.js production build/runtime).
+      - key: NODE_ENV
+        value: production
+
+      # --- Secrets / per-environment (set in Render dashboard; never committed) ---
+
+      # Neon connection string (Payload owns the `cms` schema). MUST be the
+      # UNPOOLED/direct host (NO "-pooler" in the hostname). Payload runs
+      # session-level DDL on migrate and boot, which hangs over Neon's
+      # pgBouncer pooled endpoint.
+      # IMPORTANT: use sslmode=verify-full (NOT sslmode=require) — `require`
+      # triggers a pg v9 deprecation warning on every boot/migrate. Example:
+      # postgresql://USER:PASS@ep-xxx.ap-southeast-1.aws.neon.tech/neondb?sslmode=verify-full&channel_binding=require
+      - key: DATABASE_URL
+        sync: false
+
+      # Payload signing/encryption secret (min 32 chars in production).
+      - key: PAYLOAD_SECRET
+        sync: false
+
+      # Public URL where the Payload admin/API is served (custom domain attached
+      # in the dashboard). DECLARED rather than `sync: false`: this is a public
+      # origin, not a secret, and Payload 3.90+ treats `serverURL` as the trusted
+      # origin for external file fetches and same-origin header stripping. An
+      # unset value degrades silently to '' — and the `csrf`/`cors` lists in
+      # payload.config.ts only carry the WEB app origin, never the CMS's own — so
+      # leaving this to a dashboard-only entry made a security control
+      # unverifiable from the repo. Keep it in git.
+      - key: PAYLOAD_PUBLIC_SERVER_URL
+        value: https://cms.theroyalglow.in
+
+      # Web app origin allowed to read the REST API (CORS + CSRF allowlist).
+      # Also a public origin, so likewise declared rather than dashboard-only:
+      # an empty value silently empties the CORS/CSRF allowlist.
+      - key: WEB_APP_URL
+        value: https://theroyalglow.in
+
+      # --- Cloudflare R2 (S3-compatible) media storage ---
+      # These exact names are what apps/cms/src/payload.config.ts reads. The
+      # storage-s3 adapter is only enabled when ALL four are present; otherwise
+      # Payload falls back to local-disk media. Region is hardcoded to "auto"
+      # in payload.config.ts (R2 convention), so there is NO region env var.
+      - key: R2_BUCKET_NAME
+        sync: false
+      - key: R2_ENDPOINT
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+
+      # Public base URL for serving R2 media (read client-side). e.g.
+      # https://r2.theroyalglow.in
+      - key: NEXT_PUBLIC_R2_PUBLIC_URL
+        sync: false
+
+      # --- Email (Resend) ---
+      # Powers Payload admin emails (password reset, user invites). The email
+      # adapter in payload.config.ts only activates when RESEND_API_KEY is set;
+      # otherwise Payload logs to console ("No email adapter provided" warning).
+      # RESEND_FROM_ADDRESS must be on a Resend-verified domain (theroyalglow.in).
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_ADDRESS
+        sync: false
+      - key: RESEND_FROM_NAME
+        sync: false
+
+      # Shared secret authenticating CMS -> web on-demand revalidation pings
+      # (POST WEB_APP_URL/api/revalidate). MUST match the web app's value.
+      - key: REVALIDATE_SECRET
+        sync: false
+
+  # --------------------------------------------------------------------------
+  # Legacy customer website definition — apps/web (@rgss/web)
+  # --------------------------------------------------------------------------
+  # Production is live on AWS Lambda + CloudFront through SST's OpenNext AWS
+  # implementation. Render dashboard suspension is out-of-band and cannot be
+  # represented by this Blueprint. This remains a deployable reactivation
+  # template, not a tested rollback target; automatic deploys are disabled.
+  # CMS is the only application currently running on Render.
+  - type: web
+    name: rgss-web
+    runtime: node # Render's node box; Bun is provided via BUN_VERSION below.
+    region: singapore # Free tier, closest to the India-first audience.
+    plan: free
+    branch: prod # Git flow: dev -> test -> pprd -> prod.
+    autoDeployTrigger: off # Do not deploy this dormant template from commits.
+
+    # ----- Build -----------------------------------------------------------
+    # Bun workspaces hoist all deps to the root node_modules, so install once at
+    # the repo root with the committed lockfile, then build ONLY the web
+    # workspace via Bun's --filter (resolves @rgss/web from apps/web/package.json
+    # and runs its `build` = `next build`; Turbo's `^build` builds the
+    # packages/* deps first). NEXT_PUBLIC_* vars are inlined at build time, so
+    # every client var below MUST be present before this step runs — Render
+    # exposes all of this service's envVars to the build, so that holds.
+    buildCommand: bun install --frozen-lockfile && bun run --filter=@rgss/web build
+
+    # ----- Start -----------------------------------------------------------
+    # Render injects $PORT and expects the service to bind it. `start:prod`
+    # runs `next start -p ${PORT:-3000}` from the app dir (next start reads the
+    # app's .next output). NO drizzle migrate here: the prod schema is already
+    # applied and baselined; migrations run only via GitHub Actions per the
+    # migration-discipline steering.
+    startCommand: cd apps/web && bun run start:prod
+
+    # ----- Health check ----------------------------------------------------
+    # GET /api/health pings Neon (SELECT 1) and returns 200 when the DB is
+    # reachable (Redis/R2 unconfigured => `skip`, never degrades). Render treats
+    # 2xx/3xx as healthy. Requires DATABASE_URL to be set (below).
+    healthCheckPath: /api/health
+
+    envVars:
+      # Track the latest Bun, as CI does. See the rgss-cms entry above.
+      - key: BUN_VERSION
+        value: latest
+      - key: NODE_ENV
+        value: production
+
+      # --- REQUIRED server secrets (set in Render dashboard; never committed) ---
+      # t3-env (apps/web/src/env.ts) RE-VALIDATES every required var at cold
+      # start (no SKIP_ENV_VALIDATION at runtime), so a missing required var =
+      # failed boot = failed health check. Every var below MUST be filled.
+      - key: DATABASE_URL # Neon POOLED host for app queries.
+        sync: false
+      - key: BETTER_AUTH_SECRET # min 32 chars. MUST match rgss-admin's value.
+        sync: false
+      - key: BETTER_AUTH_URL # https://theroyalglow.in
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: RESEND_API_KEY # re_...
+        sync: false
+      - key: ABLY_PRIVATE_KEY
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET_NAME
+        sync: false
+      - key: QSTASH_TOKEN
+        sync: false
+      - key: QSTASH_CURRENT_SIGNING_KEY
+        sync: false
+      - key: QSTASH_NEXT_SIGNING_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY # Web Push. Pair with NEXT_PUBLIC_VAPID_PUBLIC_KEY.
+        sync: false
+
+      # --- REQUIRED client vars (NEXT_PUBLIC_*, baked into the bundle at build) ---
+      - key: NEXT_PUBLIC_APP_URL # https://theroyalglow.in
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_CLIENT_ID
+        sync: false
+      - key: NEXT_PUBLIC_ABLY_KEY
+        sync: false
+      - key: NEXT_PUBLIC_POSTHOG_KEY # phc_...
+        sync: false
+      - key: NEXT_PUBLIC_POSTHOG_HOST # e.g. https://us.i.posthog.com
+        sync: false
+      - key: NEXT_PUBLIC_VAPID_PUBLIC_KEY
+        sync: false
+
+      # --- OPTIONAL (env.ts .optional()) — leave unset in the dashboard to skip.
+      # Declared here so they are easy to fill later without editing this file.
+      # Missing optional vars do NOT fail boot.
+      - key: NEXT_PUBLIC_ADMIN_URL # https://admin.theroyalglow.in
+        sync: false
+      - key: NEXT_PUBLIC_SENTRY_DSN # web Sentry project DSN (rgss-web). Read via
+        # process.env in sentry.*.config.ts (guarded/optional) — set it to turn
+        # on web error monitoring. Same KEY NAME as admin, different DSN VALUE.
+        sync: false
+      - key: NEXT_PUBLIC_R2_PUBLIC_URL # enables /api/health R2 probe
+        sync: false
+      - key: VAPID_SUBJECT # mailto:... for Web Push
+        sync: false
+      - key: CONTACT_INBOX_EMAIL
+        sync: false
+      - key: BETTER_AUTH_API_KEY
+        sync: false
+      - key: META_PIXEL_ACCESS_TOKEN
+        sync: false
+      - key: NEXT_PUBLIC_META_PIXEL_ID
+        sync: false
+      - key: SLACK_WEBHOOK_URL
+        sync: false
+      - key: DAILY_REPORT_EMAIL_RECIPIENTS
+        sync: false
+      - key: INVOICING_SERVICE_URL
+        sync: false
+      - key: INVOICE_PDF_HMAC_SECRET
+        sync: false
+
+  # --------------------------------------------------------------------------
+  # Legacy admin portal definition — apps/admin (@rgss/admin)
+  # --------------------------------------------------------------------------
+  # Production is live on AWS Lambda + CloudFront through SST. Render dashboard
+  # suspension is out-of-band and cannot be represented by this Blueprint. This
+  # remains a deployable reactivation template, not a tested rollback target;
+  # automatic deploys are disabled. Reactivation would also require the same
+  # `.theroyalglow.in` cookie scope and byte-identical BETTER_AUTH_SECRET.
+  - type: web
+    name: rgss-admin
+    runtime: node
+    region: singapore
+    plan: free
+    branch: prod
+    autoDeployTrigger: off # Do not deploy this dormant template from commits.
+
+    # apps/admin has a `prebuild` (scripts/assert-token-presence.mjs) that runs
+    # automatically before `next build`; the --filter build below triggers it.
+    buildCommand: bun install --frozen-lockfile && bun run --filter=@rgss/admin build
+
+    # start:prod = `next start -p ${PORT:-3001}`; Render's $PORT wins.
+    startCommand: cd apps/admin && bun run start:prod
+
+    # GET /api/health: DB SELECT 1 → 200 healthy / 503 unhealthy.
+    healthCheckPath: /api/health
+
+    envVars:
+      # Track the latest Bun, as CI does. See the rgss-cms entry above.
+      - key: BUN_VERSION
+        value: latest
+      - key: NODE_ENV
+        value: production
+
+      # --- REQUIRED server (apps/admin/src/env.ts re-validates at cold start) ---
+      - key: DATABASE_URL # Neon POOLED host for app queries.
+        sync: false
+      - key: DATABASE_URL_UNPOOLED # Neon DIRECT host (admin needs it per env.ts).
+        sync: false
+      - key: BETTER_AUTH_SECRET # min 32 chars. MUST equal rgss-web's value.
+        sync: false
+      - key: BETTER_AUTH_URL # https://admin.theroyalglow.in
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: ABLY_PRIVATE_KEY
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: QSTASH_TOKEN
+        sync: false
+      - key: QSTASH_CURRENT_SIGNING_KEY
+        sync: false
+      - key: QSTASH_NEXT_SIGNING_KEY
+        sync: false
+
+      # --- REQUIRED client (NEXT_PUBLIC_*, baked at build) ---
+      - key: NEXT_PUBLIC_APP_URL # https://admin.theroyalglow.in
+        sync: false
+      - key: NEXT_PUBLIC_ADMIN_SENTRY_DSN # admin Sentry project DSN. Distinct
+        # KEY NAME from web's NEXT_PUBLIC_SENTRY_DSN (admin code reads
+        # NEXT_PUBLIC_ADMIN_SENTRY_DSN via t3-env — required .url()).
+        sync: false
+      - key: NEXT_PUBLIC_GOOGLE_CLIENT_ID
+        sync: false
+      - key: NEXT_PUBLIC_ABLY_KEY
+        sync: false
+
+      # --- OPTIONAL (env.ts .optional()) — leave unset to skip ---
+      - key: INVOICING_SERVICE_URL
+        sync: false
+      - key: INVOICE_PDF_HMAC_SECRET
+        sync: false

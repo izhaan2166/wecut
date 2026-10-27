@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM & Lead Pipeline — Royal Glow Salon & SPA</title>
+<style>
+:root {
+  --gold: #C8A961;
+  --gold-light: #FEF3C7;
+  --gold-bg: #FFFDF7;
+  --dark: #1a1a1a;
+  --grey-100: #f9fafb;
+  --grey-200: #f3f4f6;
+  --grey-300: #e5e5e5;
+  --grey-500: #6B6B6B;
+  --grey-700: #374151;
+  --green: #10B981;
+  --green-light: #D1FAE5;
+  --green-dark: #065F46;
+  --red: #EF4444;
+  --red-light: #FEE2E2;
+  --red-dark: #991B1B;
+  --amber: #F59E0B;
+  --amber-light: #FEF3C7;
+  --blue: #3B82F6;
+  --blue-light: #DBEAFE;
+  --purple: #8B5CF6;
+  --purple-light: #EDE9FE;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: var(--gold-bg); color: var(--dark); line-height: 1.6; min-height: 100vh; }
+
+
+.page-header { background: linear-gradient(135deg, var(--dark) 0%, #2d2d2d 100%); color: white; padding: 2rem; text-align: center; border-bottom: 3px solid var(--gold); }
+.page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; }
+.page-header h1 span { color: var(--gold); }
+.page-header p { color: #aaa; font-size: 0.95rem; }
+.tab-nav { display: flex; gap: 0; background: white; border-bottom: 2px solid var(--grey-300); overflow-x: auto; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+.tab-btn { padding: 1rem 1.5rem; border: none; background: none; font-size: 0.9rem; font-weight: 600; color: var(--grey-500); cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
+.tab-btn:hover { color: var(--dark); background: var(--grey-100); }
+.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); background: var(--gold-bg); }
+.tab-content { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+.tab-content.active { display: block; }
+.card { background: white; border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--grey-200); }
+.card h3 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--dark); display: flex; align-items: center; gap: 0.5rem; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.summary-item { background: var(--grey-100); border-radius: 8px; padding: 1rem; border-left: 4px solid var(--gold); }
+.summary-item .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--grey-500); margin-bottom: 0.25rem; }
+.summary-item .value { font-size: 1rem; font-weight: 600; color: var(--dark); }
+
+
+.badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.badge-new { background: var(--blue-light); color: #1E40AF; }
+.badge-contacted { background: var(--amber-light); color: #92400E; }
+.badge-followup { background: var(--purple-light); color: #6D28D9; }
+.badge-booked { background: var(--green-light); color: var(--green-dark); }
+.badge-won { background: var(--green-light); color: var(--green-dark); }
+.badge-lost { background: var(--red-light); color: var(--red-dark); }
+.flow-container { overflow-x: auto; padding: 1rem; background: white; border-radius: var(--radius); border: 1px solid var(--grey-200); }
+.flow-container svg { display: block; margin: 0 auto; }
+.flow-container svg text { font-family: var(--font); font-size: 11px; }
+.flow-container svg .node-rect { stroke-width: 2; rx: 8; transition: all 0.2s; cursor: pointer; }
+.flow-container svg .node-rect:hover { filter: brightness(0.95); stroke-width: 3; }
+.flow-container svg .decision { stroke-width: 2; cursor: pointer; }
+.flow-container svg .decision:hover { filter: brightness(0.9); }
+.wireframe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding: 1rem 0; }
+.phone-frame { background: white; border: 3px solid var(--dark); border-radius: 32px; padding: 1rem; width: 280px; margin: 0 auto; box-shadow: var(--shadow-lg); position: relative; }
+.phone-frame::before { content: ''; display: block; width: 60px; height: 6px; background: var(--grey-300); border-radius: 3px; margin: 0 auto 1rem; }
+.phone-screen { background: var(--grey-100); border-radius: 16px; padding: 1rem; min-height: 400px; }
+.phone-screen h4 { font-size: 0.85rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; text-align: center; }
+
+
+.wire-kanban { display: flex; gap: 6px; margin-bottom: 0.75rem; overflow-x: auto; }
+.wire-column { flex: 0 0 60px; background: white; border-radius: 6px; padding: 4px; border: 1px solid var(--grey-300); }
+.wire-column-title { font-size: 0.55rem; font-weight: 700; text-align: center; padding: 3px; border-bottom: 1px solid var(--grey-200); margin-bottom: 4px; color: var(--grey-700); }
+.wire-lead-card { background: var(--grey-100); border-radius: 4px; padding: 3px; margin-bottom: 3px; font-size: 0.5rem; border-left: 2px solid var(--gold); }
+.wire-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 0.75rem; }
+.wire-kpi-item { background: white; border-radius: 6px; padding: 0.4rem; text-align: center; border: 1px solid var(--grey-300); }
+.wire-kpi-item .num { font-size: 0.9rem; font-weight: 700; color: var(--gold); }
+.wire-kpi-item .lbl { font-size: 0.5rem; color: var(--grey-500); }
+.wire-tag { display: inline-block; padding: 1px 4px; border-radius: 4px; font-size: 0.5rem; background: var(--gold-light); color: var(--gold); margin: 1px; font-weight: 600; }
+.wire-profile-header { text-align: center; margin-bottom: 0.75rem; }
+.wire-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-light); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.wire-btn { display: block; width: 100%; padding: 0.7rem; margin-top: 1rem; border: none; border-radius: 8px; background: var(--gold); color: white; font-weight: 700; font-size: 0.8rem; text-align: center; cursor: pointer; }
+details { margin-bottom: 1rem; }
+details summary { cursor: pointer; font-weight: 600; padding: 0.75rem 1rem; background: var(--grey-100); border-radius: 8px; border: 1px solid var(--grey-200); list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+details summary::before { content: '▶'; font-size: 0.7rem; transition: transform 0.2s; }
+details[open] summary::before { transform: rotate(90deg); }
+details .details-content { padding: 1rem; border: 1px solid var(--grey-200); border-top: none; border-radius: 0 0 8px 8px; background: white; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th, .data-table td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--grey-200); }
+.data-table th { background: var(--grey-100); font-weight: 600; color: var(--grey-700); }
+.data-table tr:hover { background: var(--gold-bg); }
+
+
+@media (max-width: 768px) {
+  .tab-btn { padding: 0.75rem 1rem; font-size: 0.8rem; }
+  .tab-content { padding: 1rem; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .wireframe-grid { grid-template-columns: 1fr; }
+  .phone-frame { width: 260px; }
+}
+@media (max-width: 480px) {
+  .page-header h1 { font-size: 1.4rem; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .card { padding: 1rem; }
+}
+@media print {
+  .tab-nav { display: none; }
+  .tab-content { display: block !important; padding: 1rem 0; }
+  .page-header { background: white; color: var(--dark); border-bottom: 2px solid var(--gold); }
+  .page-header p { color: var(--grey-500); }
+  .card { box-shadow: none; border: 1px solid var(--grey-300); break-inside: avoid; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+<header class="page-header">
+  <h1>CRM & <span>Lead Pipeline</span></h1>
+  <p>Customer profiles, lead kanban, no-show tiers, and acquisition tracking</p>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="overview">Overview</button>
+  <button class="tab-btn" data-tab="flow">Pipeline Flow</button>
+  <button class="tab-btn" data-tab="noshow">No-Show Tiers</button>
+  <button class="tab-btn" data-tab="wireframes">Wireframes</button>
+  <button class="tab-btn" data-tab="data">Data & API</button>
+</nav>
+
+
+<!-- OVERVIEW TAB -->
+<section class="tab-content active" id="tab-overview">
+  <div class="card">
+    <h3>📋 Quick Summary</h3>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="label">Route</div><div class="value">/leads</div></div>
+      <div class="summary-item"><div class="label">Min Role</div><div class="value">Receptionist</div></div>
+      <div class="summary-item"><div class="label">Pipeline Stages</div><div class="value">5 (New → Won)</div></div>
+      <div class="summary-item"><div class="label">Stale Alert</div><div class="value">48h no contact</div></div>
+      <div class="summary-item"><div class="label">Purpose</div><div class="value">Convert leads to bookings</div></div>
+      <div class="summary-item"><div class="label">No-Show Tiers</div><div class="value">5 levels</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Key Features</h3>
+    <ul style="padding-left:1.5rem; line-height:2;">
+      <li>Kanban board with drag-drop lead management</li>
+      <li>Auto-tags (VIP, loyal, spa_lover, dormant, at_risk)</li>
+      <li>No-show tier progression with deposit enforcement</li>
+      <li>Customer 360° profile (LTV, visits, gems, bookings)</li>
+      <li>Revenue attribution by source (Meta, GMB, organic, walk-in)</li>
+      <li>Stale lead alerts via push notification (48h+)</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Lead Status Definitions</summary>
+    <div class="details-content">
+      <table class="data-table">
+        <tr><th>Status</th><th>Meaning</th><th>Next Actions</th></tr>
+        <tr><td><span class="badge badge-new">New</span></td><td>Lead captured, no contact yet</td><td>Call / WhatsApp</td></tr>
+        <tr><td><span class="badge badge-contacted">Contacted</span></td><td>First contact made</td><td>Book or Follow-up</td></tr>
+        <tr><td><span class="badge badge-followup">Follow-up</span></td><td>Needs nurturing</td><td>Re-contact, offer</td></tr>
+        <tr><td><span class="badge badge-booked">Booked</span></td><td>Booking created</td><td>Complete service</td></tr>
+        <tr><td><span class="badge badge-won">Won</span></td><td>Invoice paid</td><td>Retain & upsell</td></tr>
+        <tr><td><span class="badge badge-lost">Lost</span></td><td>Declined / unreachable</td><td>Record reason</td></tr>
+      </table>
+    </div>
+  </details>
+</section>
+
+
+<!-- PIPELINE FLOW TAB -->
+<section class="tab-content" id="tab-flow">
+  <div class="card">
+    <h3>🔀 Lead Pipeline Stages</h3>
+    <div class="flow-container">
+      <svg width="820" height="200" viewBox="0 0 820 200">
+        <defs>
+          <marker id="arrow-crm" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+          </marker>
+        </defs>
+        <!-- New -->
+        <rect class="node-rect" x="10" y="70" width="120" height="60" fill="#DBEAFE" stroke="#3B82F6"/>
+        <text x="70" y="95" text-anchor="middle" font-weight="bold" fill="#1E40AF">NEW</text>
+        <text x="70" y="112" text-anchor="middle" font-size="9" fill="#666">Lead captured</text>
+        <!-- Arrow -->
+        <line x1="130" y1="100" x2="160" y2="100" stroke="#666" stroke-width="2" marker-end="url(#arrow-crm)"/>
+        <!-- Contacted -->
+        <rect class="node-rect" x="165" y="70" width="120" height="60" fill="#FEF3C7" stroke="#F59E0B"/>
+        <text x="225" y="95" text-anchor="middle" font-weight="bold" fill="#92400E">CONTACTED</text>
+        <text x="225" y="112" text-anchor="middle" font-size="9" fill="#666">First call made</text>
+        <!-- Arrow -->
+        <line x1="285" y1="100" x2="315" y2="100" stroke="#666" stroke-width="2" marker-end="url(#arrow-crm)"/>
+        <!-- Follow-up -->
+        <rect class="node-rect" x="320" y="70" width="120" height="60" fill="#EDE9FE" stroke="#8B5CF6"/>
+        <text x="380" y="95" text-anchor="middle" font-weight="bold" fill="#6D28D9">FOLLOW-UP</text>
+        <text x="380" y="112" text-anchor="middle" font-size="9" fill="#666">Nurturing</text>
+        <!-- Arrow -->
+        <line x1="440" y1="100" x2="470" y2="100" stroke="#666" stroke-width="2" marker-end="url(#arrow-crm)"/>
+        <!-- Booked -->
+        <rect class="node-rect" x="475" y="70" width="120" height="60" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="535" y="95" text-anchor="middle" font-weight="bold" fill="#065F46">BOOKED</text>
+        <text x="535" y="112" text-anchor="middle" font-size="9" fill="#666">Appointment set</text>
+        <!-- Arrow to Won -->
+        <line x1="595" y1="85" x2="640" y2="55" stroke="#10B981" stroke-width="2" marker-end="url(#arrow-crm)"/>
+        <!-- Arrow to Lost -->
+        <line x1="595" y1="115" x2="640" y2="155" stroke="#EF4444" stroke-width="2" marker-end="url(#arrow-crm)"/>
+        <!-- Won -->
+        <rect class="node-rect" x="645" y="30" width="120" height="50" fill="#D1FAE5" stroke="#065F46"/>
+        <text x="705" y="55" text-anchor="middle" font-weight="bold" fill="#065F46">WON ✓</text>
+        <text x="705" y="70" text-anchor="middle" font-size="9" fill="#666">Invoice paid</text>
+        <!-- Lost -->
+        <rect class="node-rect" x="645" y="135" width="120" height="50" fill="#FEE2E2" stroke="#EF4444"/>
+        <text x="705" y="160" text-anchor="middle" font-weight="bold" fill="#991B1B">LOST ✕</text>
+        <text x="705" y="175" text-anchor="middle" font-size="9" fill="#666">Reason logged</text>
+        <!-- Skip paths -->
+        <path d="M 225 130 Q 225 165 380 165 Q 535 165 535 130" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4" marker-end="url(#arrow-crm)"/>
+        <text x="380" y="180" text-anchor="middle" font-size="9" fill="#999">Direct book (skip follow-up)</text>
+      </svg>
+    </div>
+  </div>
+
+
+  <details>
+    <summary>Transition Rules</summary>
+    <div class="details-content">
+      <table class="data-table">
+        <tr><th>From</th><th>To</th><th>Trigger</th></tr>
+        <tr><td>New</td><td>Contacted</td><td>Receptionist marks after first call/WhatsApp</td></tr>
+        <tr><td>New</td><td>Lost</td><td>Unreachable after 5 attempts over 14 days</td></tr>
+        <tr><td>Contacted</td><td>Follow-up</td><td>Needs more nurturing</td></tr>
+        <tr><td>Contacted</td><td>Booked</td><td>Customer books (manual or self-service)</td></tr>
+        <tr><td>Follow-up</td><td>Booked</td><td>Customer books after follow-up</td></tr>
+        <tr><td>Follow-up</td><td>Lost</td><td>Unresponsive 14d+</td></tr>
+        <tr><td>Booked</td><td>Won</td><td>Booking completed + invoice paid</td></tr>
+        <tr><td>Booked</td><td>Lost</td><td>Booking cancelled / no-show</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <details>
+    <summary>Automatic Alerts</summary>
+    <div class="details-content">
+      <ul style="padding-left:1.5rem; line-height:2;">
+        <li><strong>Stale alert (48h):</strong> Push notification to receptionist if no status change for 48 hours</li>
+        <li><strong>Auto-Won:</strong> When booking.status = 'completed', lead auto-transitions to Won</li>
+        <li><strong>Source attribution:</strong> Revenue tracked back to original lead source (Meta ROAS)</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+
+<!-- NO-SHOW TIERS TAB -->
+<section class="tab-content" id="tab-noshow">
+  <div class="card">
+    <h3>⚠️ No-Show Tier Progression</h3>
+    <div class="flow-container">
+      <svg width="900" height="280" viewBox="0 0 900 280">
+        <defs>
+          <marker id="arrow-ns" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+          </marker>
+          <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#10B981"/>
+          </marker>
+        </defs>
+        <!-- Normal -->
+        <rect class="node-rect" x="10" y="60" width="100" height="55" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="60" y="83" text-anchor="middle" font-weight="bold" fill="#065F46">NORMAL</text>
+        <text x="60" y="100" text-anchor="middle" font-size="9" fill="#666">0 no-shows</text>
+        <!-- Arrow 1 -->
+        <line x1="110" y1="87" x2="140" y2="87" stroke="#666" stroke-width="2" marker-end="url(#arrow-ns)"/>
+        <text x="125" y="80" text-anchor="middle" font-size="8" fill="#EF4444">+1</text>
+        <!-- 1st -->
+        <rect class="node-rect" x="145" y="60" width="110" height="55" fill="#FEF3C7" stroke="#F59E0B"/>
+        <text x="200" y="80" text-anchor="middle" font-weight="bold" fill="#92400E">1st NO-SHOW</text>
+        <text x="200" y="95" text-anchor="middle" font-size="9" fill="#666">Warning sent</text>
+        <text x="200" y="108" text-anchor="middle" font-size="8" fill="#999">no_show_1</text>
+        <!-- Arrow 2 -->
+        <line x1="255" y1="87" x2="285" y2="87" stroke="#666" stroke-width="2" marker-end="url(#arrow-ns)"/>
+        <text x="270" y="80" text-anchor="middle" font-size="8" fill="#EF4444">+1</text>
+        <!-- 2nd -->
+        <rect class="node-rect" x="290" y="60" width="110" height="55" fill="#FEE2E2" stroke="#F59E0B"/>
+        <text x="345" y="80" text-anchor="middle" font-weight="bold" fill="#92400E">2nd NO-SHOW</text>
+        <text x="345" y="95" text-anchor="middle" font-size="9" fill="#666">Manager notified</text>
+        <text x="345" y="108" text-anchor="middle" font-size="8" fill="#999">no_show_2</text>
+        <!-- Arrow 3 -->
+        <line x1="400" y1="87" x2="430" y2="87" stroke="#666" stroke-width="2" marker-end="url(#arrow-ns)"/>
+        <text x="415" y="80" text-anchor="middle" font-size="8" fill="#EF4444">+1</text>
+        <!-- 3rd -->
+        <rect class="node-rect" x="435" y="60" width="110" height="55" fill="#FEE2E2" stroke="#EF4444"/>
+        <text x="490" y="80" text-anchor="middle" font-weight="bold" fill="#991B1B">3rd NO-SHOW</text>
+        <text x="490" y="95" text-anchor="middle" font-size="9" fill="#666">₹500 deposit req</text>
+        <text x="490" y="108" text-anchor="middle" font-size="8" fill="#999">no_show_3</text>
+        <!-- Arrow 4 -->
+        <line x1="545" y1="87" x2="575" y2="87" stroke="#666" stroke-width="2" marker-end="url(#arrow-ns)"/>
+        <text x="560" y="80" text-anchor="middle" font-size="8" fill="#EF4444">+1</text>
+        <!-- 4th -->
+        <rect class="node-rect" x="580" y="60" width="110" height="55" fill="#FEE2E2" stroke="#EF4444"/>
+        <text x="635" y="80" text-anchor="middle" font-weight="bold" fill="#991B1B">4th RESTRICTED</text>
+        <text x="635" y="95" text-anchor="middle" font-size="9" fill="#666">₹1000 deposit</text>
+        <text x="635" y="108" text-anchor="middle" font-size="8" fill="#999">no_show_4</text>
+        <!-- Arrow 5 -->
+        <line x1="690" y1="87" x2="720" y2="87" stroke="#666" stroke-width="2" marker-end="url(#arrow-ns)"/>
+        <text x="705" y="80" text-anchor="middle" font-size="8" fill="#EF4444">+1</text>
+        <!-- 5th -->
+        <rect class="node-rect" x="725" y="60" width="120" height="55" fill="#991B1B" stroke="#991B1B"/>
+        <text x="785" y="80" text-anchor="middle" font-weight="bold" fill="white">5th BLOCKED</text>
+        <text x="785" y="95" text-anchor="middle" font-size="9" fill="#FEE2E2">Phone-only booking</text>
+        <text x="785" y="108" text-anchor="middle" font-size="8" fill="#FEE2E2">no_show_5</text>
+        <!-- Recovery paths -->
+        <path d="M 200 115 Q 200 180 60 180 Q 30 180 30 150 L 30 115" fill="none" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrow-green)"/>
+        <text x="120" y="195" text-anchor="middle" font-size="9" fill="#10B981">Complete next → Reset to 0</text>
+        <path d="M 345 115 Q 345 220 200 220 Q 170 220 170 195 L 170 115" fill="none" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrow-green)"/>
+        <text x="265" y="240" text-anchor="middle" font-size="9" fill="#10B981">Complete 2 consecutive → Tier 1</text>
+        <path d="M 490 115 Q 490 260 345 260 Q 310 260 310 235 L 310 115" fill="none" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrow-green)"/>
+        <text x="410" y="270" text-anchor="middle" font-size="9" fill="#10B981">Complete 3 consecutive → Remove deposit</text>
+      </svg>
+    </div>
+  </div>
+
+
+  <details>
+    <summary>No-Show Tier Details</summary>
+    <div class="details-content">
+      <table class="data-table">
+        <tr><th>Tier</th><th>Tag</th><th>Consequence</th><th>Recovery</th></tr>
+        <tr><td>1st</td><td>no_show_1</td><td>Warning SMS/push sent</td><td>Complete next = reset to 0</td></tr>
+        <tr><td>2nd</td><td>no_show_2</td><td>Phone call + manager notified</td><td>2 consecutive = tier 1</td></tr>
+        <tr><td>3rd</td><td>no_show_3</td><td>₹500 deposit required + phone confirm 24h before</td><td>3 consecutive = remove deposit</td></tr>
+        <tr><td>4th</td><td>no_show_4</td><td>₹1,000 deposit + owner review</td><td>Owner discretion</td></tr>
+        <tr><td>5th</td><td>no_show_5</td><td>Blocked from online booking — phone only</td><td>Owner manual reset</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <details>
+    <summary>Implementation Notes</summary>
+    <div class="details-content">
+      <ul style="padding-left:1.5rem; line-height:2;">
+        <li><code>noshow_count</code> stored on customer row (integer)</li>
+        <li>Tag auto-assigned: <code>no_show_{count}</code> (replaces previous tier tag)</li>
+        <li>Recovery tracked via <code>consecutive_completed_count</code> (resets on new no-show)</li>
+        <li>Block enforcement: booking API returns 403 if noshow_count ≥ 5</li>
+        <li>Owner override: <code>PATCH /api/customers/[id] { noshow_count: 0 }</code></li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+
+<!-- WIREFRAMES TAB -->
+<section class="tab-content" id="tab-wireframes">
+  <div class="card">
+    <h3>📱 Wireframe Mockups</h3>
+    <div class="wireframe-grid">
+      <!-- Kanban Board -->
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <h4>Lead Pipeline Kanban</h4>
+          <div class="wire-kanban">
+            <div class="wire-column">
+              <div class="wire-column-title">New (3)</div>
+              <div class="wire-lead-card">Priya<br>Facial</div>
+              <div class="wire-lead-card">Neha<br>Bridal</div>
+              <div class="wire-lead-card">Sita<br>SPA</div>
+            </div>
+            <div class="wire-column">
+              <div class="wire-column-title">Called (2)</div>
+              <div class="wire-lead-card">Rahul<br>Haircut</div>
+              <div class="wire-lead-card">Kavya<br>Facial</div>
+            </div>
+            <div class="wire-column">
+              <div class="wire-column-title">Follow (1)</div>
+              <div class="wire-lead-card" style="border-left-color: var(--red);">Arjun<br>🔴 7d</div>
+            </div>
+            <div class="wire-column">
+              <div class="wire-column-title">Booked (2)</div>
+              <div class="wire-lead-card" style="border-left-color: var(--green);">Aisha<br>✓ Done</div>
+              <div class="wire-lead-card" style="border-left-color: var(--green);">Kiran<br>Sat 3PM</div>
+            </div>
+          </div>
+          <div style="font-size:0.6rem; color:var(--grey-500); margin-bottom:0.5rem;">🔴 = Stale (48h+) • Tap card for detail</div>
+          <div class="wire-btn" style="font-size:0.7rem; padding:0.5rem;">+ Manual Lead</div>
+        </div>
+      </div>
+
+      <!-- Customer 360° Profile -->
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <h4>Customer 360°</h4>
+          <div class="wire-profile-header">
+            <div class="wire-avatar">👤</div>
+            <div style="font-size:0.85rem; font-weight:700;">Priya Sharma</div>
+            <div style="font-size:0.65rem; color:var(--grey-500);">+91 98765 43210</div>
+            <div style="margin-top:0.3rem;">
+              <span class="wire-tag">VIP</span>
+              <span class="wire-tag">loyal</span>
+              <span class="wire-tag">SPA-lover</span>
+            </div>
+          </div>
+          <div class="wire-kpi">
+            <div class="wire-kpi-item"><div class="num">14</div><div class="lbl">Visits</div></div>
+            <div class="wire-kpi-item"><div class="num">₹18K</div><div class="lbl">LTV</div></div>
+            <div class="wire-kpi-item"><div class="num">55</div><div class="lbl">Gems</div></div>
+          </div>
+          <div style="font-size:0.7rem; font-weight:600; margin-bottom:0.3rem; color:var(--grey-700);">Recent Bookings</div>
+          <div style="font-size:0.6rem; padding:0.3rem; background:white; border-radius:4px; margin-bottom:3px; border:1px solid var(--grey-200);">20 Jun — Swedish Massage — ✓</div>
+          <div style="font-size:0.6rem; padding:0.3rem; background:white; border-radius:4px; margin-bottom:3px; border:1px solid var(--grey-200);">15 Jun — Facial + Waxing — ✓</div>
+          <div style="font-size:0.6rem; padding:0.3rem; background:white; border-radius:4px; margin-bottom:3px; border:1px solid var(--grey-200);">24 May — Facial — ⚠️ No-show</div>
+          <div class="wire-btn" style="font-size:0.7rem; padding:0.5rem; margin-top:0.75rem;">Book for Customer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- DATA & API TAB -->
+<section class="tab-content" id="tab-data">
+  <div class="card">
+    <h3>🔌 API Endpoints</h3>
+    <table class="data-table">
+      <tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Role</th></tr>
+      <tr><td>GET</td><td>/api/leads</td><td>List all leads (filterable by status)</td><td>Receptionist</td></tr>
+      <tr><td>POST</td><td>/api/leads</td><td>Create manual lead</td><td>Receptionist</td></tr>
+      <tr><td>PATCH</td><td>/api/leads/[id]</td><td>Update lead status/notes</td><td>Receptionist</td></tr>
+      <tr><td>GET</td><td>/api/customers</td><td>List customers with filters</td><td>Receptionist</td></tr>
+      <tr><td>GET</td><td>/api/customers/[id]</td><td>Customer 360° profile</td><td>Receptionist</td></tr>
+      <tr><td>PATCH</td><td>/api/customers/[id]</td><td>Update tags, noshow_count reset</td><td>Manager/Owner</td></tr>
+      <tr><td>GET</td><td>/api/revenue-by-source</td><td>Attribution dashboard data</td><td>Owner</td></tr>
+    </table>
+  </div>
+
+  <details>
+    <summary>CRM Tag System</summary>
+    <div class="details-content">
+      <table class="data-table">
+        <tr><th>Tag</th><th>Type</th><th>Trigger</th></tr>
+        <tr><td>vip</td><td>Auto</td><td>LTV ≥ ₹25,000</td></tr>
+        <tr><td>loyal</td><td>Auto</td><td>≥ 10 completed bookings</td></tr>
+        <tr><td>spa_lover</td><td>Auto</td><td>≥ 5 SPA bookings</td></tr>
+        <tr><td>new_customer</td><td>Auto</td><td>1 completed booking only</td></tr>
+        <tr><td>dormant</td><td>Auto</td><td>No visit in 60+ days</td></tr>
+        <tr><td>at_risk</td><td>Auto</td><td>Was loyal, dormant 30+ days</td></tr>
+        <tr><td>bridal</td><td>Manual</td><td>Receptionist assigns</td></tr>
+        <tr><td>influencer</td><td>Manual</td><td>Social media collab</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <details>
+    <summary>Revenue Attribution</summary>
+    <div class="details-content">
+      <table class="data-table">
+        <tr><th>Source</th><th>Detection</th><th>Stored On</th></tr>
+        <tr><td>meta_ad</td><td>utm_source=meta on /book</td><td>lead.source + booking.source</td></tr>
+        <tr><td>organic</td><td>No UTM params</td><td>booking.source (default)</td></tr>
+        <tr><td>gmb</td><td>utm_source=gmb from Google Business</td><td>booking.source</td></tr>
+        <tr><td>walkin</td><td>utm_source=walkin (QR) or admin creates</td><td>booking.source</td></tr>
+      </table>
+    </div>
+  </details>
+</section>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

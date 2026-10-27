@@ -1,0 +1,213 @@
+---
+title: Git Workflow
+description: Branch strategy, CI/CD pipeline, commit conventions, and database-per-environment for Royal Glow.
+icon: git-branch
+---
+> **Policy update (2026-09-09):** Environment promotions now use checked fast-forward updates through `promote.yml`, preserving identical commits without promotion PRs. Release Please targets `dev`. See `knowledge-base/branch-promotions.md` for the current procedure; older merge-based examples below are historical.
+
+
+
+<Info>
+  **In one line:** Collaborative workflow with four persistent branches
+  (`dev → test → pprd → prod`), each mapped to a Neon DB branch. Gates get
+  stricter at every stage, **no direct pushes to `prod`**, and commits follow
+  Conventional Commits.
+</Info>
+
+## Branch Strategy
+
+The platform uses **4 persistent branches**, each mapped to an environment:
+
+| Branch | Environment | Neon Branch | Purpose |
+| --- | --- | --- | --- |
+| `prod` | Production | `prod` | Live traffic — real customers |
+| `pprd` | Pre-production | `pprd` | Final validation before going live |
+| `test` | Test / QA | `test` | Integration tests, CI |
+| `dev` | Development | `dev` | Active development work |
+
+**Flow direction:** `dev → test → pprd → prod`
+
+Work happens on `dev` (or short-lived feature branches off `dev`). Code must pass all CI gates at each stage before being promoted. **No direct pushes to `prod`.**
+
+## Branch Protection Rules
+
+| Branch | Protection |
+| --- | --- |
+| `prod` | Ruleset protections, production security/load gates |
+| `pprd` | Ruleset protections, integration and security/load gates |
+| `test` | Ruleset protections, CI and integration/E2E gates |
+| `dev` | Ruleset protections, CI and security gates |
+
+GitHub Rulesets are the only merge gate: a reviewed pull request into `dev` that
+satisfies the required status checks is merged directly. See
+[Engineering Workflow](/engineering/index) and
+[GitHub Rulesets](/github/rulesets) for the current policy.
+
+## Database Per Environment
+
+All environments use **Neon DB branches** within a single Neon project — no separate paid projects needed.
+
+| Branch | Neon Branch | Reset Policy |
+| --- | --- | --- |
+| `prod` | `prod` | Never reset — live customer data |
+| `pprd` | `pprd` | Auto-reset daily from `prod` + PII stripped |
+| `test` | `test` | Wiped and reseeded before each CI run |
+| `dev` | `dev` | Developer sandbox, scales to zero when idle |
+
+## Prod → pprd Data Replication
+
+Every 24 hours, a GitHub Actions cron job uses the **Neon Branch Reset API** to sync pprd from prod.
+
+<Steps>
+<Step title="Reset the branch">
+Call the Neon API to reset the `pprd` branch from `prod`.
+</Step>
+<Step title="Anonymise PII">
+Run a PII anonymisation script — names, phone numbers, and emails are replaced with fake data.
+</Step>
+<Step title="Ready for UAT">
+pprd is now a clean, realistic copy of prod without real customer data.
+</Step>
+</Steps>
+
+This is faster than `pg_dump` / `pg_restore` because Neon branching is a near-instant copy-on-write operation at the storage layer.
+
+```yaml
+# .github/workflows/replicate-prod-to-pprd.yml
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 1 AM UTC daily
+```
+
+## CI/CD Pipeline
+
+Gates are cumulative — each stage adds checks on top of the previous one.
+
+<Tabs>
+<Tab title="PR to dev">
+
+```text
+✅ Lint + Format (Biome + Ultracite)
+✅ Type check (tsc --noEmit)
+✅ Unit tests (Vitest)
+```
+
+</Tab>
+<Tab title="PR to test">
+
+```text
+✅ Lint + Format
+✅ Type check
+✅ Unit tests
+✅ Integration tests (Neon test branch)
+✅ Playwright E2E tests
+✅ Lighthouse CI (performance ≥ 95; accessibility, best practices, SEO = 100)
+```
+
+</Tab>
+<Tab title="PR to pprd">
+
+```text
+✅ All tests from test branch
+✅ k6 load test against pprd environment
+✅ OWASP ZAP security scan
+✅ Smoke test Playwright suite
+```
+
+</Tab>
+<Tab title="PR to prod">
+
+```text
+✅ All CI gates passing
+✅ Manual approval required
+🚀 Deploy apps/web + apps/admin to AWS through SST
+```
+
+</Tab>
+</Tabs>
+
+## Commit Conventions
+
+Use **Conventional Commits** for clean history and automatic changelog generation:
+
+```text
+feat: add booking confirmation email
+fix: correct availability calculation for same-day slots
+chore: update dependencies
+docs: update testing plan
+test: add E2E test for admin booking flow
+refactor: extract pricing logic to service layer
+perf: cache service catalog in Upstash Redis
+security: add rate limiting to /api/leads
+```
+
+## Pre-Commit Hooks
+
+Every `git commit` automatically runs **Biome** lint + format on staged files via Husky + lint-staged:
+
+```bash
+# What runs on every commit (~200ms):
+biome check --write --staged
+```
+
+This catches formatting issues and obvious lint errors **before they ever reach CI** — saving pipeline minutes and avoiding "fix lint" commits.
+
+## Secrets Management
+
+| Secret | Where Stored |
+| --- | --- |
+| `DATABASE_URL_PROD/PPRD/TEST/DEV` | GitHub Actions encrypted secrets |
+| `DATABASE_URL_UNPOOLED_*` | GitHub Actions encrypted secrets |
+| `RESEND_API_KEY` | GitHub Actions encrypted secret |
+| `BETTER_AUTH_SECRET` | GitHub Actions encrypted secret |
+| `GOOGLE_OAUTH_CLIENT_ID/SECRET` | GitHub Actions encrypted secret |
+
+<Warning>
+  **Never commit secrets to git.** Use `.env.local` locally (gitignored) and
+  GitHub Actions secrets in CI.
+</Warning>
+
+## Deployment
+
+<Tabs>
+<Tab title="AWS (current)">
+
+- `apps/web` and `apps/admin`: Lambda (ARM64) + CloudFront + S3 per app through `sst.aws.Nextjs`
+- `deploy-aws.yml` on push to `prod`: GitHub OIDC → `bunx sst deploy --stage production`; when `AWS_DOMAINS_LIVE=true`, retry both public health endpoints up to 6 times with 15-second waits
+- Recovery: inspect SST/Pulumi logs, stack state, and both applications, then manually deploy a known-good `git_ref` if needed
+- Cloudflare remains authoritative DNS; SST manages only required validation and alias records
+
+</Tab>
+<Tab title="Other workloads">
+
+- Payload CMS (`apps/cms`) remains on Render
+- Invoice PDF service (`apps/invoicing`) remains on Cloud Run
+- Neon, Upstash, QStash, Ably, Resend, and Cloudflare R2 remain unchanged
+
+</Tab>
+</Tabs>
+
+## Weekly Backup
+
+Every Sunday at 2 AM UTC, a GitHub Actions workflow:
+
+<Steps>
+<Step title="Dump">
+Run `pg_dump` against the Neon `prod` branch.
+</Step>
+<Step title="Upload">
+Upload the compressed dump to Cloudflare R2 (`backups/weekly/`).
+</Step>
+<Step title="Retain">
+Keep 8 weeks of backups.
+</Step>
+<Step title="Heartbeat">
+Ping the BetterStack heartbeat on success.
+</Step>
+</Steps>
+
+## Related
+
+- [Testing](/content/docs/testing) — Full CI gate specifications
+- [Deployment](/content/docs/deployment) — Platform configuration details
+- [Environment Variables](/content/docs/environment-variables) — All secrets and their purpose

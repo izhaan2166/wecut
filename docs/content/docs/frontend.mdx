@@ -1,0 +1,256 @@
+---
+title: Frontend
+description: Component architecture, design system, styling conventions, and accessibility standards for Royal Glow.
+icon: panels-top-left
+---
+
+<Info>
+  The frontend is **server-first**: components are React Server Components by default, and `'use client'` is added only when browser APIs, state, or event handlers are needed. **WCAG 2.1 AA and a Lighthouse Accessibility score of 100 are hard CI gates.**
+</Info>
+
+## Component Architecture
+
+The structure under `apps/web/src/` separates routes, owned UI primitives, feature components, and framework-glue libraries.
+
+<Info>
+  This page covers the **customer web app** (`apps/web` → `theroyalglow.in`). The
+  admin portal is a **separate Next.js app** at `apps/admin` (served from
+  `admin.theroyalglow.in`, root-path routes with no `/admin` prefix) — its pages,
+  `admin` components, and admin data helpers all live under `apps/admin/src/`, not
+  in `apps/web`. `apps/web` only keeps `lib/admin-redirect.ts`, which 301-redirects
+  legacy `theroyalglow.in/admin/*` URLs to the subdomain.
+</Info>
+
+<Tree>
+  <Tree.Folder name="apps/web/src" defaultOpen>
+    <Tree.Folder name="app — App Router pages and layouts" defaultOpen>
+      <Tree.File name="(customer) — public + authenticated customer pages" />
+      <Tree.File name="(auth) — sign-in, onboarding" />
+      <Tree.File name="(landing) — /book Meta ad lead capture" />
+      <Tree.File name="(legal) — privacy, terms, refund policy" />
+    </Tree.Folder>
+    <Tree.Folder name="components">
+      <Tree.File name="ui — shadcn/ui primitives (copy-pasted, fully owned)" />
+      <Tree.File name="layout — Header, Footer, MobileNav" />
+      <Tree.File name="booking — BookingDialog, ServiceTypeToggle, BookingDialogProvider" />
+      <Tree.File name="lead — LeadCaptureForm, LeadKanban, LeadDetail" />
+      <Tree.File name="notifications — NotificationBell" />
+      <Tree.File name="consent — CookieConsent, CookiePreferencesButton" />
+      <Tree.File name="seo — JsonLd" />
+      <Tree.File name="analytics — Analytics (PostHog + Clarity loader)" />
+      <Tree.File name="blog — PostCard, RichText" />
+      <Tree.File name="gallery — GalleryGrid" />
+      <Tree.File name="offers — OfferBookButton" />
+      <Tree.File name="pwa — ServiceWorkerRegistrar" />
+    </Tree.Folder>
+    <Tree.Folder name="lib">
+      <Tree.File name="auth-client.ts — Better Auth client" />
+      <Tree.File name="auth-server.ts — Better Auth server" />
+      <Tree.File name="api — withErrorHandler, rate-limit, response helpers, session" />
+      <Tree.File name="admin-redirect.ts — legacy /admin → admin.theroyalglow.in 301" />
+      <Tree.File name="cms — Payload CMS client" />
+      <Tree.File name="seo — JSON-LD generators, metadata helpers" />
+      <Tree.File name="realtime — Ably client" />
+      <Tree.File name="jobs — QStash enqueue, heartbeat, verify" />
+      <Tree.File name="notifications — dispatch, email/webpush providers" />
+    </Tree.Folder>
+  </Tree.Folder>
+</Tree>
+
+## Design System
+
+### Design Tokens
+
+Tailwind CSS v4 design tokens are defined in `apps/web/src/styles/globals.css`.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `royal-gold` | `#C8A961` | Primary CTA, active states, accents |
+| `deep-gold` | `#A8893F` | Hover state for gold elements |
+| `cocoa-dark` | `#2C1810` | Primary text, headings |
+| `canvas-white` | `#FAFAF8` | Page background |
+| `cloud-gray` | `#F0EDE8` | Card backgrounds, subtle fills |
+| `warm-gray` | `#8B7D74` | Secondary text |
+| `dusty-gray` | `#A09590` | Placeholder text, captions |
+| `error` | `#DC2626` | Error states |
+
+### Typography
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `font-display` | `Playfair Display` | Headings, logo, premium feel |
+| `font-sans` | `Inter` | Body text, descriptions |
+| `font-ui` | `Inter (uppercase tracking)` | Labels, buttons, navigation |
+| `font-mono` | `JetBrains Mono` | Booking numbers, invoice numbers |
+
+### Spacing & Layout
+
+- Max content width: `1278px` (`max-w-[1278px]`)
+- Horizontal padding: `px-5` (20px) on mobile, `px-8` on desktop
+- Mobile-first: customer pages designed for 375px–428px first
+
+## shadcn/ui Components
+
+Components are copy-pasted into `components/ui/` — you own 100% of the code. Built on Radix UI primitives for production-tested accessibility.
+
+Key components in use:
+
+- `Button`, `Input`, `Label`, `Select`, `Textarea`
+- `Dialog`, `Sheet`, `Popover`, `Tooltip`
+- `Badge`, `Card`, `Separator`, `Skeleton`
+- `Tabs`, `Accordion`
+- `Calendar`, `DatePicker`
+
+## Booking Dialog
+
+The booking dialog is a 4-step modal that opens over the homepage. It is **never a separate page** — it's always a modal overlay.
+
+<Steps>
+
+<Step title="Step 1 — Branch, date & time">
+Branch selector plus a date and time-slot picker.
+</Step>
+
+<Step title="Step 2 — Service type & category">
+Salon/SPA toggle and category selection (one service type per booking).
+</Step>
+
+<Step title="Step 3 — Services">
+Service multi-select with a running total.
+</Step>
+
+<Step title="Step 4 — Summary & submission">
+Review and submit the booking.
+</Step>
+
+</Steps>
+
+**Entry points:**
+
+- Homepage "Book Now" button
+- `/?book=1` deep-link (auto-opens dialog)
+- `/?book=1&utm_source=gmb` (dialog + GMB attribution)
+- `/?book=1&utm_source=walkin` (dialog + walk-in attribution)
+
+The dialog has a full focus trap, `aria-modal="true"`, and Escape key handling. It uses `BookingDialogProvider` (React context) to share open/close state across the page.
+
+## Animation
+
+**motion** (motion.dev) handles all animations:
+
+```tsx
+import { motion } from 'motion/react'
+
+// Page transitions
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.4, ease: 'easeOut' }}
+>
+
+// Staggered list reveals
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+}
+```
+
+All animations respect `prefers-reduced-motion`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  /* motion handles this automatically via its built-in hook */
+}
+```
+
+## Accessibility Standards
+
+WCAG 2.1 AA compliance is non-negotiable. Lighthouse Accessibility = 100 is a hard CI gate.
+
+<Tabs>
+
+<Tab title="Interactive elements">
+
+- `<button>` for actions (never `<div onClick>`)
+- `type="button"` on all buttons not inside a form
+- `aria-label` on icon-only buttons
+- Visible focus ring (`focus-visible:ring-2`)
+- Keyboard navigation support
+
+</Tab>
+
+<Tab title="Forms">
+
+- Every `<input>` has a `<label>` with matching `htmlFor`/`id`
+- `aria-required="true"` on required fields
+- `aria-describedby` linking input to error message
+- `<fieldset>` + `<legend>` for grouped fields
+
+</Tab>
+
+<Tab title="Dynamic content">
+
+- `aria-live="polite"` on booking availability updates
+- `aria-live="polite"` on loading states (use the `<output>` element)
+- `role="alert"` on error messages
+- Focus management on modal open/close
+
+</Tab>
+
+<Tab title="Colour contrast">
+
+- Normal text: 4.5:1 minimum
+- Large text (18px+ or 14px+ bold): 3:1 minimum
+- UI components and graphical objects: 3:1 minimum
+
+</Tab>
+
+</Tabs>
+
+## PWA
+
+The app is installable as a Progressive Web App:
+
+- `manifest.ts` — app name, icons, theme colour, display mode
+- `sw.js` — service worker for offline support
+- `ServiceWorkerRegistrar` — registers the service worker on first load
+- Offline page at `/offline` — shows when user is offline
+
+Offline capabilities:
+
+- Service menu and prices (cached on first visit)
+- Contact information and address
+- Booking history (cached)
+
+## Performance Targets
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `LCP` | `< 2.5s` | SSR/SSG, priority Image on hero |
+| `CLS` | `< 0.1` | Explicit width/height on all images |
+| `INP` | `< 200ms` | Minimal client JS, deferred non-critical scripts |
+| `Lighthouse Performance` | `≥ 95` | CI gate |
+| `JS bundle (initial)` | `< 150 KB gzipped` | @next/bundle-analyzer monitoring |
+
+## Coding Conventions
+
+- **Files:** `kebab-case.ts` for utilities, `PascalCase.tsx` for React components
+- **Server Components by default** — only add `'use client'` when needed
+- **Zero business logic in components** — presentation only
+- **No `any`** — TypeScript strict mode enforced by Biome
+- **Single quotes, no semicolons** — Biome formatter
+- **Import sorting** — handled automatically by Biome
+
+## Related Pages
+
+<Columns cols={2}>
+  <Card title="Pages & Routes" href="/content/docs/pages-and-routes">
+  Every route these components render
+</Card>
+  <Card title="Conventions" href="/content/docs/conventions">
+  Cross-cutting money, date, and layer rules
+</Card>
+  <Card title="Tech Stack" href="/content/docs/tech-stack">
+  The UI and tooling choices behind the frontend
+</Card>
+</Columns>

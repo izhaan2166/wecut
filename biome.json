@@ -1,0 +1,81 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "all"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "a11y": {
+        "useSemanticElements": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "error"
+      },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "warn",
+        "useConst": "error"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/docs/**/*.css"],
+      "linter": {
+        "rules": {
+          "complexity": { "noImportantStyles": "off" },
+          "correctness": { "noUnknownTypeSelector": "off" }
+        }
+      }
+    }
+  ],
+  "files": {
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/.next",
+      "!**/dist",
+      "!**/migrations",
+      "!**/*.gen.ts",
+      "!**/payload-types.ts",
+      "!**/importMap.js",
+      "!**/importMap.d.ts",
+      "!**/design",
+      "!**/next-env.d.ts",
+      "!**/.turbo",
+      "!**/coverage",
+      "!**/.kiro/settings/mcp.json",
+      "!**/.mcp.json",
+      "!**/.vscode/mcp.json",
+      "!**/.cursor/mcp.json",
+      "!**/opencode.json"
+    ]
+  }
+}

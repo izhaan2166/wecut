@@ -1,0 +1,60 @@
+name: Register QStash Schedules
+
+# ---------------------------------------------------------------------------
+# MANUAL registrar for the QStash scheduled background jobs.
+#
+# Registration is intentionally separate from the AWS application deploy.
+# apps/web and apps/admin run on AWS Lambda + CloudFront through SST; this manual
+# workflow keeps QStash schedule changes explicit and independently repeatable.
+#
+# OWNERSHIP (admin-web-separation Req 2.2, 3.6): the background-jobs surface
+# belongs to the ADMIN app. Schedules must therefore be registered against the
+# ADMIN origin (admin.theroyalglow.in), never the customer site. The invariant
+# test apps/web/src/__tests__/admin-web-separation.invariants.test.ts asserts
+# this workflow — and not any customer-side workflow — owns the registration.
+#
+# `register-schedules` is idempotent (QStash upserts by destination), so
+# re-running it is safe and is a no-op once the schedules exist.
+#
+# Run it after any change to the job schedule definitions, and once after the
+# first successful AWS admin deployment.
+#
+# Required GitHub secrets/vars. GitHub runners do not inherit SST runtime
+# secrets or application environment variables:
+#   secret QSTASH_TOKEN            — Upstash QStash token
+#   var    NEXT_PUBLIC_ADMIN_URL   — e.g. https://admin.theroyalglow.in
+# ---------------------------------------------------------------------------
+
+on:
+  workflow_dispatch:
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+
+      - name: Check required configuration
+        env:
+          QSTASH_TOKEN: ${{ secrets.QSTASH_TOKEN }}
+          ADMIN_URL: ${{ vars.NEXT_PUBLIC_ADMIN_URL }}
+        run: |
+          missing=""
+          [ -z "$QSTASH_TOKEN" ] && missing="$missing QSTASH_TOKEN(secret)"
+          [ -z "$ADMIN_URL" ] && missing="$missing NEXT_PUBLIC_ADMIN_URL(variable)"
+          if [ -n "$missing" ]; then
+            echo "::error title=Missing configuration::Cannot register schedules without:$missing"
+            exit 1
+          fi
+          echo "Registering schedules against $ADMIN_URL"
+
+      # Registration targets the ADMIN origin — the background-jobs surface owner.
+      - name: Register QStash schedules (idempotent)
+        working-directory: apps/admin
+        env:
+          QSTASH_TOKEN: ${{ secrets.QSTASH_TOKEN }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_ADMIN_URL }}
+        run: bun run register-schedules

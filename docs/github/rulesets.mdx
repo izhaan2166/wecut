@@ -1,0 +1,40 @@
+---
+title: GitHub Rulesets
+description: Exact branch protection policy and safe activation sequence.
+icon: shield-check
+---
+
+The importable API payloads are in `.github/rulesets/`. The **dev** ruleset requires
+reviewed pull requests. Environment rulesets permit fast-forward updates and
+require CI, CodeQL, integration, and (for pprd/prod) load/security aggregate checks.
+They forbid deletion and non-fast-forward updates and have no bypass actors.
+
+The promotion workflow enforces dev → test → pprd → prod at one validated commit
+SHA. It requires explicit production confirmation by katbose before updating prod.
+Rulesets gate PRs into dev; environment updates advance through the promotion
+workflow rather than pull requests.
+
+## Safe activation order
+
+<Warning>
+  Do not activate the supplied Rulesets before every named external check has
+  run at least once. Requiring a check that has never registered can block all
+  merges.
+</Warning>
+
+1. Install the Socket and Codecov GitHub Apps for this repository.
+2. Run CI, CodeQL, Codecov, and Socket checks on a test PR so every required
+   check name has registered at least once.
+3. Import the three JSON payloads in **Settings -> Rules -> Rulesets**.
+4. Confirm each target branch and required check name, then activate the Rulesets.
+5. Disable the old `protect main branch` Ruleset after the replacements are active.
+6. Enable **Merge commits** and **Squash merging** and disable rebase merging. Keep
+   automatic branch deletion disabled during bootstrap; persistent branches must
+   never be deleted.
+
+GitHub Actions contexts use the job name, such as `CI Success`, without the
+workflow prefix displayed in parts of GitHub's UI. Verify names through the
+check-runs API before activation.
+
+Use Ruleset evaluation mode first if it is available on the repository plan. Verify
+one complete promotion before switching all policies to active enforcement.

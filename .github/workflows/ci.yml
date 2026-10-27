@@ -1,0 +1,585 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, test, pprd, prod]
+  push:
+    branches: [dev]
+  workflow_call:
+
+concurrency:
+  # Reusable CI inherits the caller's workflow name. Keep promotion validation
+  # separate from push CI on the same dev ref so neither cancels the other.
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Path filter — decides which per-app jobs run (Req 10.2, 10.3, 10.4).
+  # `admin` / `web` are true when that app OR any shared package changed,
+  # since packages/** affect both apps.
+  # ---------------------------------------------------------------------------
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      admin: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.admin }}
+      web: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.web }}
+      cms: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.cms }}
+      invoicing: ${{ github.event_name == 'workflow_dispatch' && 'true' || steps.filter.outputs.invoicing }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            admin:
+              - 'apps/admin/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'tsconfig.json'
+              - 'bun.lock'
+              - 'bunfig.toml'
+              - '.github/workflows/ci.yml'
+            web:
+              - 'apps/web/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'tsconfig.json'
+              - 'bun.lock'
+              - 'bunfig.toml'
+              - '.github/workflows/ci.yml'
+              # The Lighthouse gate for the customer site is driven by this
+              # config (routes + thresholds), so a change to it must re-run
+              # web-ci -> lighthouse-web and re-validate itself. Mirrors the
+              # paths trigger in docs-lighthouse.yml.
+              - '.github/lighthouse/lighthouserc.json'
+            invoicing:
+              - 'apps/invoicing/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'tsconfig.json'
+              - 'bun.lock'
+              - 'bunfig.toml'
+              - '.github/workflows/ci.yml'
+            cms:
+              - 'apps/cms/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'tsconfig.json'
+              - 'bun.lock'
+              - 'bunfig.toml'
+              - '.github/workflows/ci.yml'
+
+  # ---------------------------------------------------------------------------
+  # Per-app CI: lint + typecheck + test + build scoped via turbo filters.
+  # Each job reports its own pass/fail independently (Req 10.1, 10.7) and a
+  # failed app build blocks only that app's deploy — the other app's job is
+  # unaffected because they have no `needs` relationship between them.
+  # ---------------------------------------------------------------------------
+  admin-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes]
+    if: needs.changes.outputs.admin == 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Lint, typecheck, test, build (admin)
+        run: bunx turbo run lint typecheck test build --filter=@rgss/admin
+        env:
+          SKIP_ENV_VALIDATION: '1'
+          # Build-time-only placeholder. `next build` collects page data for
+          # routes that import auth-server.ts, which calls
+          # betterAuth({ secret: process.env.BETTER_AUTH_SECRET }); Better Auth
+          # throws its own "default secret" error when this is unset — a guard
+          # independent of SKIP_ENV_VALIDATION. The real per-Worker secret is
+          # injected at deploy; this value is never used at runtime.
+          BETTER_AUTH_SECRET: 'ci-build-only-placeholder-not-used-at-runtime-000'
+          # Raise the Node heap for `next build` — the default ceiling can OOM
+          # (exit 137) on the ~7 GB ubuntu-latest runner while bundling the
+          # admin app (recharts + react-table across ~40 routes). Harmless if
+          # memory was never the issue.
+          NODE_OPTIONS: '--max-old-space-size=4096'
+      - name: Upload admin build artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: admin-build-output
+          path: apps/admin/.next/
+          retention-days: 1
+
+  web-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes]
+    if: needs.changes.outputs.web == 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Lint, typecheck, test, build (web)
+        run: bunx turbo run lint typecheck test build --filter=@rgss/web
+        env:
+          SKIP_ENV_VALIDATION: '1'
+          # Build-time-only placeholder — same rationale as admin-ci: keeps
+          # Better Auth from throwing its "default secret" guard during
+          # `next build` page-data collection. Never used at runtime (the real
+          # per-Worker secret is injected at deploy).
+          BETTER_AUTH_SECRET: 'ci-build-only-placeholder-not-used-at-runtime-000'
+          # Raise the Node heap for `next build` — guards against an OOM
+          # (exit 137) on the ~7 GB ubuntu-latest runner. Harmless otherwise.
+          NODE_OPTIONS: '--max-old-space-size=4096'
+      - name: Upload web build artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: web-build-output
+          path: apps/web/.next/
+          retention-days: 1
+
+  # ---------------------------------------------------------------------------
+  # Invoicing service CI: lint + typecheck + build scoped via turbo filter.
+  # The standalone @rgss/invoicing (Hono + @react-pdf/renderer) Cloud Run
+  # service. `build` runs tsup, which bundles the workspace @rgss/* deps inline
+  # — so this job catches bundling regressions before a manual `gcloud run
+  # deploy`. No test step: the service currently ships no unit tests (its render
+  # contract + HMAC helpers are covered by @rgss/types / @rgss/business tests in
+  # the repo-wide unit-tests job).
+  # ---------------------------------------------------------------------------
+  invoicing-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes]
+    if: needs.changes.outputs.invoicing == 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Lint, typecheck, build (invoicing)
+        run: bunx turbo run lint typecheck build --filter=@rgss/invoicing
+        env:
+          SKIP_ENV_VALIDATION: '1'
+
+  # ---------------------------------------------------------------------------
+  # Payload upgrades also need a production compile; unit tests cannot exercise
+  # Next/Payload's server and admin bundles. No live database is used here.
+  cms-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes]
+    if: needs.changes.outputs.cms == 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run --filter=@rgss/cms typecheck
+      - run: bun run --filter=@rgss/cms build
+        env:
+          PAYLOAD_SECRET: 'ci-build-only-placeholder-not-used-at-runtime-000'
+          DATABASE_URL: 'postgresql://build:build@127.0.0.1:9/build'
+          PAYLOAD_PUBLIC_SERVER_URL: 'http://localhost:3002'
+          WEB_APP_URL: 'http://localhost:3000'
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+  # ---------------------------------------------------------------------------
+  # Lighthouse CI for the CUSTOMER-FACING web app (Req 10.6).
+  #
+  # Lighthouse measures the PUBLIC user-facing experience — the brand promise in
+  # project-overview.md (perf >= 95, 100 accessibility / SEO). It used to target
+  # admin.theroyalglow.in, which measured nothing useful: the admin portal
+  # renders no sign-in and 307-redirects every unauthenticated request to the
+  # customer domain (apps/admin/src/middleware.ts, Req 4.7), so all 16 audited
+  # admin URLs actually scored the customer homepage — and the job failed with a
+  # 503 whenever the live deploy or the scale-to-zero Neon compute was cold.
+  # Admin accessibility is enforced instead by the jest-axe assertions on
+  # rendered admin components in the unit-tests job, where it can be measured
+  # without fabricating a session.
+  #
+  # SELF-CONTAINED (mirrors docs-lighthouse.yml): build the web app from THIS
+  # PR's source, serve that production build on localhost via `next start`
+  # (wired as collect.startServerCommand in the config), and audit it. No live
+  # environment required, and the gate reflects the PR rather than whatever is
+  # deployed.
+  #
+  # The route list and thresholds live in .github/lighthouse/lighthouserc.json
+  # (the single source of truth): the public pages that render fully without a
+  # session, DB, or reachable CMS. Lighthouse CI reports each URL separately, so
+  # a sub-threshold score on ANY route fails the gate and names it. The `urls:`
+  # action input is intentionally omitted so it does NOT override that list.
+  # ---------------------------------------------------------------------------
+  lighthouse-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes, web-ci]
+    if: needs.changes.outputs.web == 'true'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Build web app
+        run: bunx turbo run build --filter=@rgss/web
+        env:
+          SKIP_ENV_VALIDATION: '1'
+          # Build-time-only placeholder — same rationale as web-ci: keeps Better
+          # Auth from throwing its "default secret" guard during `next build`
+          # page-data collection. Never used at runtime.
+          BETTER_AUTH_SECRET: 'ci-build-only-placeholder-not-used-at-runtime-000'
+          NODE_OPTIONS: '--max-old-space-size=4096'
+      - name: Run Lighthouse CI (web)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: .github/lighthouse/lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        env:
+          # `next start` serves the built app; the same build-time placeholders
+          # keep Better Auth quiet in the server process.
+          SKIP_ENV_VALIDATION: '1'
+          BETTER_AUTH_SECRET: 'ci-build-only-placeholder-not-used-at-runtime-000'
+
+      - name: Print Lighthouse server diagnostics
+        if: failure()
+        run: |
+          if [ -f "$RUNNER_TEMP/rgss-lighthouse-web.log" ]; then
+            cat "$RUNNER_TEMP/rgss-lighthouse-web.log"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Repo-wide quality gates (cover shared packages and run on every PR).
+  # Kept lean and parallel to the per-app jobs so the total workflow stays
+  # within the 15-minute budget (Req 10.1).
+  # ---------------------------------------------------------------------------
+  lint-typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - name: Check installed auth dependency compatibility
+        run: bun run check:auth-dependencies
+      - name: Check CMS Payload and GraphQL compatibility
+        run: bun run check:cms-dependencies
+      - name: Check Vitest runner and coverage provider compatibility
+        run: bun run check:vitest-dependencies
+      - name: Check dependency automation policy
+        run: bun run check:dependency-policy
+      - name: Check no root override pins below a declared version
+        run: bun run check:dependency-overrides
+      # Release Please writes the Mintlify changelog page directly, and cannot
+      # escape MDX. A commit subject containing `<`, `{` or `}` would break the
+      # docs build, so the release history is linted for unescaped syntax.
+      - name: Check the changelog page has no unescaped MDX syntax
+        run: bun run check:changelog-mdx
+      - run: bun run typecheck
+        env:
+          SKIP_ENV_VALIDATION: '1'
+      - run: bun run release:check
+      - run: bun test scripts/mcp/generate.test.ts
+
+  # Validate the upstream schema as well as our workspace/grouping policy.
+  # The image is itself maintained by Renovate's GitHub Actions manager.
+  renovate-config:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    container:
+      image: ghcr.io/renovatebot/renovate:44.149.3
+      options: --user 0
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: renovate-config-validator --strict --no-global .github/renovate.json
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run test:coverage
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+      - name: Install verified Codecov CLI
+        # Keep the reviewed release and SHA256 together. The action's default
+        # cli.codecov.io downloader failed TLS before uploading valid coverage.
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --show-error --silent --location \
+            --retry 3 --connect-timeout 10 --max-time 120 \
+            https://github.com/codecov/codecov-cli/releases/download/v11.3.1/codecovcli_linux \
+            --output "$RUNNER_TEMP/codecovcli"
+          printf '%s  %s\n' \
+            'ca1d64196d2d34771084afe76ea657d581bf628e31d993ff8e52ea09cc88a56d' \
+            "$RUNNER_TEMP/codecovcli" | sha256sum --check --strict
+          chmod +x "$RUNNER_TEMP/codecovcli"
+          "$RUNNER_TEMP/codecovcli" --version
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          binary: ${{ runner.temp }}/codecovcli
+          files: coverage/lcov.info
+          disable_search: true
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Audit dependencies (bun audit — blocking gate)
+        # No advisory allowlist or severity filter; audit errors also fail this step.
+        run: bun audit
+      - name: Trivy vulnerability scan (informational — IaC/secret/OS coverage)
+        # Defense-in-depth beyond `bun audit` (IaC misconfig, secrets, OS pkgs).
+        # Non-blocking: trivy-action's GHCR setup/DB pull rate-limits anonymous
+        # access (TOOMANYREQUESTS), failing the step in ~2s before any scan —
+        # an infra flake, not a finding. Kept for signal; `bun audit` is the gate.
+        # Pin to a released tag so updates arrive as reviewable dependency PRs;
+        # a mutable `master` ref can change without any repository diff.
+        uses: aquasecurity/trivy-action@v0.36.0
+        continue-on-error: true
+        with:
+          scan-type: 'fs'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
+      # NOTE: the former `SocketDev/socket-security-action@v1` step was removed —
+      # that action repo no longer resolves ("repository not found"), and an
+      # unresolvable action fails the whole job at "Set up job" BEFORE any step
+      # runs, so `continue-on-error` could not save it (that only applies once a
+      # step executes). Socket.dev supply-chain coverage, if wanted, is now via
+      # the Socket GitHub App, not a workflow action.
+
+  # ---------------------------------------------------------------------------
+  # Cutover guards (admin-subdomain-migration) — Req 2.2, 2.7, 9.1, 9.2, 14.5,
+  # 15.4. A required check on every PR/push: a violation FAILS this job and,
+  # because it is a required status check, BLOCKS merge and deploy.
+  #
+  #   1. Path assertion — zero admin artifacts under apps/web and no admin
+  #      RBAC / role-gating in the web middleware (a /admin 301-redirect branch
+  #      is allowed; ROLE_LEVELS / get-session role-gating is not).
+  #   2. Migration-diff — no new ADMIN-SUBDOMAIN DB migration is introduced
+  #      relative to the base branch (the admin-subdomain feature adds no schema
+  #      changes). The filename scan inside `check:cutover` catches
+  #      admin-subdomain-named migrations; the git-diff step below mirrors that
+  #      pattern, failing only on newly added migrations whose FILENAME matches
+  #      the admin/subdomain marker. General "schema must match a committed
+  #      migration" discipline is owned by the `drift-gate` job + the
+  #      migration-discipline steering doc, so legitimate generated/committed
+  #      migrations (e.g. the schema-drift-remediation baseline) are NOT blocked
+  #      here — only stray admin-subdomain schema changes are.
+  # ---------------------------------------------------------------------------
+  cutover-guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+      - name: Assert no admin artifacts / no admin RBAC in web / no admin migration
+        run: bun run check:cutover
+      - name: Migration-diff — no new admin-subdomain DB migrations vs base branch
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          ADDED=$(git diff --name-only --diff-filter=A "$BASE_SHA"...HEAD -- 'packages/db/migrations/**/*.sql' || true)
+          # Mirror check:cutover's MIGRATION_NAME_MARKERS — only fail on migrations
+          # whose FILENAME marks them as admin-subdomain schema changes. Legitimate
+          # baseline/forward migrations are allowed; the drift-gate job enforces that
+          # any such migration actually matches the committed schema.
+          OFFENDING=$(printf '%s\n' "$ADDED" | grep -Ei 'admin[_-]subdomain|admin[_-]migration' || true)
+          if [ -n "$OFFENDING" ]; then
+            echo "✖ New admin-subdomain DB migration(s) introduced — the admin-subdomain feature must add no schema changes (Req 14.5):"
+            echo "$OFFENDING" | sed 's/^/  • /'
+            exit 1
+          fi
+          echo "✔ No new admin-subdomain DB migrations introduced vs base branch."
+          echo "  (General schema/migration discipline is enforced by the drift-gate job.)"
+
+  # ---------------------------------------------------------------------------
+  # Admin static gates (admin-portal-redesign) — presentation-layer guards over
+  # apps/admin source. The path-allowlist parser uses the repository's pinned
+  # Biome formatter and import organizer, so this job installs dependencies
+  # before running the otherwise static checks. A violation FAILS this job and,
+  # as a required status check, BLOCKS merge.
+  #
+  #   • No emoji icons (Req 2.3) — assert no Unicode emoji glyph is rendered as
+  #     an icon anywhere in the admin presentation source (App_Shell, Sidebar,
+  #     Dashboard, and every other admin component/page). The redesign replaced
+  #     the legacy emoji NAV_ICONS / KPI icons with lucide-react components; this
+  #     gate prevents emoji from creeping back in.
+  #
+  #   • Root-Path Convention (Req 4.9) — assert every ADMIN_NAV href in
+  #     apps/admin/src/lib/rbac.ts omits the `/admin` prefix. The admin app is
+  #     served from the admin.theroyalglow.in subdomain (which provides the
+  #     admin namespace), so nav hrefs must be root paths (e.g. `/bookings`).
+  # ---------------------------------------------------------------------------
+  admin-static-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: No emoji icons in admin presentation source (Req 2.3)
+        run: node scripts/assert-no-emoji-icons.mjs
+      # -----------------------------------------------------------------------
+      # Path-allowlist gate (admin-portal-redesign · task 11.4) — Req 16.1–16.3,
+      # 16.6–16.8. The redesign is presentation-layer ONLY; this gate inspects
+      # the PR diff vs the base branch (BASE_SHA, mirroring the cutover-guards
+      # migration-diff step) and FAILS when an admin presentation change reaches
+      # past its boundary into a PROTECTED path: packages/db/(src/)schema,
+      # packages/db/migrations, an admin API route contract, apps/admin/src/lib/
+      # rbac.ts, or the committed drift fingerprint reference. A protected-path
+      # change made WITHOUT admin presentation changes is out of this gate's
+      # scope (owned by drift-gate / cutover-guards) and passes here.
+      # -----------------------------------------------------------------------
+      # Scoped to FEATURE PRs into `dev`. On a release promotion (dev -> test ->
+      # pprd -> prod) the diff spans every commit accumulated since that branch
+      # last moved, so it legitimately contains admin API/schema changes — but
+      # those were already reviewed and gated on their way into `dev`. Re-running
+      # the redesign boundary check against a promotion diff can only produce a
+      # false failure, which is exactly what it did on the first dev -> test
+      # promotion (79 protected paths flagged).
+      - name: Admin presentation stays within its path boundary (Req 16)
+        if: github.event_name == 'pull_request' && github.base_ref == 'dev'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/admin-design/path-allowlist.mjs
+      - name: Root-Path Convention — ADMIN_NAV omits the /admin prefix (Req 4.9)
+        run: node scripts/admin-design/root-path-convention.mjs
+
+  # ---------------------------------------------------------------------------
+  # Admin design-system static gates (admin-portal-redesign) — Req 1.1, 1.2.
+  # A required check on every PR/push: a violation FAILS this job and, because
+  # it is a required status check, BLOCKS merge and deploy.
+  #
+  #   no-brand-literals — asserts zero hard-coded hex / rgb() / rgba() / hsl()
+  #     colour literals and zero raw Tailwind colour-PALETTE utilities
+  #     (e.g. bg-amber-50) in admin component source
+  #     (apps/admin/src/components/**, apps/admin/src/app/**). All colour, font,
+  #     radius, and shadow values must come from the shared @rgss/ui Brand
+  #     Tokens via named Tailwind utilities or var(--color-…) references.
+  # ---------------------------------------------------------------------------
+  admin-design-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - name: No brand literals in admin component source
+        run: bun run check:admin-no-literals
+
+  # ---------------------------------------------------------------------------
+  # Drift gate (schema-drift-remediation) — Req 12.4, 12.5. Runs on every PR
+  # (covers the shared packages/db). DB-FREE: CI has no Neon branch, so the gate
+  # never connects to a database — it asserts that the code schema and the
+  # committed migration history have not diverged. A PR that changes
+  # packages/db/src/schema without a matching committed migration (and
+  # regenerated reference) FAILS here and BLOCKS merge.
+  #
+  #   1. drizzle-kit check — validates the migration journal/snapshot integrity.
+  #   2. Canonical fingerprint reference test — re-derives the fingerprint from
+  #      the committed drizzle snapshot and asserts it equals the committed
+  #      reference artifact; fails if the schema/snapshot moved without
+  #      regenerating the reference.
+  #   3. Schema-vs-migration divergence — runs drizzle-kit generate and asserts
+  #      it produced no new/changed migration files (an uncommitted generated
+  #      migration means a schema change has no committed migration).
+  # ---------------------------------------------------------------------------
+  drift-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Validate migration journal/snapshot integrity (drizzle-kit check)
+        working-directory: packages/db
+        env:
+          SKIP_ENV_VALIDATION: '1'
+        run: bunx drizzle-kit check
+      - name: Canonical fingerprint reference test (DB-free drift gate)
+        env:
+          SKIP_ENV_VALIDATION: '1'
+        run: bunx vitest run packages/db/scripts/drift/__tests__/canonical-reference.test.ts
+      - name: Schema-vs-migration divergence — no uncommitted generated migration
+        env:
+          SKIP_ENV_VALIDATION: '1'
+        run: |
+          # drizzle-kit generate is DB-free: it diffs packages/db/src/schema vs
+          # the committed snapshot. If the schema moved without a committed
+          # migration, it emits a new migration .sql + rewrites meta/_journal.json
+          # (a tracked file) → non-empty diff under packages/db/migrations.
+          ( cd packages/db && bunx drizzle-kit generate --name ci_drift_probe )
+          if ! git diff --exit-code -- packages/db/migrations; then
+            echo ""
+            echo "✖ Code schema diverges from the committed migration history."
+            echo "  A change under packages/db/src/schema has no matching committed migration."
+            echo "  Fix: in packages/db run 'bun run generate' then 'bun run drift:reference',"
+            echo "       review the emitted SQL, and commit the migration + reference artifact."
+            # Restore tracked files and drop the untracked probe artifacts so the
+            # only signal this step produces is the pass/fail above.
+            git checkout -- packages/db/migrations 2>/dev/null || true
+            git clean -fd packages/db/migrations 2>/dev/null || true
+            exit 1
+          fi
+          echo "✔ No schema/migration divergence — code schema matches committed migrations."
+          # Clean any untracked probe artifacts even on the success path.
+          git clean -fd packages/db/migrations >/dev/null 2>&1 || true
+
+  # One stable required check for branch Rulesets. Path-filtered jobs may be
+  # skipped; failures and cancellations are never accepted.
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    if: always()
+    needs:
+      - changes
+      - admin-ci
+      - web-ci
+      - cms-ci
+      - invoicing-ci
+      - lighthouse-web
+      - lint-typecheck
+      - renovate-config
+      - unit-tests
+      - dependency-audit
+      - cutover-guards
+      - admin-static-gates
+      - admin-design-gates
+      - drift-gate
+    steps:
+      - name: Verify required jobs
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          if jq -e 'all(. == "success" or . == "skipped")' <<< "$RESULTS" >/dev/null; then
+            echo "All required CI jobs passed or were intentionally skipped."
+          else
+            echo "One or more required CI jobs failed or were cancelled: $RESULTS"
+            exit 1
+          fi

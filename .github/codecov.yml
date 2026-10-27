@@ -1,0 +1,26 @@
+codecov:
+  # Publish coverage independently of the other CI statuses: the `CI Success`
+  # aggregate is a separate required check, so Codecov must not wait on it or the
+  # two would gate each other and never report.
+  require_ci_to_pass: false
+  notify:
+    wait_for_ci: false
+
+coverage:
+  precision: 2
+  round: down
+  range: 70..100
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        target: 70%
+        threshold: 2%
+
+comment:
+  layout: reach, diff, flags, files
+  behavior: default
+  require_changes: true

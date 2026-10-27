@@ -1,0 +1,165 @@
+{
+  "mcpServers": {
+    "Snyk": {
+      "command": "snyk",
+      "args": [
+        "mcp",
+        "-t",
+        "stdio"
+      ],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "socket-mcp": {
+      "url": "https://mcp.socket.dev/",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "neon": {
+      "url": "https://mcp.neon.tech/mcp",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "code-review-graph": {
+      "command": "code-review-graph",
+      "args": [
+        "serve",
+        "--repo",
+        "C:\\Users\\kbose\\OneDrive\\Desktop\\rgss_website_v1"
+      ],
+      "env": {
+        "PYTHONUTF8": "1"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_minimal_context_tool",
+        "get_architecture_overview_tool",
+        "get_knowledge_gaps_tool",
+        "build_or_update_graph_tool",
+        "list_graph_stats_tool",
+        "query_graph_tool",
+        "refactor_tool"
+      ]
+    },
+    "shadcn": {
+      "command": "shadcn",
+      "args": [
+        "mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "get_items",
+        "get_item",
+        "list_items_in_registries",
+        "search_items_in_registries",
+        "view_items_in_registries",
+        "get_item_examples_from_registries",
+        "get_add_command_for_items",
+        "get_project_registries"
+      ]
+    },
+    "cloudflare-api": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.cloudflare.com/mcp",
+        "--header",
+        "Authorization:Bearer ${CLOUDFLARE_API_TOKEN}"
+      ],
+      "env": {
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN_RGSS}"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "execute"
+      ]
+    },
+    "cloudflare-docs": {
+      "command": "mcp-remote",
+      "args": [
+        "https://docs.mcp.cloudflare.com/mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "search_cloudflare_documentation"
+      ]
+    },
+    "github": {
+      "command": "mcp-remote",
+      "args": [
+        "https://api.githubcopilot.com/mcp/",
+        "--header",
+        "Authorization:Bearer ${GITHUB_PAT}"
+      ],
+      "env": {
+        "GITHUB_PAT": "${GITHUB_PAT_RGSS}"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_me",
+        "list_commits",
+        "list_pull_requests",
+        "pull_request_read",
+        "create_pull_request"
+      ]
+    },
+    "posthog": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.eu.posthog.com/mcp",
+        "--header",
+        "Authorization:Bearer ${POSTHOG_AUTH_HEADER}"
+      ],
+      "env": {
+        "POSTHOG_AUTH_HEADER": "${POSTHOG_AUTH_HEADER_RGSS}"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "execute-sql",
+        "projects-get"
+      ]
+    },
+    "mintlify-admin": {
+      "url": "https://mcp.mintlify.com",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "mintlify-search": {
+      "url": "https://www.mintlify.com/docs/mcp",
+      "disabled": false,
+      "autoApprove": [
+        "search_mintlify",
+        "query_docs_filesystem_mintlify"
+      ]
+    },
+    "sentry": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.sentry.dev/mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "whoami",
+        "find_organizations",
+        "find_projects",
+        "find_issues",
+        "get_issue_details",
+        "search_sentry_tools",
+        "execute_sentry_tool"
+      ]
+    },
+    "payload": {
+      "command": "mcp-remote",
+      "args": [
+        "http://localhost:3002/api/mcp",
+        "--header",
+        "Authorization:Bearer ${PAYLOAD_MCP_API_KEY}",
+        "--allow-http"
+      ],
+      "env": {
+        "PAYLOAD_MCP_API_KEY": "${PAYLOAD_MCP_API_KEY_RGSS}"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

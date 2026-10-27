@@ -1,0 +1,110 @@
+---
+title: Architecture
+description: High-level architecture of the Royal Glow Salon & Spa platform.
+icon: workflow
+---
+
+<Info>
+  Royal Glow is a **monolithic modular** monorepo, not microservices. Strict layer boundaries give the modularity of microservices without the ops burden — and three hard conventions hold everywhere: **money is integer paise**, **IDs are app-generated text**, and **business logic never imports the database or framework**.
+</Info>
+
+## Layered monorepo
+
+The Bun + Turborepo workspace holds four apps/packages workspaces:
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `@rgss/web` | `theroyalglow.in` | Customer Next.js site — AWS Lambda + CloudFront via SST (dev port 3000). |
+| `@rgss/admin` | `admin.theroyalglow.in` | Admin Next.js portal — AWS Lambda + CloudFront via SST (dev port 3001). |
+| `@rgss/cms` | `cms.theroyalglow.in` | Payload CMS v3 — Render service rgss-cms (dev port 3002). |
+| `@rgss/invoicing` | `Cloud Run` | PDF invoice render service. |
+
+The codebase enforces a strict dependency direction so business rules stay
+testable and framework-agnostic. Each layer may only import inward.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Presentation` | `apps/web + apps/admin (app, components)` | May import: business, db, types, errors. Must not import: nothing restricted. |
+| `API (thin)` | `apps/web/app/api + apps/admin/app/api` | May import: business, db, types, errors. Must not import: UI components. |
+| `Business logic` | `packages/business` | May import: types, errors. Must not import: db, framework, UI. |
+| `Data access` | `packages/db` | May import: types. Must not import: business, framework, UI. |
+| `Types / validation` | `packages/types` | May import: nothing. Must not import: everything else. |
+
+<Warning>
+  **API routes are thin orchestrators:** parse → validate with Zod → call business logic → return JSON. No database queries live in route handlers.
+</Warning>
+
+## Hosting topology
+
+`apps/web` and `apps/admin` are live on AWS; Render now hosts only the CMS. Pick a concern below.
+
+<Tabs>
+
+<Tab title="Web & Admin">
+
+The customer site (`apps/web`) and admin portal (`apps/admin`) are Next.js 16 App Router apps on **AWS Lambda behind CloudFront** in `ap-southeast-1`. `sst.config.ts` declares one `sst.aws.Nextjs` component per app; SST uses OpenNext to package the production output. Each app has an ARM64 SSR Lambda and its own CloudFront distribution.
+
+Cloudflare remains the authoritative DNS provider. SST manages only the DNS records needed for ACM validation and the public aliases; Cloudflare runs no web/admin application compute. Service catalogue endpoints read Neon directly through Drizzle. No Redis catalogue cache is implemented; a 5-minute Upstash read-through cache remains planned.
+
+</Tab>
+
+<Tab title="CMS & PDF">
+
+**Render (Singapore)** hosts the **Payload CMS** (`rgss-cms`, `cms.theroyalglow.in`). The **`@rgss/invoicing`** PDF render service remains on **Cloud Run**.
+
+</Tab>
+
+<Tab title="Database">
+
+A single **Neon** project with four branches (`prod`, `pprd`, `test`, `dev`). The CMS owns its own tables, disjoint from the app's Drizzle schema.
+
+</Tab>
+
+<Tab title="Media & Queue">
+
+**Cloudflare R2** for media (S3-compatible, zero egress). **Upstash Redis** for distributed API rate limiting and **QStash** for background jobs. Five-minute catalogue/availability caches are planned, not live. **Ably** for realtime.
+
+</Tab>
+
+</Tabs>
+
+## Observability
+
+Five layers, each on a free tier.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `Sentry` | `errors` | Guarded web/admin browser capture, wrapped API error capture, and optional invoicing capture. Payload CMS has no current Sentry wiring. |
+| `BetterStack` | `uptime` | Uptime, status page, job heartbeats, and logs. |
+| `PostHog` | `product analytics` | Product analytics plus feature flags. |
+| `Microsoft Clarity` | `UX` | Heatmaps and session replay. |
+| `Checkly` | `synthetic` | Synthetic browser monitoring. |
+
+All third-party browser scripts load only after explicit cookie consent and only when their keys are configured.
+
+## Conventions
+
+<Info>
+  These hold across the whole monorepo and are covered in depth on the [Conventions](/content/docs/conventions) page.
+</Info>
+
+- Money is stored as integer **paise**; never floating point.
+- Timestamps are `timestamptz` (stored UTC, displayed IST).
+- Dates display as DD/MM/YYYY and currency in Indian grouping (₹1,00,000.00).
+- Every external integration is a guarded extension point: with no key
+  configured it no-ops and logs, so the whole monorepo builds and runs locally
+  without secrets.
+
+## Related Pages
+
+<Columns cols={2}>
+  <Card title="Conventions" href="/content/docs/conventions">
+  Money, dates, layering, and the API response envelope
+</Card>
+  <Card title="Tech Stack" href="/content/docs/tech-stack">
+  Every technology and why it was chosen
+</Card>
+  <Card title="System Design" href="/content/docs/system-design/index">
+  Formal HLD and LLD documents
+</Card>
+</Columns>

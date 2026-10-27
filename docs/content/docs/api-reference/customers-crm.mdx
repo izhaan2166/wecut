@@ -1,0 +1,633 @@
+---
+title: Customers & CRM
+description: Admin endpoints for the customer directory, profiles, notes, tags, and tag management.
+icon: users-round
+---
+
+Admin CRM endpoints covering the customer directory, individual profiles,
+free-text notes, and the customer-tag system. Every endpoint calls
+`requireRole(...)`, which resolves the Better Auth session
+(`UNAUTHENTICATED` 401 when there is none) and checks the caller's role against
+the hierarchy `customer < staff < receptionist < manager < owner < developer`
+(`FORBIDDEN` 403 when the level is too low).
+
+<Info>
+  **Base URL:** `admin.theroyalglow.in` · **Auth:** Better Auth session. These
+  paths carry **no `/admin` prefix** — the admin subdomain is the namespace, so
+  the full URL is e.g. `admin.theroyalglow.in/api/customers`. Most
+  endpoints require **`receptionist`**; profile overrides
+  (`PATCH /api/customers/[id]`) and tag creation (`POST /api/tags`)
+  require **`manager`**. Money is an integer in **paise**; `dateOfBirth` is
+  `YYYY-MM-DD`; timestamps are ISO-8601 UTC. A "customer" id is the underlying
+  `user` id.
+</Info>
+
+## GET /api/customers
+
+Paginated, searchable, sortable customer directory. Returns `user` rows with
+role `customer` that have a `customer_profile`, each enriched with KPIs, the
+loyalty gems balance (LEFT JOined — `null` when no account exists), and tag
+chips. This endpoint paginates and includes `meta`.
+
+**Minimum role:** `receptionist` (`requireRole('receptionist')`)
+
+```http
+GET /api/customers?q=aarav&sort=ltv&page=1&pageSize=20&tag=vip
+```
+
+### Query parameters
+
+Validated by `customerListQuerySchema` (`@rgss/types`).
+
+| Name | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `q` | `string` | No |  | Free-text search, trimmed, max 120 chars. Matched (case-insensitive) against name, phone, and email. |
+| `sort` | `enum` | No | `ltv` | One of ltv, visits, last_visit, name, gems, noshows. |
+| `page` | `number` | No | `1` | Integer at least 1. Coerced from string. |
+| `pageSize` | `number` | No | `20` | Integer 1–100. Coerced from string. |
+| `tag` | `string` | No |  | Tag slug filter. An unknown slug matches nobody (empty result). |
+
+### Response
+
+`meta` carries pagination. `totalPages` is `max(1, ceil(totalCount / pageSize))`.
+
+```json
+{
+  "success": true,
+  "data": {
+    "customers": [
+      {
+        "id": "usr_abc123",
+        "name": "Aarav Sharma",
+        "email": "aarav@example.com",
+        "phone": "+919812345678",
+        "totalVisits": 12,
+        "totalSpentPaise": 4560000,
+        "noshowCount": 0,
+        "firstVisitAt": "2025-09-10T05:30:00.000Z",
+        "lastVisitAt": "2026-05-28T09:15:00.000Z",
+        "gemsBalance": 320,
+        "createdAt": "2025-09-01T04:00:00.000Z",
+        "tags": [
+          { "slug": "vip", "name": "VIP", "color": "#d4af37" }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "page": 1,
+    "totalPages": 3,
+    "totalCount": 48
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `receptionist`.
+
+</Accordion>
+<Accordion title="VALIDATION_ERROR — 400">
+
+Query fails `customerListQuerySchema` (e.g. `pageSize` above 100, invalid
+`sort`). `details` carries field errors.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## GET /api/customers/[id]
+
+Returns a single customer profile: user identity plus `customer_profile` KPIs,
+the gems balance (`null` when no loyalty account), and tag chips.
+
+**Minimum role:** `receptionist` (`requireRole('receptionist')`)
+
+```http
+GET /api/customers/usr_abc123
+```
+
+### Path parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | Yes | Path. The customer (user) id. |
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "customer": {
+      "id": "usr_abc123",
+      "name": "Aarav Sharma",
+      "email": "aarav@example.com",
+      "role": "customer",
+      "image": "https://lh3.googleusercontent.com/a/avatar.jpg",
+      "phone": "+919812345678",
+      "gender": "male",
+      "dateOfBirth": "1994-03-22",
+      "totalVisits": 12,
+      "totalSpentPaise": 4560000,
+      "noshowCount": 0,
+      "lateCancellationCount": 1,
+      "bookingRequiresApproval": false,
+      "firstVisitAt": "2025-09-10T05:30:00.000Z",
+      "lastVisitAt": "2026-05-28T09:15:00.000Z",
+      "gemsBalance": 320,
+      "createdAt": "2025-09-01T04:00:00.000Z",
+      "tags": [
+        { "slug": "vip", "name": "VIP", "color": "#d4af37" }
+      ]
+    }
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `receptionist`.
+
+</Accordion>
+<Accordion title="NOT_FOUND — 404">
+
+No user with that id has a customer profile.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## PATCH /api/customers/[id]
+
+Manager-level override of profile gates — e.g. reset the no-show count or toggle
+the booking-approval requirement. Both fields are optional; an empty body is a
+no-op that returns the current profile.
+
+**Minimum role:** `manager` (`requireRole('manager')`)
+
+```http
+PATCH /api/customers/usr_abc123
+Content-Type: application/json
+```
+
+### Path parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | Yes | Path. The customer (user) id. |
+
+### Request body
+
+Validated by an inline Zod schema in the handler.
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `noshowCount` | `number` | No | Integer at least 0. Overrides the stored no-show count. |
+| `bookingRequiresApproval` | `boolean` | No | Toggles the booking-approval gate. |
+
+```json
+{
+  "noshowCount": 0,
+  "bookingRequiresApproval": false
+}
+```
+
+### Response
+
+Returns the updated `customer_profile` row.
+
+```json
+{
+  "success": true,
+  "data": {
+    "customer": {
+      "id": "cp_7g2k9",
+      "userId": "usr_abc123",
+      "phone": "+919812345678",
+      "gender": "male",
+      "dateOfBirth": "1994-03-22",
+      "marketingConsent": true,
+      "marketingConsentAt": "2025-09-01T04:05:00.000Z",
+      "appointmentRemindersEnabled": true,
+      "membershipAlertsEnabled": true,
+      "acquisitionSource": "gmb",
+      "utmCampaign": null,
+      "utmMedium": null,
+      "utmSource": "gmb",
+      "firstVisitAt": "2025-09-10T05:30:00.000Z",
+      "lastVisitAt": "2026-05-28T09:15:00.000Z",
+      "totalVisits": 12,
+      "totalSpentPaise": 4560000,
+      "noshowCount": 0,
+      "lateCancellationCount": 1,
+      "consecutiveCompletedBookings": 3,
+      "bookingRequiresApproval": false,
+      "createdAt": "2025-09-01T04:00:00.000Z",
+      "updatedAt": "2026-05-30T10:00:00.000Z"
+    }
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `manager`.
+
+</Accordion>
+<Accordion title="VALIDATION_ERROR — 400">
+
+Body fails validation (e.g. negative `noshowCount`). `details` carries field
+errors.
+
+</Accordion>
+<Accordion title="NOT_FOUND — 404">
+
+No user with that id has a customer profile.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## POST /api/customers/[id]/notes
+
+Adds a free-text note to a customer, optionally linked to a booking. The author
+(the signed-in user) and a timestamp are persisted automatically.
+
+**Minimum role:** `receptionist` (`requireRole('receptionist')`)
+
+```http
+POST /api/customers/usr_abc123/notes
+Content-Type: application/json
+```
+
+### Path parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | Yes | Path. The customer (user) id. |
+
+### Request body
+
+Validated by `addCustomerNoteSchema` (`@rgss/types`).
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `content` | `string` | Yes | Trimmed, 1–1000 characters. |
+| `bookingId` | `string` | No | Links the note to a specific booking. |
+
+```json
+{
+  "content": "Prefers Priya as stylist. Allergic to ammonia-based dyes.",
+  "bookingId": "bk_8f2a1c9e4d"
+}
+```
+
+### Response
+
+Returns `201 Created` with the created note row.
+
+```json
+{
+  "success": true,
+  "data": {
+    "note": {
+      "id": "note_5h3j2",
+      "customerId": "usr_abc123",
+      "authorId": "usr_staff09",
+      "bookingId": "bk_8f2a1c9e4d",
+      "content": "Prefers Priya as stylist. Allergic to ammonia-based dyes.",
+      "createdAt": "2026-05-30T10:15:00.000Z"
+    }
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `receptionist`.
+
+</Accordion>
+<Accordion title="VALIDATION_ERROR — 400">
+
+Body fails `addCustomerNoteSchema` (empty/too-long `content`). `details` carries
+field errors.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## POST /api/customers/[id]/tags
+
+Assigns an existing tag to a customer. Idempotent: re-assigning a tag the
+customer already has is a silent no-op (the composite primary key absorbs the
+conflict). The assigning user is recorded.
+
+**Minimum role:** `receptionist` (`requireRole('receptionist')`)
+
+```http
+POST /api/customers/usr_abc123/tags
+Content-Type: application/json
+```
+
+### Path parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | Yes | Path. The customer (user) id. |
+
+### Request body
+
+Validated by `assignTagSchema` (`@rgss/types`).
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `tagId` | `string` | Yes | Non-empty id of an existing customer_tag. |
+
+```json
+{
+  "tagId": "tag_vip01"
+}
+```
+
+### Response
+
+Returns `201 Created`.
+
+```json
+{
+  "success": true,
+  "data": {
+    "ok": true
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `receptionist`.
+
+</Accordion>
+<Accordion title="VALIDATION_ERROR — 400">
+
+Body fails `assignTagSchema` (missing/empty `tagId`). `details` carries field
+errors.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## DELETE /api/customers/[id]/tags/[tagId]
+
+Removes a tag assignment from a customer. No-op if the assignment does not exist
+(still returns success).
+
+**Minimum role:** `receptionist` (`requireRole('receptionist')`)
+
+```http
+DELETE /api/customers/usr_abc123/tags/tag_vip01
+```
+
+### Path parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | Yes | Path. The customer (user) id. |
+| `tagId` | `string` | Yes | Path. The tag id to unassign. |
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "ok": true
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `receptionist`.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## GET /api/tags
+
+Lists all customer tags, alphabetical by name — used to populate the tag picker.
+
+**Minimum role:** `receptionist` (`requireRole('receptionist')`)
+
+```http
+GET /api/tags
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "tags": [
+      {
+        "id": "tag_noshow01",
+        "name": "No-Show Risk",
+        "slug": "no-show-risk",
+        "color": "#e11d48",
+        "description": null,
+        "createdAt": "2025-08-15T04:00:00.000Z"
+      },
+      {
+        "id": "tag_vip01",
+        "name": "VIP",
+        "slug": "vip",
+        "color": "#d4af37",
+        "description": null,
+        "createdAt": "2025-08-15T04:00:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `receptionist`.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## POST /api/tags
+
+Creates a new customer tag. The `slug` is derived from `name` in the query layer
+(lowercased, whitespace runs collapsed to hyphens).
+
+**Minimum role:** `manager` (`requireRole('manager')`)
+
+```http
+POST /api/tags
+Content-Type: application/json
+```
+
+### Request body
+
+Validated by `createTagSchema` (`@rgss/types`).
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | Yes | Trimmed, 1–40 characters. |
+| `color` | `string` | No | Hex colour matching #RRGGBB (six hex digits, e.g. #d4af37). |
+
+```json
+{
+  "name": "VIP",
+  "color": "#d4af37"
+}
+```
+
+### Response
+
+Returns `201 Created` with the created tag row.
+
+```json
+{
+  "success": true,
+  "data": {
+    "tag": {
+      "id": "tag_vip01",
+      "name": "VIP",
+      "slug": "vip",
+      "color": "#d4af37",
+      "description": null,
+      "createdAt": "2026-05-30T10:20:00.000Z"
+    }
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="UNAUTHENTICATED — 401">
+
+No active session.
+
+</Accordion>
+<Accordion title="FORBIDDEN — 403">
+
+Caller's role is below `manager`.
+
+</Accordion>
+<Accordion title="VALIDATION_ERROR — 400">
+
+Body fails `createTagSchema` (empty/too-long `name`, malformed `color`).
+`details` carries field errors.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>

@@ -1,0 +1,85 @@
+import { withSentryConfig } from '@sentry/nextjs/config'
+import type { NextConfig } from 'next'
+
+// This app intentionally has no root instrumentation.ts: OpenNext's trace-copy
+// of it breaks the SST build. Server init runs through
+// src/lib/api/sentry-server-init.ts instead, so the SDK's "Could not find a
+// Next.js instrumentation file" warning is expected and would only be noise.
+// Set here (not in a script) so it applies on every OS and every entry point.
+process.env.SENTRY_SUPPRESS_INSTRUMENTATION_FILE_WARNING ??= '1'
+
+const nextConfig: NextConfig = {
+  transpilePackages: [
+    '@rgss/business',
+    '@rgss/db',
+    '@rgss/errors',
+    '@rgss/logger',
+    '@rgss/types',
+    '@rgss/ui',
+  ],
+  // TypeScript 7 has no JavaScript Compiler API. Make Next run the
+  // project-local native `tsc` CLI for build-time validation instead.
+  experimental: {
+    useTypeScriptCli: true,
+    optimizePackageImports: [
+      'lucide-react',
+      'motion',
+      'posthog-js',
+      'radix-ui',
+      '@radix-ui/react-dropdown-menu',
+      'sonner',
+    ],
+  },
+  images: {
+    // Hosts that next/image is allowed to load from. CMS media resolves via
+    // NEXT_PUBLIC_R2_PUBLIC_URL (R2 CDN) in prod, or the CMS origin in dev.
+    remotePatterns: [
+      // Cloudflare R2 public media host (matches NEXT_PUBLIC_R2_PUBLIC_URL)
+      { protocol: 'https', hostname: 'pub-40c9806a7ea146c9b0469960f8b84d94.r2.dev' },
+      // Payload CMS origin (prod) — fallback when media served from CMS
+      { protocol: 'https', hostname: 'cms.theroyalglow.in' },
+      // Payload CMS origin (local dev)
+      { protocol: 'http', hostname: 'localhost', port: '3002' },
+      // Mock/blog fallback imagery
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+    ],
+  },
+  // Static security headers applied to all routes. The per-request, nonce-based
+  // Content-Security-Policy is owned by the edge middleware (`src/middleware.ts`)
+  // so it is intentionally NOT set here — a static `script-src` would otherwise
+  // conflict with the middleware nonce policy.
+  //
+  // NOTE: unlike the admin portal, the public customer site MUST stay indexable,
+  // so NO `X-Robots-Tag: noindex` is emitted here.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          // Clickjacking protection (complements CSP `frame-ancestors 'none'`).
+          { key: 'X-Frame-Options', value: 'DENY' },
+          // Disallow MIME-type sniffing.
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          // Minimise referrer leakage to other origins.
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+    ]
+  },
+}
+
+// Source-map upload is a no-op without SENTRY_ORG/SENTRY_PROJECT/SENTRY_AUTH_TOKEN (CI-only).
+// `bundleSizeOptimizations` + `removeDebugLogging` strip Sentry debug/logger code and
+// tree-shakeable internals, keeping production bundles lean without losing error monitoring.
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+  },
+})

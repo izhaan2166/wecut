@@ -1,0 +1,102 @@
+{
+  "mcpServers": {
+    "Snyk": {
+      "command": "snyk",
+      "args": [
+        "mcp",
+        "-t",
+        "stdio"
+      ]
+    },
+    "socket-mcp": {
+      "type": "http",
+      "url": "https://mcp.socket.dev/"
+    },
+    "neon": {
+      "type": "http",
+      "url": "https://mcp.neon.tech/mcp"
+    },
+    "code-review-graph": {
+      "command": "code-review-graph",
+      "args": [
+        "serve",
+        "--repo",
+        "${CLAUDE_PROJECT_DIR:-.}"
+      ],
+      "env": {
+        "PYTHONUTF8": "1"
+      }
+    },
+    "shadcn": {
+      "command": "shadcn",
+      "args": [
+        "mcp"
+      ]
+    },
+    "cloudflare-api": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.cloudflare.com/mcp",
+        "--header",
+        "Authorization:Bearer ${CLOUDFLARE_API_TOKEN_RGSS}"
+      ],
+      "env": {
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN_RGSS}"
+      }
+    },
+    "cloudflare-docs": {
+      "command": "mcp-remote",
+      "args": [
+        "https://docs.mcp.cloudflare.com/mcp"
+      ]
+    },
+    "github": {
+      "command": "mcp-remote",
+      "args": [
+        "https://api.githubcopilot.com/mcp/",
+        "--header",
+        "Authorization:Bearer ${GITHUB_PAT_RGSS}"
+      ],
+      "env": {
+        "GITHUB_PAT": "${GITHUB_PAT_RGSS}"
+      }
+    },
+    "posthog": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.eu.posthog.com/mcp",
+        "--header",
+        "Authorization:Bearer ${POSTHOG_AUTH_HEADER_RGSS}"
+      ],
+      "env": {
+        "POSTHOG_AUTH_HEADER": "${POSTHOG_AUTH_HEADER_RGSS}"
+      }
+    },
+    "mintlify-admin": {
+      "type": "http",
+      "url": "https://mcp.mintlify.com"
+    },
+    "mintlify-search": {
+      "type": "http",
+      "url": "https://www.mintlify.com/docs/mcp"
+    },
+    "sentry": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.sentry.dev/mcp"
+      ]
+    },
+    "payload": {
+      "command": "mcp-remote",
+      "args": [
+        "http://localhost:3002/api/mcp",
+        "--header",
+        "Authorization:Bearer ${PAYLOAD_MCP_API_KEY_RGSS}",
+        "--allow-http"
+      ],
+      "env": {
+        "PAYLOAD_MCP_API_KEY": "${PAYLOAD_MCP_API_KEY_RGSS}"
+      }
+    }
+  }
+}

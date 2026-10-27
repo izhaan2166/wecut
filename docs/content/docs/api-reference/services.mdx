@@ -1,0 +1,263 @@
+---
+title: Services & Availability
+description: Public endpoints for the service catalogue, single service lookup, branches, and slot availability.
+icon: scissors
+---
+
+These endpoints expose the public service catalogue, the branches taking
+bookings, and the booking-slot schedule. All four are **Public** — none of them
+call `requireSession` or `requireRole`, so no session cookie is needed.
+
+<Info>
+  **Base URL:** `https://theroyalglow.in` · **Auth:** Public (no session). Money
+  is an integer in **paise** (`pricePaise: 250000` = ₹2,500.00). Durations are
+  whole minutes. All responses use the standard envelope
+  `{ "success": true, "data": ... }`.
+</Info>
+
+## GET /api/services
+
+Returns the full catalogue: every active service category (ordered by
+`displayOrder`) with its active services nested under `services`.
+
+**Minimum role:** Public
+
+```http
+GET /api/services
+```
+
+This endpoint takes no path or query parameters.
+
+### Response
+
+`data.categories` is an array of category objects. Each category carries its own
+columns plus a `services` array of the active services that belong to it.
+
+```json
+{
+  "success": true,
+  "data": {
+    "categories": [
+      {
+        "id": "cat_haircare01",
+        "name": "Hair Care",
+        "slug": "hair-care",
+        "description": "Cuts, colour, and treatments",
+        "serviceType": "salon",
+        "displayOrder": 0,
+        "isActive": true,
+        "createdAt": "2026-05-01T04:30:00.000Z",
+        "updatedAt": "2026-05-01T04:30:00.000Z",
+        "services": [
+          {
+            "id": "svc_haircut001",
+            "categoryId": "cat_haircare01",
+            "name": "Signature Haircut",
+            "slug": "signature-haircut",
+            "description": "Consultation, wash, cut, and style",
+            "durationMinutes": 45,
+            "bufferMinutes": 0,
+            "pricePaise": 80000,
+            "isActive": true,
+            "imageUrl": "https://cdn.theroyalglow.in/services/haircut.webp",
+            "displayOrder": 0,
+            "gemsRedeemable": false,
+            "gemsRequired": null,
+            "gemsCatalogueOrder": null,
+            "createdAt": "2026-05-01T04:30:00.000Z",
+            "updatedAt": "2026-05-01T04:30:00.000Z"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure (e.g. database unreachable). `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## GET /api/services/[slug]
+
+Returns a single service matched by its unique `slug`.
+
+**Minimum role:** Public
+
+```http
+GET /api/services/signature-haircut
+```
+
+### Path parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `slug` | `string` | Yes | Path. The service's unique slug (e.g. signature-haircut). |
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "service": {
+      "id": "svc_haircut001",
+      "categoryId": "cat_haircare01",
+      "name": "Signature Haircut",
+      "slug": "signature-haircut",
+      "description": "Consultation, wash, cut, and style",
+      "durationMinutes": 45,
+      "bufferMinutes": 0,
+      "pricePaise": 80000,
+      "isActive": true,
+      "imageUrl": "https://cdn.theroyalglow.in/services/haircut.webp",
+      "displayOrder": 0,
+      "gemsRedeemable": false,
+      "gemsRequired": null,
+      "gemsCatalogueOrder": null,
+      "createdAt": "2026-05-01T04:30:00.000Z",
+      "updatedAt": "2026-05-01T04:30:00.000Z"
+    }
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="NOT_FOUND — 404">
+
+No service exists for the given `slug`.
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## GET /api/branches
+
+Returns the branches the booking dialog's branch picker shows: every branch
+that is not shut down, in display order, and the branch to preselect. Each
+branch carries only its id, name, city, and status, plus whether it is taking
+bookings; address, phone, and coordinates are not exposed.
+
+**Minimum role:** Public
+
+```http
+GET /api/branches
+```
+
+This endpoint takes no path or query parameters.
+
+### Response
+
+Only an `operational` branch has `acceptingBookings: true`; the picker shows the
+others disabled. `defaultBranchId` is the primary branch when it is operational,
+otherwise the first operational branch in display order, and `null` when no
+branch is taking bookings. `GET /api/availability` uses the same branch when a
+request names none.
+
+```json
+{
+  "success": true,
+  "data": {
+    "branches": [
+      {
+        "id": "br_rayasandra01",
+        "name": "Rayasandra",
+        "city": "Bengaluru",
+        "status": "operational",
+        "acceptingBookings": true
+      },
+      {
+        "id": "br_marathahalli01",
+        "name": "Marathahalli",
+        "city": "Bengaluru",
+        "status": "opens_soon",
+        "acceptingBookings": false
+      }
+    ],
+    "defaultBranchId": "br_rayasandra01"
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure (e.g. database unreachable). `retryable: true`.
+
+</Accordion>
+</AccordionGroup>
+
+---
+
+## GET /api/availability
+
+Returns the bookable time slots for a single date. Slots are a fixed
+30-minute schedule from **10:00 to 21:00** (first slot starts `10:00`, last slot
+starts `20:30` and ends `21:00`). A slot is `available: false` when it falls
+outside that weekday's configured business hours (every slot, on a day the salon
+is closed) or, for today, when its start time has already passed in IST.
+
+**Minimum role:** Public
+
+```http
+GET /api/availability?date=2026-06-15&branchId=br_rayasandra01
+```
+
+### Query parameters
+
+| Name | Type | Required | Description |
+| --- | --- | --- | --- |
+| `date` | `string` | Yes | Query. Calendar date in YYYY-MM-DD format. Must be a real date and not earlier than today (compared in IST, UTC+5:30). |
+| `branchId` | `string` | No | Query. A branch id from `GET /api/branches`; the branch must exist and be operational. When omitted, the slots are for that endpoint's `defaultBranchId`. Business hours are one setting shared by every branch, so the grid does not currently differ between branches. |
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "slots": [
+      { "startTime": "10:00", "endTime": "10:30", "available": true },
+      { "startTime": "10:30", "endTime": "11:00", "available": true },
+      { "startTime": "20:30", "endTime": "21:00", "available": true }
+    ]
+  }
+}
+```
+
+### Errors
+
+<AccordionGroup>
+<Accordion title="VALIDATION_ERROR — 400">
+
+`date` is missing, not `YYYY-MM-DD`, not a real calendar date, or in the past;
+`branchId` is present but empty; the named branch does not exist
+(`Branch not found.`) or is not operational
+(`Selected branch is not accepting bookings.`); or no `branchId` was sent and no
+branch is taking bookings (`No branch is taking bookings right now.`).
+
+</Accordion>
+<Accordion title="INTERNAL_ERROR — 500">
+
+Unexpected/transient failure. `retryable: true`.
+
+</Accordion>
+</AccordionGroup>

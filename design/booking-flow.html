@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Flow — Royal Glow Salon & SPA</title>
+<style>
+:root {
+  --gold: #C8A961;
+  --gold-light: #FEF3C7;
+  --gold-bg: #FFFDF7;
+  --dark: #1a1a1a;
+  --grey-100: #f9fafb;
+  --grey-200: #f3f4f6;
+  --grey-300: #e5e5e5;
+  --grey-500: #6B6B6B;
+  --grey-700: #374151;
+  --green: #10B981;
+  --green-light: #D1FAE5;
+  --green-dark: #065F46;
+  --red: #EF4444;
+  --red-light: #FEE2E2;
+  --red-dark: #991B1B;
+  --amber: #F59E0B;
+  --amber-light: #FEF3C7;
+  --blue: #3B82F6;
+  --blue-light: #DBEAFE;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font);
+  background: var(--gold-bg);
+  color: var(--dark);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+
+/* Header */
+.page-header {
+  background: linear-gradient(135deg, var(--dark) 0%, #2d2d2d 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+}
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.page-header h1 span { color: var(--gold); }
+.page-header p {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  background: white;
+  border-bottom: 2px solid var(--grey-300);
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.tab-btn {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--grey-500);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+.tab-btn:hover { color: var(--dark); background: var(--grey-100); }
+.tab-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: var(--gold-bg);
+}
+
+
+/* Tab Content */
+.tab-content { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--grey-200);
+}
+.card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Quick Summary Grid */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.summary-item {
+  background: var(--grey-100);
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid var(--gold);
+}
+.summary-item .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--grey-500);
+  margin-bottom: 0.25rem;
+}
+.summary-item .value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.badge-pending { background: var(--amber-light); color: #92400E; }
+.badge-confirmed { background: var(--green-light); color: var(--green-dark); }
+.badge-inprogress { background: var(--blue-light); color: #1E40AF; }
+.badge-completed { background: #E0E7FF; color: #3730A3; }
+.badge-rejected { background: var(--red-light); color: var(--red-dark); }
+.badge-cancelled { background: var(--grey-200); color: var(--grey-700); }
+.badge-noshow { background: #FDE68A; color: #92400E; }
+
+/* SVG Styles */
+.flow-container {
+  overflow-x: auto;
+  padding: 1rem;
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--grey-200);
+}
+.flow-container svg { display: block; margin: 0 auto; }
+.flow-container svg text {
+  font-family: var(--font);
+  font-size: 11px;
+}
+.flow-container svg .node-rect {
+  stroke-width: 2;
+  rx: 8;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.flow-container svg .node-rect:hover {
+  filter: brightness(0.95);
+  stroke-width: 3;
+}
+.flow-container svg .decision {
+  stroke-width: 2;
+  cursor: pointer;
+}
+.flow-container svg .decision:hover {
+  filter: brightness(0.9);
+}
+
+
+/* Wireframe Phone */
+.wireframe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+.phone-frame {
+  background: white;
+  border: 3px solid var(--dark);
+  border-radius: 32px;
+  padding: 1rem;
+  width: 280px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+.phone-frame::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 6px;
+  background: var(--grey-300);
+  border-radius: 3px;
+  margin: 0 auto 1rem;
+}
+.phone-screen {
+  background: var(--grey-100);
+  border-radius: 16px;
+  padding: 1rem;
+  min-height: 400px;
+}
+.phone-screen h4 {
+  font-size: 0.85rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+/* Wireframe elements */
+.wire-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+.wire-day {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  background: white;
+  border: 1px solid var(--grey-300);
+}
+.wire-day.selected {
+  background: var(--gold);
+  color: white;
+  border-color: var(--gold);
+}
+.wire-day.disabled { opacity: 0.3; }
+
+
+.wire-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+.wire-slot {
+  padding: 0.4rem;
+  text-align: center;
+  font-size: 0.7rem;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid var(--grey-300);
+  cursor: pointer;
+}
+.wire-slot.selected {
+  background: var(--gold);
+  color: white;
+  border-color: var(--gold);
+}
+.wire-slot.unavailable {
+  background: var(--grey-200);
+  color: var(--grey-500);
+  text-decoration: line-through;
+}
+
+.wire-toggle {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--gold);
+  margin-bottom: 1rem;
+}
+.wire-toggle-btn {
+  flex: 1;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: white;
+  color: var(--dark);
+}
+.wire-toggle-btn.active {
+  background: var(--gold);
+  color: white;
+}
+
+.wire-service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem;
+  margin-bottom: 0.5rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--grey-300);
+  font-size: 0.75rem;
+}
+.wire-service-item .price {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+
+.wire-confirm-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--grey-200);
+}
+.wire-confirm-row:last-child { border-bottom: none; }
+.wire-btn {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--gold);
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-align: center;
+  cursor: pointer;
+}
+.wire-btn:hover { background: #B8963E; }
+.wire-btn.secondary {
+  background: white;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+}
+
+/* Details / Collapsible */
+details {
+  background: white;
+  border: 1px solid var(--grey-200);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+details summary {
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--grey-100);
+  border-bottom: 1px solid var(--grey-200);
+  transition: background 0.2s;
+}
+details summary:hover { background: var(--grey-200); }
+details[open] summary { background: var(--gold-light); }
+details .content { padding: 1.5rem; }
+
+
+/* Code blocks */
+pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border-radius: 8px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  margin: 1rem 0;
+}
+code {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+.inline-code {
+  background: var(--grey-200);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1rem 0;
+}
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--grey-200);
+}
+.data-table th {
+  background: var(--grey-100);
+  font-weight: 600;
+  color: var(--grey-700);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+.data-table tr:hover td { background: var(--gold-bg); }
+
+/* Entry points list */
+.entry-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.75rem;
+}
+.entry-list li {
+  padding: 0.75rem 1rem;
+  background: var(--grey-100);
+  border-radius: 8px;
+  border-left: 3px solid var(--gold);
+  font-size: 0.85rem;
+}
+.entry-list li code {
+  background: var(--gold-light);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+}
+
+
+/* Lifecycle Arrow */
+.lifecycle-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: var(--grey-100);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+.lifecycle-flow .arrow {
+  color: var(--grey-500);
+  font-size: 1.2rem;
+}
+
+/* Print Styles */
+@media print {
+  .tab-nav { display: none; }
+  .tab-content { display: block !important; page-break-inside: avoid; }
+  .page-header { background: white; color: black; border-bottom: 2px solid black; }
+  .page-header h1 span { color: black; }
+  .page-header p { color: #666; }
+  body { background: white; }
+  .card { box-shadow: none; border: 1px solid #ccc; }
+  .phone-frame { box-shadow: none; }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .page-header { padding: 1.5rem 1rem; }
+  .page-header h1 { font-size: 1.4rem; }
+  .tab-nav { gap: 0; }
+  .tab-btn { padding: 0.75rem 1rem; font-size: 0.8rem; }
+  .tab-content { padding: 1rem; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .wireframe-grid { grid-template-columns: 1fr; }
+  .phone-frame { width: 100%; max-width: 300px; }
+  .entry-list { grid-template-columns: 1fr; }
+  pre { font-size: 0.7rem; padding: 0.75rem; }
+}
+@media (max-width: 480px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .tab-btn { padding: 0.6rem 0.75rem; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+
+<!-- Page Header -->
+<header class="page-header">
+  <h1><span>Royal Glow</span> Booking Flow</h1>
+  <p>Customer booking dialog &mdash; 4-step wizard with auth gate</p>
+</header>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav" role="tablist">
+  <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
+  <button class="tab-btn" data-tab="flow" role="tab" aria-selected="false">Flow Diagram</button>
+  <button class="tab-btn" data-tab="wireframes" role="tab" aria-selected="false">Wireframes</button>
+  <button class="tab-btn" data-tab="states" role="tab" aria-selected="false">States &amp; Errors</button>
+  <button class="tab-btn" data-tab="data" role="tab" aria-selected="false">Data &amp; API</button>
+</nav>
+
+
+<!-- ==================== TAB: OVERVIEW ==================== -->
+<section class="tab-content active" id="tab-overview" role="tabpanel">
+
+  <!-- Quick Summary -->
+  <div class="card">
+    <h3>&#9889; Quick Summary</h3>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="label">Route</div>
+        <div class="value">Homepage <code class="inline-code">/?book=1</code></div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Steps</div>
+        <div class="value">4 (Date/Time &rarr; Categories &rarr; Services &rarr; Confirm)</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Auth</div>
+        <div class="value">Required (Google OAuth)</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Role</div>
+        <div class="value">customer</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Component</div>
+        <div class="value">Dialog overlay (modal)</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">Status Lifecycle</div>
+        <div class="value">
+          <span class="badge badge-pending">Pending</span>
+          <span style="margin: 0 2px;">&rarr;</span>
+          <span class="badge badge-confirmed">Confirmed</span>
+          <span style="margin: 0 2px;">&rarr;</span>
+          <span class="badge badge-inprogress">In Progress</span>
+          <span style="margin: 0 2px;">&rarr;</span>
+          <span class="badge badge-completed">Completed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Entry Points -->
+  <div class="card">
+    <h3>&#128279; Entry Points</h3>
+    <ul class="entry-list">
+      <li>Homepage <strong>"Book Now"</strong> hero button</li>
+      <li>Header <strong>"Book Now"</strong> CTA (all pages)</li>
+      <li>Service card <strong>"Book This"</strong> button</li>
+      <li>Offer card <strong>"Book Now"</strong> CTA</li>
+      <li>Deep link: <code>/?book=1</code></li>
+      <li>GMB link: <code>/?book=1&amp;utm_source=gmb</code></li>
+      <li>QR code: <code>/?book=1&amp;utm_source=walkin</code></li>
+      <li>Post-lead: <code>/?book=1&amp;leadId={id}</code></li>
+      <li>Service pre-select: <code>/?book=1&amp;service=X</code></li>
+    </ul>
+  </div>
+
+  <!-- Status Lifecycle -->
+  <div class="card">
+    <h3>&#128260; Status Lifecycle</h3>
+    <div class="lifecycle-flow">
+      <span class="badge badge-pending">PENDING</span>
+      <span class="arrow">&rarr;</span>
+      <span class="badge badge-confirmed">CONFIRMED</span>
+      <span class="arrow">&rarr;</span>
+      <span class="badge badge-inprogress">IN_PROGRESS</span>
+      <span class="arrow">&rarr;</span>
+      <span class="badge badge-completed">COMPLETED</span>
+    </div>
+    <div class="lifecycle-flow" style="margin-top: 0.5rem;">
+      <span class="badge badge-pending">PENDING</span>
+      <span class="arrow">&rarr;</span>
+      <span class="badge badge-rejected">REJECTED</span>
+      <span style="margin-left: 1rem; font-size: 0.8rem; color: var(--grey-500);">(with reason)</span>
+    </div>
+    <div class="lifecycle-flow" style="margin-top: 0.5rem;">
+      <span class="badge badge-pending">PENDING</span>
+      <span style="font-size: 0.75rem; color: var(--grey-500);">/</span>
+      <span class="badge badge-confirmed">CONFIRMED</span>
+      <span class="arrow">&rarr;</span>
+      <span class="badge badge-cancelled">CANCELLED</span>
+      <span style="margin-left: 1rem; font-size: 0.8rem; color: var(--grey-500);">(free if &gt;4h before)</span>
+    </div>
+    <div class="lifecycle-flow" style="margin-top: 0.5rem;">
+      <span class="badge badge-confirmed">CONFIRMED</span>
+      <span class="arrow">&rarr;</span>
+      <span class="badge badge-noshow">NO_SHOW</span>
+      <span style="margin-left: 1rem; font-size: 0.8rem; color: var(--grey-500);">(noshow_count++)</span>
+    </div>
+  </div>
+
+
+  <!-- Booking Steps Overview -->
+  <div class="card">
+    <h3>&#128203; Booking Dialog Steps</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Key Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-pending">1</span></td>
+          <td><strong>Date &amp; Time</strong></td>
+          <td>Calendar picker + available time slots grid</td>
+          <td>Select date, pick slot, auto-branch selection</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">2</span></td>
+          <td><strong>Categories</strong></td>
+          <td>Salon / SPA toggle with multi-select categories</td>
+          <td>Toggle type, select one or more categories</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-inprogress">3</span></td>
+          <td><strong>Services</strong></td>
+          <td>Per-category service list with prices &amp; durations</td>
+          <td>Select services, SPA 60/90 min toggle</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-completed">4</span></td>
+          <td><strong>Confirmation</strong></td>
+          <td>Booking summary with ID, total, gems balance</td>
+          <td>Review, submit booking, view receipt</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Cancellation Rules -->
+  <div class="card">
+    <h3>&#9888;&#65039; Cancellation Rules</h3>
+    <ul style="list-style: none; padding: 0;">
+      <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--grey-200);">&#9989; Free cancellation if <strong>&gt; 4 hours</strong> before appointment</li>
+      <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--grey-200);">&#9888;&#65039; Tagged in CRM as <strong>"late cancellation"</strong> if &lt; 4 hours</li>
+      <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--grey-200);">&#10060; No-show count incremented if customer doesn't arrive</li>
+      <li style="padding: 0.5rem 0;">&#128683; At <strong>4 no-shows</strong>: future bookings require manager approval</li>
+    </ul>
+  </div>
+
+</section>
+
+
+<!-- ==================== TAB: FLOW DIAGRAM ==================== -->
+<section class="tab-content" id="tab-flow" role="tabpanel">
+
+  <div class="card">
+    <h3>&#128736; Complete Booking Flow</h3>
+    <p style="font-size: 0.85rem; color: var(--grey-500); margin-bottom: 1rem;">
+      Interactive flowchart showing the complete booking dialog process. Hover over nodes for details.
+    </p>
+    <div class="flow-container">
+      <svg viewBox="0 0 800 600" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- Arrowhead Marker Definition -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+          </marker>
+          <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#10B981"/>
+          </marker>
+          <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#EF4444"/>
+          </marker>
+        </defs>
+
+
+        <!-- Entry Points (Left side) -->
+        <rect class="node-rect" x="20" y="30" width="140" height="30" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="90" y="50" text-anchor="middle" font-size="10" fill="#1a1a1a">Book Now (Hero)</text>
+
+        <rect class="node-rect" x="20" y="70" width="140" height="30" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="90" y="90" text-anchor="middle" font-size="10" fill="#1a1a1a">Header CTA</text>
+
+        <rect class="node-rect" x="20" y="110" width="140" height="30" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="90" y="130" text-anchor="middle" font-size="10" fill="#1a1a1a">Service "Book This"</text>
+
+        <rect class="node-rect" x="20" y="150" width="140" height="30" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="90" y="170" text-anchor="middle" font-size="10" fill="#1a1a1a">Deep link /?book=1</text>
+
+        <rect class="node-rect" x="20" y="190" width="140" height="30" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="90" y="210" text-anchor="middle" font-size="10" fill="#1a1a1a">QR / GMB Link</text>
+
+        <!-- Convergence arrows to Booking Dialog Opens -->
+        <line x1="160" y1="45" x2="270" y2="130" stroke="#C8A961" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <line x1="160" y1="85" x2="270" y2="130" stroke="#C8A961" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <line x1="160" y1="125" x2="270" y2="130" stroke="#C8A961" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <line x1="160" y1="165" x2="270" y2="130" stroke="#C8A961" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <line x1="160" y1="205" x2="270" y2="130" stroke="#C8A961" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+
+        <!-- Booking Dialog Opens Node -->
+        <rect class="node-rect" x="280" y="110" width="160" height="40" fill="#E0E7FF" stroke="#3B82F6"/>
+        <text x="360" y="135" text-anchor="middle" font-size="12" font-weight="bold" fill="#1E40AF">Booking Dialog Opens</text>
+
+        <!-- Arrow down to Auth Decision -->
+        <line x1="360" y1="150" x2="360" y2="180" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- Auth Decision Diamond -->
+        <polygon class="decision" points="360,190 420,220 360,250 300,220" fill="#FEF3C7" stroke="#C8A961" stroke-width="2"/>
+        <text x="360" y="223" text-anchor="middle" font-size="10" fill="#1a1a1a">Signed in?</text>
+
+        <!-- NO branch: goes to Google OAuth -->
+        <line x1="300" y1="220" x2="210" y2="220" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowhead-red)"/>
+        <text x="255" y="213" text-anchor="middle" font-size="9" fill="#EF4444">No</text>
+
+        <rect class="node-rect" x="100" y="205" width="110" height="30" fill="#FEE2E2" stroke="#EF4444"/>
+        <text x="155" y="224" text-anchor="middle" font-size="10" fill="#991B1B">Google OAuth</text>
+
+        <!-- OAuth back to dialog -->
+        <path d="M 155 235 L 155 260 L 360 260 L 360 250" fill="none" stroke="#10B981" stroke-width="1.5" marker-end="url(#arrowhead-green)"/>
+        <text x="250" y="255" text-anchor="middle" font-size="9" fill="#10B981">Authenticated</text>
+
+        <!-- YES branch: goes to Step 1 -->
+        <line x1="420" y1="220" x2="480" y2="220" stroke="#10B981" stroke-width="1.5" marker-end="url(#arrowhead-green)"/>
+        <text x="450" y="213" text-anchor="middle" font-size="9" fill="#10B981">Yes</text>
+
+
+        <!-- Step 1: Date & Time -->
+        <rect class="node-rect" x="480" y="200" width="150" height="40" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="555" y="216" text-anchor="middle" font-size="9" fill="#065F46">STEP 1</text>
+        <text x="555" y="230" text-anchor="middle" font-size="11" font-weight="bold" fill="#065F46">Date &amp; Time</text>
+
+        <!-- Arrow to Step 2 -->
+        <line x1="555" y1="240" x2="555" y2="275" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- Step 2: Categories -->
+        <rect class="node-rect" x="480" y="280" width="150" height="40" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="555" y="296" text-anchor="middle" font-size="9" fill="#065F46">STEP 2</text>
+        <text x="555" y="310" text-anchor="middle" font-size="11" font-weight="bold" fill="#065F46">Categories</text>
+
+        <!-- Arrow to Step 3 -->
+        <line x1="555" y1="320" x2="555" y2="355" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- Step 3: Services -->
+        <rect class="node-rect" x="480" y="360" width="150" height="40" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="555" y="376" text-anchor="middle" font-size="9" fill="#065F46">STEP 3</text>
+        <text x="555" y="390" text-anchor="middle" font-size="11" font-weight="bold" fill="#065F46">Services</text>
+
+        <!-- Arrow to Step 4 -->
+        <line x1="555" y1="400" x2="555" y2="435" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- Step 4: Confirmation -->
+        <rect class="node-rect" x="480" y="440" width="150" height="40" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="555" y="456" text-anchor="middle" font-size="9" fill="#065F46">STEP 4</text>
+        <text x="555" y="470" text-anchor="middle" font-size="11" font-weight="bold" fill="#065F46">Confirmation</text>
+
+
+        <!-- Arrow from Step 4 to PENDING status -->
+        <line x1="555" y1="480" x2="555" y2="510" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- PENDING -->
+        <rect class="node-rect" x="495" y="515" width="120" height="30" fill="#FEF3C7" stroke="#F59E0B"/>
+        <text x="555" y="534" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400E">PENDING</text>
+
+        <!-- Arrow from PENDING to CONFIRMED -->
+        <line x1="555" y1="545" x2="555" y2="565" stroke="#10B981" stroke-width="1.5" marker-end="url(#arrowhead-green)"/>
+
+        <!-- CONFIRMED -->
+        <rect class="node-rect" x="495" y="570" width="120" height="30" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="555" y="589" text-anchor="middle" font-size="11" font-weight="bold" fill="#065F46">CONFIRMED</text>
+
+        <!-- Branch: PENDING to REJECTED -->
+        <line x1="495" y1="530" x2="380" y2="530" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrowhead-red)"/>
+        <rect class="node-rect" x="280" y="515" width="100" height="30" fill="#FEE2E2" stroke="#EF4444"/>
+        <text x="330" y="534" text-anchor="middle" font-size="10" font-weight="bold" fill="#991B1B">REJECTED</text>
+
+        <!-- Branch: PENDING/CONFIRMED to CANCELLED -->
+        <line x1="495" y1="580" x2="380" y2="580" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect class="node-rect" x="280" y="565" width="100" height="30" fill="#F3F4F6" stroke="#6B6B6B"/>
+        <text x="330" y="584" text-anchor="middle" font-size="10" font-weight="bold" fill="#374151">CANCELLED</text>
+
+
+        <!-- Branch: CONFIRMED to NO_SHOW -->
+        <line x1="615" y1="585" x2="700" y2="585" stroke="#F59E0B" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect class="node-rect" x="700" y="570" width="90" height="30" fill="#FDE68A" stroke="#F59E0B"/>
+        <text x="745" y="589" text-anchor="middle" font-size="10" font-weight="bold" fill="#92400E">NO_SHOW</text>
+
+        <!-- CONFIRMED to IN_PROGRESS (below the main flow) -->
+        <text x="555" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a1a1a">Booking Flow &amp; Status Lifecycle</text>
+
+        <!-- Legend -->
+        <rect x="640" y="30" width="150" height="90" fill="white" stroke="#e5e5e5" rx="6"/>
+        <text x="650" y="48" font-size="9" font-weight="bold" fill="#374151">LEGEND</text>
+        <rect x="650" y="55" width="12" height="12" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="668" y="65" font-size="9" fill="#1a1a1a">Entry Point</text>
+        <rect x="650" y="73" width="12" height="12" fill="#D1FAE5" stroke="#10B981"/>
+        <text x="668" y="83" font-size="9" fill="#1a1a1a">Process Step</text>
+        <rect x="650" y="91" width="12" height="12" fill="#E0E7FF" stroke="#3B82F6"/>
+        <text x="668" y="101" font-size="9" fill="#1a1a1a">Dialog / UI</text>
+        <polygon points="656,109 668,115 656,121" fill="#FEF3C7" stroke="#C8A961"/>
+        <text x="675" y="118" font-size="9" fill="#1a1a1a">Decision</text>
+
+      </svg>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ==================== TAB: WIREFRAMES ==================== -->
+<section class="tab-content" id="tab-wireframes" role="tabpanel">
+
+  <div class="card">
+    <h3>&#128241; Phone Wireframe Mockups</h3>
+    <p style="font-size: 0.85rem; color: var(--grey-500); margin-bottom: 1.5rem;">
+      Mobile-first dialog wireframes showing each step of the booking wizard.
+    </p>
+
+    <div class="wireframe-grid">
+
+      <!-- Step 1: Date & Time -->
+      <div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <h4>Step 1: Date &amp; Time</h4>
+            <div style="text-align: center; font-size: 0.75rem; color: var(--grey-500); margin-bottom: 0.5rem;">June 2025</div>
+            <div class="wire-calendar">
+              <div class="wire-day disabled">26</div>
+              <div class="wire-day disabled">27</div>
+              <div class="wire-day disabled">28</div>
+              <div class="wire-day disabled">29</div>
+              <div class="wire-day disabled">30</div>
+              <div class="wire-day disabled">31</div>
+              <div class="wire-day">1</div>
+              <div class="wire-day">2</div>
+              <div class="wire-day">3</div>
+              <div class="wire-day">4</div>
+              <div class="wire-day selected">5</div>
+              <div class="wire-day">6</div>
+              <div class="wire-day">7</div>
+              <div class="wire-day">8</div>
+              <div class="wire-day">9</div>
+              <div class="wire-day">10</div>
+              <div class="wire-day">11</div>
+              <div class="wire-day">12</div>
+              <div class="wire-day">13</div>
+              <div class="wire-day">14</div>
+              <div class="wire-day">15</div>
+            </div>
+            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem;">Available Slots</div>
+            <div class="wire-slots">
+              <div class="wire-slot">9:00</div>
+              <div class="wire-slot selected">10:00</div>
+              <div class="wire-slot">11:00</div>
+              <div class="wire-slot">12:00</div>
+              <div class="wire-slot unavailable">13:00</div>
+              <div class="wire-slot">14:00</div>
+              <div class="wire-slot">15:00</div>
+              <div class="wire-slot unavailable">16:00</div>
+              <div class="wire-slot">17:00</div>
+            </div>
+            <div class="wire-btn">Next: Choose Categories &rarr;</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Step 2: Categories -->
+      <div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <h4>Step 2: Categories</h4>
+            <div class="wire-toggle">
+              <div class="wire-toggle-btn active">Salon</div>
+              <div class="wire-toggle-btn">SPA</div>
+            </div>
+            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem;">Select Categories</div>
+            <div class="wire-service-item" style="border: 2px solid var(--gold); background: var(--gold-bg);">
+              <span>&#9989; Hair Styling</span>
+              <span class="price">12 services</span>
+            </div>
+            <div class="wire-service-item">
+              <span>Nail Care</span>
+              <span class="price">8 services</span>
+            </div>
+            <div class="wire-service-item" style="border: 2px solid var(--gold); background: var(--gold-bg);">
+              <span>&#9989; Skin Care</span>
+              <span class="price">6 services</span>
+            </div>
+            <div class="wire-service-item">
+              <span>Makeup</span>
+              <span class="price">5 services</span>
+            </div>
+            <div class="wire-service-item">
+              <span>Waxing</span>
+              <span class="price">4 services</span>
+            </div>
+            <div class="wire-btn">Next: Select Services &rarr;</div>
+            <div class="wire-btn secondary" style="margin-top: 0.5rem;">&larr; Back</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Step 3: Services -->
+      <div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <h4>Step 3: Services</h4>
+            <div style="font-size: 0.7rem; color: var(--grey-500); margin-bottom: 0.5rem;">HAIR STYLING</div>
+            <div class="wire-service-item" style="border: 2px solid var(--gold); background: var(--gold-bg);">
+              <div>
+                <div style="font-weight: 600;">Haircut &amp; Blow Dry</div>
+                <div style="color: var(--grey-500); font-size: 0.65rem;">45 min</div>
+              </div>
+              <span class="price">AED 150</span>
+            </div>
+            <div class="wire-service-item">
+              <div>
+                <div style="font-weight: 600;">Keratin Treatment</div>
+                <div style="color: var(--grey-500); font-size: 0.65rem;">120 min</div>
+              </div>
+              <span class="price">AED 450</span>
+            </div>
+            <div style="font-size: 0.7rem; color: var(--grey-500); margin: 0.75rem 0 0.5rem;">SKIN CARE</div>
+            <div class="wire-service-item" style="border: 2px solid var(--gold); background: var(--gold-bg);">
+              <div>
+                <div style="font-weight: 600;">Facial Gold Mask</div>
+                <div style="color: var(--grey-500); font-size: 0.65rem;">60 min</div>
+              </div>
+              <span class="price">AED 280</span>
+            </div>
+            <div class="wire-service-item">
+              <div>
+                <div style="font-weight: 600;">Deep Cleansing</div>
+                <div style="color: var(--grey-500); font-size: 0.65rem;">45 min</div>
+              </div>
+              <span class="price">AED 200</span>
+            </div>
+            <div style="background: var(--gold-light); padding: 0.5rem; border-radius: 6px; margin-top: 0.5rem; text-align: center; font-size: 0.75rem; font-weight: 600;">
+              Total: AED 430 &bull; 105 min
+            </div>
+            <div class="wire-btn">Next: Confirm &rarr;</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Step 4: Confirmation -->
+      <div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <h4>Step 4: Confirmation</h4>
+            <div style="text-align: center; margin-bottom: 1rem;">
+              <div style="font-size: 2rem;">&#9989;</div>
+              <div style="font-weight: 700; font-size: 0.9rem; color: var(--green);">Booking Submitted!</div>
+              <div style="font-size: 0.7rem; color: var(--grey-500);">Pending confirmation</div>
+            </div>
+            <div style="background: var(--grey-100); border-radius: 8px; padding: 0.75rem;">
+              <div class="wire-confirm-row">
+                <span>Booking ID</span>
+                <strong>#BK-20250605-001</strong>
+              </div>
+              <div class="wire-confirm-row">
+                <span>Date</span>
+                <strong>5 Jun 2025, 10:00</strong>
+              </div>
+              <div class="wire-confirm-row">
+                <span>Services</span>
+                <strong>2 selected</strong>
+              </div>
+              <div class="wire-confirm-row">
+                <span>Duration</span>
+                <strong>105 min</strong>
+              </div>
+              <div class="wire-confirm-row">
+                <span>Total</span>
+                <strong style="color: var(--gold);">AED 430</strong>
+              </div>
+              <div class="wire-confirm-row">
+                <span>Gems Balance</span>
+                <strong style="color: var(--amber);">+43 gems</strong>
+              </div>
+            </div>
+            <div class="wire-btn">View My Bookings</div>
+            <div class="wire-btn secondary" style="margin-top: 0.5rem;">Close</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end wireframe-grid -->
+  </div>
+
+</section>
+
+
+<!-- ==================== TAB: STATES & ERRORS ==================== -->
+<section class="tab-content" id="tab-states" role="tabpanel">
+
+  <div class="card">
+    <h3>&#128736; Booking States &amp; Error Handling</h3>
+    <p style="font-size: 0.85rem; color: var(--grey-500); margin-bottom: 1rem;">
+      Expand each section to see state details, UI behavior, and error handling.
+    </p>
+  </div>
+
+  <!-- PENDING State -->
+  <details open>
+    <summary><span class="badge badge-pending">PENDING</span> &mdash; Initial booking state</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Booking has been submitted by customer, awaiting admin confirmation.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Customer completes Step 4 and submits</td></tr>
+        <tr><td>UI State</td><td>Amber "Pending" badge on booking card</td></tr>
+        <tr><td>Notifications</td><td>Push to admin; email confirmation to customer</td></tr>
+        <tr><td>Customer actions</td><td>Cancel (free), view details</td></tr>
+        <tr><td>Admin actions</td><td>Approve (CONFIRMED), Reject (REJECTED)</td></tr>
+        <tr><td>Auto-transition</td><td>None (requires admin action)</td></tr>
+      </table>
+      <p style="margin-top: 0.75rem; font-size: 0.85rem;"><strong>Error scenarios:</strong></p>
+      <ul style="font-size: 0.85rem; padding-left: 1.5rem;">
+        <li>Slot already taken &rarr; show "Slot unavailable, please choose another time"</li>
+        <li>Network failure &rarr; retry with exponential backoff, show toast</li>
+        <li>User at 4+ no-shows &rarr; booking flagged for manager approval</li>
+      </ul>
+    </div>
+  </details>
+
+
+  <!-- CONFIRMED State -->
+  <details>
+    <summary><span class="badge badge-confirmed">CONFIRMED</span> &mdash; Admin approved</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Admin has approved the booking. Customer will receive a confirmation notification.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Admin clicks "Approve" on booking</td></tr>
+        <tr><td>UI State</td><td>Green "Confirmed" badge, add to calendar option</td></tr>
+        <tr><td>Notifications</td><td>Push + email to customer with details</td></tr>
+        <tr><td>Customer actions</td><td>Cancel (free if &gt;4h), reschedule</td></tr>
+        <tr><td>Admin actions</td><td>Check-in (IN_PROGRESS), Cancel, mark No-Show</td></tr>
+        <tr><td>Reminders</td><td>24h before, 2h before appointment</td></tr>
+      </table>
+      <p style="margin-top: 0.75rem; font-size: 0.85rem;"><strong>Error scenarios:</strong></p>
+      <ul style="font-size: 0.85rem; padding-left: 1.5rem;">
+        <li>Late cancellation (&lt;4h) &rarr; tagged in CRM, no penalty first time</li>
+        <li>Double-booking conflict &rarr; admin alerted, must resolve manually</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- IN_PROGRESS State -->
+  <details>
+    <summary><span class="badge badge-inprogress">IN_PROGRESS</span> &mdash; Customer checked in</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Customer has arrived and been checked in by front desk.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Admin clicks "Check-in" at front desk</td></tr>
+        <tr><td>UI State</td><td>Blue "In Progress" badge, service timer shown</td></tr>
+        <tr><td>Notifications</td><td>Internal notification to assigned staff</td></tr>
+        <tr><td>Customer actions</td><td>View progress (read-only)</td></tr>
+        <tr><td>Admin actions</td><td>Complete (with invoice), add extra services</td></tr>
+        <tr><td>Duration tracking</td><td>Timer starts from check-in timestamp</td></tr>
+      </table>
+    </div>
+  </details>
+
+
+  <!-- COMPLETED State -->
+  <details>
+    <summary><span class="badge badge-completed">COMPLETED</span> &mdash; Service finished</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Service has been completed, invoice generated, gems awarded.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Admin marks "Complete" after service is done</td></tr>
+        <tr><td>UI State</td><td>Purple "Completed" badge, invoice available</td></tr>
+        <tr><td>Notifications</td><td>Invoice email + gems earned notification</td></tr>
+        <tr><td>Customer actions</td><td>View invoice, leave review, rebook</td></tr>
+        <tr><td>Gems</td><td>Awarded based on total spend (1 gem per 10 AED)</td></tr>
+        <tr><td>Follow-up</td><td>Feedback request after 24h</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <!-- REJECTED State -->
+  <details>
+    <summary><span class="badge badge-rejected">REJECTED</span> &mdash; Admin declined</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Booking was rejected by admin with a reason provided.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Admin clicks "Reject" with reason</td></tr>
+        <tr><td>UI State</td><td>Red "Rejected" badge with reason displayed</td></tr>
+        <tr><td>Notifications</td><td>Push + email to customer with rejection reason</td></tr>
+        <tr><td>Customer actions</td><td>View reason, rebook with different options</td></tr>
+        <tr><td>Common reasons</td><td>Slot conflict, service unavailable, staff leave</td></tr>
+      </table>
+    </div>
+  </details>
+
+
+  <!-- CANCELLED State -->
+  <details>
+    <summary><span class="badge badge-cancelled">CANCELLED</span> &mdash; Booking cancelled</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Booking was cancelled by customer or admin.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Customer or admin initiates cancellation</td></tr>
+        <tr><td>UI State</td><td>Grey "Cancelled" badge with timestamp</td></tr>
+        <tr><td>Free cancellation</td><td>&gt; 4 hours before appointment time</td></tr>
+        <tr><td>Late cancellation</td><td>&lt; 4 hours &mdash; tagged in CRM</td></tr>
+        <tr><td>Customer actions</td><td>Rebook</td></tr>
+        <tr><td>CRM impact</td><td>late_cancellation_count incremented if &lt;4h</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <!-- NO_SHOW State -->
+  <details>
+    <summary><span class="badge badge-noshow">NO_SHOW</span> &mdash; Customer didn't arrive</summary>
+    <div class="content">
+      <p><strong>Description:</strong> Customer didn't show up for their confirmed appointment.</p>
+      <table class="data-table">
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Trigger</td><td>Auto-marked after appointment end time passes (or admin marks)</td></tr>
+        <tr><td>UI State</td><td>Amber "No Show" badge</td></tr>
+        <tr><td>Notifications</td><td>Internal alert to admin; no customer notification</td></tr>
+        <tr><td>CRM impact</td><td>noshow_count++ on customer profile</td></tr>
+        <tr><td>Threshold</td><td>At 4 no-shows: future bookings require manager approval</td></tr>
+        <tr><td>Recovery</td><td>Customer can still rebook but may be flagged</td></tr>
+      </table>
+      <p style="margin-top: 0.75rem; font-size: 0.85rem;"><strong>Escalation:</strong></p>
+      <ul style="font-size: 0.85rem; padding-left: 1.5rem;">
+        <li>1-3 no-shows: Warning shown to customer on next booking</li>
+        <li>4+ no-shows: Booking goes to manager approval queue</li>
+        <li>Manager can override or block customer</li>
+      </ul>
+    </div>
+  </details>
+
+</section>
+
+
+<!-- ==================== TAB: DATA & API ==================== -->
+<section class="tab-content" id="tab-data" role="tabpanel">
+
+  <div class="card">
+    <h3>&#128451; Data Model</h3>
+    <p style="font-size: 0.85rem; color: var(--grey-500); margin-bottom: 1rem;">Core booking data structure stored in the database.</p>
+    <pre><code>{
+  "id": "bk_20250605_001",
+  "customer_id": "cust_abc123",
+  "branch_id": "branch_main",
+  "status": "pending",
+  "date": "2025-06-05",
+  "time_slot": "10:00",
+  "services": [
+    {
+      "service_id": "svc_haircut",
+      "name": "Haircut & Blow Dry",
+      "category": "hair_styling",
+      "duration_min": 45,
+      "price_aed": 150
+    },
+    {
+      "service_id": "svc_facial",
+      "name": "Facial Gold Mask",
+      "category": "skin_care",
+      "duration_min": 60,
+      "price_aed": 280
+    }
+  ],
+  "total_duration_min": 105,
+  "total_price_aed": 430,
+  "gems_earned": 43,
+  "source": "website",
+  "utm_source": null,
+  "lead_id": null,
+  "created_at": "2025-06-04T14:30:00Z",
+  "updated_at": "2025-06-04T14:30:00Z",
+  "cancelled_at": null,
+  "cancellation_reason": null,
+  "rejection_reason": null,
+  "checked_in_at": null,
+  "completed_at": null,
+  "noshow_marked_at": null
+}</code></pre>
+  </div>
+
+
+  <div class="card">
+    <h3>&#128640; API Endpoints</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+          <th>Auth</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-confirmed">GET</span></td>
+          <td><code class="inline-code">/api/bookings/slots</code></td>
+          <td>Get available time slots for a date + branch</td>
+          <td>Public</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">GET</span></td>
+          <td><code class="inline-code">/api/bookings/categories</code></td>
+          <td>List service categories (Salon/SPA)</td>
+          <td>Public</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">GET</span></td>
+          <td><code class="inline-code">/api/bookings/services</code></td>
+          <td>List services by category with prices</td>
+          <td>Public</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-inprogress">POST</span></td>
+          <td><code class="inline-code">/api/bookings</code></td>
+          <td>Create new booking (submit wizard)</td>
+          <td>Customer</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">GET</span></td>
+          <td><code class="inline-code">/api/bookings/:id</code></td>
+          <td>Get booking details</td>
+          <td>Customer/Admin</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-pending">PATCH</span></td>
+          <td><code class="inline-code">/api/bookings/:id/status</code></td>
+          <td>Update booking status (admin only)</td>
+          <td>Admin</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-rejected">DELETE</span></td>
+          <td><code class="inline-code">/api/bookings/:id</code></td>
+          <td>Cancel booking</td>
+          <td>Customer/Admin</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">GET</span></td>
+          <td><code class="inline-code">/api/bookings/my</code></td>
+          <td>List customer's bookings</td>
+          <td>Customer</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="card">
+    <h3>&#128221; Create Booking Request</h3>
+    <pre><code>// POST /api/bookings
+// Headers: Authorization: Bearer {token}
+
+{
+  "date": "2025-06-05",
+  "time_slot": "10:00",
+  "branch_id": "branch_main",
+  "service_ids": ["svc_haircut", "svc_facial"],
+  "source": "website",
+  "utm_source": "gmb",
+  "lead_id": null,
+  "notes": "First time customer, prefer natural products"
+}
+
+// Response: 201 Created
+{
+  "id": "bk_20250605_001",
+  "status": "pending",
+  "total_price_aed": 430,
+  "total_duration_min": 105,
+  "gems_to_earn": 43,
+  "message": "Booking submitted! You'll receive confirmation shortly."
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <h3>&#128202; Status Transition Rules</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Triggered By</th>
+          <th>Conditions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-pending">PENDING</span></td>
+          <td><span class="badge badge-confirmed">CONFIRMED</span></td>
+          <td>Admin approve</td>
+          <td>No conflicts, staff available</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-pending">PENDING</span></td>
+          <td><span class="badge badge-rejected">REJECTED</span></td>
+          <td>Admin reject</td>
+          <td>Reason required</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">CONFIRMED</span></td>
+          <td><span class="badge badge-inprogress">IN_PROGRESS</span></td>
+          <td>Admin check-in</td>
+          <td>Within 30min of appointment</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-inprogress">IN_PROGRESS</span></td>
+          <td><span class="badge badge-completed">COMPLETED</span></td>
+          <td>Admin complete</td>
+          <td>Invoice generated</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-pending">PENDING</span></td>
+          <td><span class="badge badge-cancelled">CANCELLED</span></td>
+          <td>Customer/Admin</td>
+          <td>Always free if &gt;4h before</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">CONFIRMED</span></td>
+          <td><span class="badge badge-cancelled">CANCELLED</span></td>
+          <td>Customer/Admin</td>
+          <td>CRM flag if &lt;4h before</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-confirmed">CONFIRMED</span></td>
+          <td><span class="badge badge-noshow">NO_SHOW</span></td>
+          <td>System/Admin</td>
+          <td>After appointment end time</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="card">
+    <h3>&#9889; Realtime Events (Ably)</h3>
+    <pre><code>// Channel: bookings:{booking_id}
+// Events published on status change:
+
+{
+  "event": "booking.status_changed",
+  "data": {
+    "booking_id": "bk_20250605_001",
+    "old_status": "pending",
+    "new_status": "confirmed",
+    "changed_by": "admin_xyz",
+    "changed_at": "2025-06-04T15:00:00Z"
+  }
+}
+
+// Channel: user:{customer_id}:bookings
+// Customer receives all their booking updates here
+
+// Channel: admin:bookings
+// Admin receives new booking notifications
+{
+  "event": "booking.created",
+  "data": {
+    "booking_id": "bk_20250605_001",
+    "customer_name": "Sarah Ahmed",
+    "date": "2025-06-05",
+    "time_slot": "10:00",
+    "total_price_aed": 430
+  }
+}</code></pre>
+  </div>
+
+  <div class="card">
+    <h3>&#128272; Validation Rules</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Field</th><th>Rule</th><th>Error Message</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>date</td><td>Must be today or future, within 30 days</td><td>"Please select a valid future date"</td></tr>
+        <tr><td>time_slot</td><td>Must be available (not taken)</td><td>"This slot is no longer available"</td></tr>
+        <tr><td>service_ids</td><td>At least 1 service required, max 10</td><td>"Please select at least one service"</td></tr>
+        <tr><td>branch_id</td><td>Must be valid active branch</td><td>"Invalid branch selected"</td></tr>
+        <tr><td>total_duration</td><td>Cannot exceed remaining hours in day</td><td>"Selected services exceed available time"</td></tr>
+        <tr><td>noshow_count</td><td>If &ge; 4, requires manager flag</td><td>"Booking requires approval"</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+// Tab Navigation
+document.addEventListener('DOMContentLoaded', () => {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Remove active from all
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      tabContents.forEach(c => c.classList.remove('active'));
+
+      // Activate clicked tab
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const tabId = btn.getAttribute('data-tab');
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.add('active');
+    });
+  });
+
+  // SVG node hover tooltips
+  const svgNodes = document.querySelectorAll('.node-rect');
+  svgNodes.forEach(node => {
+    node.addEventListener('mouseenter', (e) => {
+      e.target.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))';
+    });
+    node.addEventListener('mouseleave', (e) => {
+      e.target.style.filter = '';
+    });
+  });
+
+  // Keyboard navigation for tabs
+  const tabNav = document.querySelector('.tab-nav');
+  tabNav.addEventListener('keydown', (e) => {
+    const tabs = Array.from(tabBtns);
+    const currentIndex = tabs.indexOf(document.activeElement);
+    let newIndex;
+
+    if (e.key === 'ArrowRight') {
+      newIndex = (currentIndex + 1) % tabs.length;
+    } else if (e.key === 'ArrowLeft') {
+      newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    } else {
+      return;
+    }
+
+    e.preventDefault();
+    tabs[newIndex].focus();
+    tabs[newIndex].click();
+  });
+});
+</script>
+
+</body>
+</html>

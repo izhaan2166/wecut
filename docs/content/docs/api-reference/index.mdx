@@ -1,0 +1,163 @@
+---
+title: API Reference
+description: REST API for the Royal Glow platform — envelope, auth, and endpoint groups.
+icon: plug
+---
+
+The Royal Glow API is a set of Next.js route handlers under `/api`. All
+endpoints share one JSON envelope, human-readable RESTful paths, and stable
+error codes — so both browsers and AI agents can call them predictably.
+
+<Info>
+  **Base URLs:** customer endpoints are on `https://theroyalglow.in`
+  (local: `http://localhost:3000`); admin endpoint groups (Admin — Bookings,
+  Customers & CRM, the admin halves of Leads / Memberships / Loyalty & Offers,
+  and Background Jobs) are a separate app on `https://admin.theroyalglow.in`
+  (local: `http://localhost:3001`) and carry **no `/api/admin/` segment** — the
+  subdomain is the namespace. Most endpoints require a Better Auth session
+  cookie and note their **minimum role**. This reference is hand-authored from
+  the actual route handlers and the shared Zod schemas in `packages/types`; when
+  a route's schema changes, update the corresponding page.
+</Info>
+
+## Base & envelope
+
+<Tabs>
+<Tab title="Success">
+
+```json
+{ "success": true, "data": {}, "meta": {} }
+```
+
+`meta` is optional and carries pagination (`page`, `totalPages`, `totalCount`).
+
+</Tab>
+<Tab title="Error">
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid request data",
+    "statusCode": 400,
+    "requestId": "req_xxx",
+    "retryable": false,
+    "details": {}
+  }
+}
+```
+
+</Tab>
+</Tabs>
+
+See [Conventions](/content/docs/conventions) for the full envelope, money/date rules,
+and the error-code table, and [Authentication](/content/docs/authentication) for the
+session/role model.
+
+## Authentication
+
+<AccordionGroup>
+<Accordion title="How roles and sessions work">
+
+Most endpoints require a Better Auth session cookie. Each endpoint notes its
+**minimum role**. Roles are hierarchical: `customer` is the lowest, then
+`staff`, `receptionist`, `manager`, `owner`, `developer` — a handler requiring
+`receptionist` also admits everyone above it.
+
+</Accordion>
+<Accordion title="Which endpoints are public (no auth)">
+
+`GET /api/services`, `GET /api/services/[slug]`, `GET /api/branches`,
+`GET /api/availability`, `GET /api/offers`, `POST /api/leads`, and
+`GET /api/health` need no session.
+
+</Accordion>
+</AccordionGroup>
+
+## Quick index
+
+The endpoints reached for most often, in one place.
+
+| Action | Method | Path |
+| --- | --- | --- |
+| List services | GET | `/api/services` |
+| List branches | GET | `/api/branches` |
+| Check availability | GET | `/api/availability?date={YYYY-MM-DD}&branchId={id}` |
+| Submit booking request | POST | `/api/bookings` |
+| Get booking status | GET | `/api/bookings/{id}` |
+| Submit campaign lead | POST | `/api/leads` |
+| Health check | GET | `/api/health` |
+
+## Endpoint groups
+
+<Columns cols={2}>
+  <Card title="Services & Availability" icon="scissors" href="/content/docs/api-reference/services">
+    Catalogue, service detail, branches, slot availability.
+  </Card>
+
+  <Card title="Bookings (customer)" icon="calendar" href="/content/docs/api-reference/bookings">
+    Create, view, and cancel a booking.
+  </Card>
+
+  <Card title="Admin — Bookings" icon="clipboard-list" href="/content/docs/api-reference/admin-bookings">
+    Approve, assign, complete, no-show.
+  </Card>
+
+  <Card title="Customers & CRM" icon="users-round" href="/content/docs/api-reference/customers-crm">
+    Directory, profiles, notes, tags.
+  </Card>
+
+  <Card title="Leads" icon="target" href="/content/docs/api-reference/leads">
+    Lead capture plus the admin pipeline.
+  </Card>
+
+  <Card title="Memberships" icon="id-card" href="/content/docs/api-reference/memberships">
+    Customer view plus admin management.
+  </Card>
+
+  <Card title="Loyalty & Offers" icon="badge-percent" href="/content/docs/api-reference/loyalty-offers">
+    Gems and promotional offers.
+  </Card>
+
+  <Card title="Notifications & Realtime" icon="bell-ring" href="/content/docs/api-reference/notifications">
+    In-app, push, and the Ably token route.
+  </Card>
+
+  <Card title="Background Jobs" icon="cog" href="/content/docs/api-reference/jobs">
+    QStash-triggered job routes.
+  </Card>
+
+  <Card title="Health" icon="heart-pulse" href="/content/docs/api-reference/health">
+    Liveness and dependency checks.
+  </Card>
+</Columns>
+
+## AI-discovery files
+
+The platform publishes machine-readable descriptions of itself so assistants and
+crawlers can answer questions about the salon without scraping the UI.
+
+<Columns cols={2}>
+  <Card title="/llms.txt" icon="file-text" href="https://theroyalglow.in/llms.txt">
+    Concise site summary with live service names.
+  </Card>
+
+  <Card title="/llms-full.txt" icon="file-stack" href="https://theroyalglow.in/llms-full.txt">
+    Full menu with prices, durations, policies, and FAQs.
+  </Card>
+
+  <Card title="/sitemap.xml" icon="map" href="https://theroyalglow.in/sitemap.xml">
+    Crawler discovery — all major AI crawlers allowed.
+  </Card>
+
+  <Card title="/robots.txt" icon="bot" href="https://theroyalglow.in/robots.txt">
+    Crawl rules; AI crawlers explicitly allowed.
+  </Card>
+</Columns>
+
+<Info>
+  A complete, auto-generated reference (via Mintlify's native OpenAPI support
+  from a published OpenAPI spec) is a planned follow-up. This page documents the
+  stable, agent-facing surface in the meantime.
+</Info>

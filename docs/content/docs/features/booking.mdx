@@ -1,0 +1,190 @@
+---
+title: Booking System
+description: The 4-step booking dialog, its entry points, and the booking lifecycle — from a customer's first tap to a completed, invoiced appointment.
+icon: calendar-check
+---
+
+Booking is the heart of Royal Glow. A customer taps **Book Now**, picks a date
+and time, chooses their services, and submits — all in a single dialog that
+opens right over the homepage. Staff then confirm the request, assign a stylist
+or therapist, and complete the appointment on the day.
+
+<Info>
+  The booking dialog is **not** a separate page. It opens as an overlay on the
+  homepage (a bottom sheet on mobile, a centered modal on desktop). The homepage
+  CTA never sends customers to `/book` — that route is reserved for Meta-ad lead
+  capture (see [CRM & Lead Pipeline](/content/docs/features/crm-leads)).
+</Info>
+
+## What it is
+
+A streamlined way for customers to request an appointment without leaving the
+homepage. Instead of a long multi-page form, everything happens in a four-step
+dialog. A booking starts life as a request (status `pending`) — the salon
+confirms it shortly after, so the customer is never left wondering whether their
+slot is locked in.
+
+## How it works — the 4-step dialog
+
+The dialog walks the customer through four short steps:
+
+<Steps>
+<Step title="Date & slot">
+Branch (auto-selected as Rayasandra in Phase 1), name and email prefilled from
+the profile (not editable), a date picker for future dates only, and the
+available time slots for that day. Fully booked or closed slots are greyed out.
+</Step>
+<Step title="Choose category">
+A Salon / SPA toggle, then multi-select category cards within the chosen type.
+**One booking is one type only** — Salon or SPA, never both — which keeps the
+two sides of the business cleanly separated for reporting.
+</Step>
+<Step title="Choose services">
+Service cards under the selected categories, with a running total at the bottom
+(e.g. "3 services · ₹3,500.00"). SPA services that come in 60-minute and
+90-minute variants appear as a single card with a duration selector.
+</Step>
+<Step title="Summary">
+A "Booking Submitted!" confirmation showing the booking number, the selected
+services with prices, the GST-inclusive total, a "Pay at the salon (Cash / UPI /
+Card)" note, and the customer's current gems balance.
+</Step>
+</Steps>
+
+<Info>
+  If the customer is not signed in when they trigger the dialog, the booking
+  context (`book=1`, any UTM values, and `leadId`) is saved to `sessionStorage`,
+  they sign in with Google, and the dialog re-opens automatically afterwards —
+  so the journey is never lost.
+</Info>
+
+### Entry points
+
+There is one booking dialog, reached from several places:
+
+| Entry point | URL | Notes |
+| --- | --- | --- |
+| Homepage "Book Now" button | `/` | Opens the dialog in place. |
+| Deep link | `/?book=1` | Auto-opens the dialog on load. |
+| Google My Business link | `/?book=1&utm_source=gmb` | Dialog opens; source attributed as `gmb`. |
+| In-store QR (walk-in) | `/?book=1&utm_source=walkin` | Dialog opens; source attributed as `walkin`. |
+| Post-lead redirect | `/?book=1&leadId={id}` | Dialog opens with the Meta-ad lead linked for attribution. |
+
+Customers arriving with no UTM are attributed as `organic`. First-touch
+attribution is stored once and never overwritten by later visits.
+
+## How it works — the booking lifecycle
+
+Every booking moves through a defined set of states:
+
+```
+pending → confirmed → in_progress → completed
+   │           │
+   │           ├─→ cancelled   (from pending or confirmed)
+   │           ├─→ no_show      (from confirmed, +15 min after end time)
+   │           └─→ rescheduled  (from confirmed)
+   └─→ rejected  (with a reason)
+```
+
+The happy path moves through four states in order:
+
+<Steps>
+<Step title="pending">
+The initial state for every online booking. The customer can edit services,
+reschedule, or cancel. (Walk-ins skip this state.)
+</Step>
+<Step title="confirmed">
+A receptionist or manager approved the request and assigned staff. The customer
+can still reschedule or cancel.
+</Step>
+<Step title="in_progress">
+The customer is in the salon and the service is underway.
+</Step>
+<Step title="completed">
+The service is done — an invoice is generated, gems are awarded, and a
+confirmation email is sent.
+</Step>
+</Steps>
+
+The off-ramps from this path are `rejected` (declined with a reason from
+`pending`), `cancelled` (from `pending` or `confirmed`), `no_show` (15 minutes
+after the end time when the customer never arrived), and `rescheduled` (moved to
+a new slot from `confirmed`).
+
+<Info>
+  **Walk-ins skip `pending`.** When a receptionist creates a walk-in booking the
+  customer is already in the salon, so it is created directly as `confirmed`. A
+  walk-in no-show therefore does **not** count toward the no-show tier — there
+  was no pre-booked slot to miss. See the [No-Show Policy](/content/docs/features/no-show-policy).
+</Info>
+
+## Rules
+
+<Warning>
+  **One service type per booking** — a booking is Salon **or** SPA, never mixed.
+  This hard separation keeps the two sides of the business cleanly split for
+  reporting and is enforced from the dialog through to the database.
+</Warning>
+
+<AccordionGroup>
+<Accordion title="Who chooses the staff member?">
+The customer does not. A receptionist or manager assigns staff per service when
+approving the booking. Customers can leave a staff preference in the notes, but
+the assignment decision stays with the salon.
+</Accordion>
+<Accordion title="How many times can a booking be rescheduled?">
+Up to 2 reschedules per booking, each at least 1 hour before the appointment. A
+3rd attempt is blocked — the customer must cancel and re-book.
+</Accordion>
+<Accordion title="What are the cancellation rules?">
+Cancellation is free more than 4 hours before the appointment. Within 4 hours it
+is tagged in CRM (no fee, ever). Cancellation is not possible once a booking is
+`in_progress`. The cut-off is configurable — see
+[Booking rules](/content/docs/features/booking-rules).
+</Accordion>
+<Accordion title="Why don't past bookings change when prices change?">
+Pricing is snapshotted. Each `booking_service` row freezes the service name and
+price at the time of booking, so later catalogue changes never alter a past
+booking.
+</Accordion>
+<Accordion title="When are gems awarded?">
+On completion. Service bookings earn 1 gem per ₹100 invoiced when the booking is
+completed. See [Loyalty — Gems](/content/docs/features/loyalty-gems).
+</Accordion>
+</AccordionGroup>
+
+### Booking number format
+
+Every booking gets a human-readable number:
+
+```
+BK-{branch_code}-{YYMM}-{H|S}-{5_random}[-M]
+```
+
+- `H` = salon (hair/beauty), `S` = spa
+- `YYMM` = two-digit year and month
+- a 5-digit random suffix keeps numbers unique
+- the optional `-M` suffix marks a membership session
+
+For example, `BK-RS-2606-H-38291` is a June 2026 salon booking at the Rayasandra
+branch.
+
+## Related links
+
+<Columns cols={2}>
+  <Card title="Bookings API" href="/content/docs/api-reference/bookings">
+  Create, list, view, and cancel a booking (customer endpoints).
+</Card>
+  <Card title="Admin — Bookings API" href="/content/docs/api-reference/admin-bookings">
+  Approve, reject, assign, complete, and mark no-show.
+</Card>
+  <Card title="No-Show Policy" href="/content/docs/features/no-show-policy">
+  How no-shows are tracked and escalated.
+</Card>
+  <Card title="Booking Rules" href="/content/docs/features/booking-rules">
+  Lead time, advance window, cancellation cut-off, and the per-customer cap.
+</Card>
+  <Card title="Data Model" href="/content/docs/data-model">
+  The booking, booking_service, and booking_status_log tables.
+</Card>
+</Columns>

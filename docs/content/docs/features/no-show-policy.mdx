@@ -1,0 +1,121 @@
+---
+title: No-Show Policy
+description: How Royal Glow tracks missed appointments — the escalating tiers, the 90-day window, manager approval, automatic recovery, and why walk-ins never count.
+icon: user-x
+---
+
+A no-show is when a customer has a confirmed appointment and simply doesn't turn
+up. The occasional miss happens to everyone, so the policy is gentle at first and
+only adds friction for repeat offenders. There are **no fees, ever** — the only
+consequence is that frequent no-shows eventually need a manager to approve their
+bookings. This page explains how the tiers work and how a customer recovers.
+
+<Info>
+  A booking is marked `no_show` automatically 15 minutes after its end time if it
+  was still `confirmed` and the customer never arrived. The policy applies only to
+  pre-booked appointments — see why walk-ins are excluded below.
+</Info>
+
+## What it is
+
+A fair, escalating system that protects the salon's calendar from repeated
+slot-hoarding without punishing honest mistakes. The first few misses are just
+noted; only a pattern of misses adds a check before future bookings.
+
+## How it works — the tiers
+
+No-shows accumulate on the customer's record. The consequence steps up as the
+count rises.
+
+| Cumulative no-shows | Consequence |
+| --- | --- |
+| 1st, 2nd, 3rd | `noshow_count` increments and a CRM note is added automatically. No restriction on booking. |
+| **4th** (within 90 days of the 1st) | `booking_requires_approval` is set to `true` — a manager must approve every future booking. A push and email go to the customer, and the **"No-Show Risk"** CRM tag is applied. |
+| **5th** (any time) | A warning note is added to all future bookings for the receptionist: *"Repeated no-shows — verify before confirming."* The receptionist can still override per booking. |
+
+<Warning>
+  The 4th no-show only triggers approval-required if it falls **within 90 days**
+  of the first one. The window matters: misses spread thinly over a long period
+  don't escalate the same way a cluster of recent misses does.
+</Warning>
+
+## How it works — the "No-Show Risk" tag
+
+Once a customer crosses the 4th-no-show threshold, two things happen together:
+
+- **`booking_requires_approval = true`** — their future bookings can't be
+  auto-confirmed; a manager reviews each one first.
+- **The "No-Show Risk" CRM tag** — applied to their profile so staff can see the
+  pattern at a glance in the customer list and on the booking screen.
+
+## How it works — automatic recovery
+
+The policy is designed to forgive. A flagged customer earns their way back
+automatically:
+
+<AccordionGroup>
+<Accordion title="How does a customer clear the No-Show Risk flag?">
+Completing **3 consecutive bookings** with no no-show in between clears the flag:
+`booking_requires_approval` returns to `false` and the "No-Show Risk" tag is
+removed.
+</Accordion>
+<Accordion title="What happens if they miss again during recovery?">
+Any no-show **resets** the streak — `consecutive_completed_bookings` goes back to
+`0` — so the three completed bookings must be unbroken.
+</Accordion>
+</AccordionGroup>
+
+<Info>
+  Recovery is hands-off. No one at the salon has to manually clear the flag — the
+  system removes it the moment the customer completes their third consecutive
+  clean booking.
+</Info>
+
+## Why walk-ins don't count
+
+A walk-in booking is created by a receptionist only when the customer is already
+physically standing in the salon. There is no pre-reserved slot for them to miss,
+so a `no_show` status on a walk-in does **not** count toward the no-show tier.
+
+<Info>
+  The same fairness applies to salon-side cancellations. If the salon cancels a
+  booking — for example because a staff member went on leave — that is never
+  counted against the customer. See [Staff Scheduling & Leave](/content/docs/features/scheduling-leave).
+</Info>
+
+## How it relates to cancellations
+
+A no-show is different from a cancellation. Cancelling — even at short notice —
+is handled separately and never carries a fee.
+
+| Action | Counts as no-show? | Consequence |
+| --- | --- | --- |
+| Cancel more than 4 hours before | No | Free, no record, slot released immediately. |
+| Cancel within 4 hours | No | Tagged in CRM, `late_cancellation_count` increments, a courtesy call. No fee. |
+| Don't show up at all | Yes | Counts toward the no-show tiers above. |
+
+## Where the thresholds live
+
+The no-show thresholds and the cancellation window are configuration keys, not
+hard-coded values. A manager can adjust them under `admin.theroyalglow.in/settings`, alongside
+other policy settings like the GST number and business hours.
+
+## Related links
+
+<Columns cols={2}>
+  <Card title="Booking System" href="/content/docs/features/booking">
+  The booking lifecycle, including how a booking becomes a no-show.
+</Card>
+  <Card title="Staff Scheduling & Leave" href="/content/docs/features/scheduling-leave">
+  Why salon-side cancellations never count against the customer.
+</Card>
+  <Card title="CRM & Lead Pipeline" href="/content/docs/features/crm-leads">
+  How the No-Show Risk tag and notes appear on a customer profile.
+</Card>
+  <Card title="Admin — Bookings API" href="/content/docs/api-reference/admin-bookings">
+  Marking a booking as no-show and the manager approval flow.
+</Card>
+  <Card title="Data Model" href="/content/docs/data-model">
+  The customer_profile no-show fields and customer_tag tables.
+</Card>
+</Columns>

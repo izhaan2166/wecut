@@ -8,12 +8,12 @@
  *
  * Description  : Main homepage of theroyalglow.in. Rebuilt to faithfully
  *                match the Stitch MCP design — "Homepage - Updated Font Stack".
- *                Renders: announcement bar, hero (2-col), brand logos,
+ *                Renders: announcement bar, hero, brand logos,
  *                scrollable service cards, special offers, testimonials,
  *                FAQ accordion, booking CTA, footer.
  *
  * Responsibilities :
- * - Render hero with dark left card + image right card layout
+ * - Render the full-width dark hero card
  * - Render horizontally scrollable service category cards
  * - Render special offers 2-col grid
  * - Render testimonial 3-col grid
@@ -24,7 +24,7 @@
  * Tech Stack   : React, Next.js 16 App Router, Tailwind CSS v4, motion
  * Layer        : Presentation
  *
- * Dependencies : JsonLd, resolveFaqs, getActiveBanners, SEO helpers,
+ * Dependencies : JsonLd, resolveFaqs, SEO helpers,
  *                next/link, motion
  *
  * Notes        :
@@ -34,20 +34,10 @@
  *   dialog opens (requireProfileBeforeBooking).
  * - Without booking intent, a signed-in customer without a completed profile is
  *   re-prompted to /onboarding at most once per 24h (repromptPendingOnboarding).
- * - The hero image is owner-managed via the Payload `banner` collection; it
- *   falls back to the bundled /hero-fallback.svg brand artwork when no banner
- *   is active. Remaining sections still use Stitch-generated assets.
- * - The hero image and the site-wide announcement strip are DECOUPLED even
- *   though both read the same `banner` record: the hero takes the first active,
- *   in-window banner (selectHeroBanner) whether or not it has a CTA link, while
- *   AnnouncementBar only shows a banner WITH a non-empty `ctaHref`. Leaving the
- *   CTA link blank therefore changes the hero photo alone. See lib/cms/banners.ts.
  ************************************************************/
 
 import type { Metadata } from 'next'
 import { JsonLd } from '@/components/seo/JsonLd'
-import { selectHeroBanner } from '@/lib/cms/banners'
-import { getActiveBanners } from '@/lib/cms/client'
 import { resolveFaqs } from '@/lib/cms/faqs'
 import { repromptPendingOnboarding, requireProfileBeforeBooking } from '@/lib/onboarding-guard'
 import {
@@ -90,13 +80,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   // customers without a profile.
   await repromptPendingOnboarding(params)
 
-  const [faqList, banners] = await Promise.all([resolveFaqs(), getActiveBanners()])
-
-  // The first active banner in `order` owns the hero image, CTA link or not.
-  // Only the image crosses into HeroSection — the h1 is fixed brand copy, and the
-  // headline/ctaHref belong to the announcement strip, which independently
-  // requires a CTA link before it shows a banner at all.
-  const heroImage = selectHeroBanner(banners)?.image ?? null
+  const faqList = await resolveFaqs()
 
   return (
     <>
@@ -111,7 +95,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       />
 
       <div className="flex flex-col">
-        <HeroSection image={heroImage} />
+        <HeroSection />
         <BrandLogosSection />
         <ServicesSection />
         <OffersSection />

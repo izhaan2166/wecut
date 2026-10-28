@@ -49,7 +49,7 @@ import { SignOutButton } from './sign-out-button'
 
 export const metadata: Metadata = {
   title: 'My Profile',
-  description: 'Manage your wecut account.',
+  description: 'Manage your WeCut account.',
   robots: { index: false, follow: false },
 }
 

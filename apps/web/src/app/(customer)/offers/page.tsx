@@ -48,7 +48,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata: Metadata = buildMetadata({
   title: 'Special Offers',
   description:
-    'Explore exclusive offers and discounts at wecut Salon & Spa. Save on facials, spa treatments, and more at our Bengaluru salon.',
+    'Explore exclusive offers and discounts at WeCut Salon & Spa. Save on facials, spa treatments, and more at our Bengaluru salon.',
   path: '/offers',
 })
 

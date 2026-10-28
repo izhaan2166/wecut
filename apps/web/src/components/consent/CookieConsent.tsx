@@ -33,7 +33,7 @@
  * Dependencies : @/lib/consent/consent, @/lib/utils, next/link
  *
  * Notes        : Icons are inlined SVGs (the web app does not depend on
- *                lucide-react). Colours use wecut Brand Tokens only.
+ *                lucide-react). Colours use WeCut Brand Tokens only.
  ************************************************************/
 
 'use client'

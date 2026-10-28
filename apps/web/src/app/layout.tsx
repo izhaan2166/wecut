@@ -16,7 +16,7 @@
  * - Register service worker for PWA
  *
  * Features / Functionality :
- * - Brand title template (%s | wecut Salon & Spa)
+ * - Brand title template (%s | WeCut Salon & Spa)
  * - Open Graph + Twitter Card meta tags
  * - en_IN locale targeting
  *
@@ -44,15 +44,15 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'wecut Salon & Spa — Premium Salon & Spa in Bengaluru',
-    template: '%s | wecut Salon & Spa',
+    default: 'WeCut Salon & Spa — Premium Salon & Spa in Bengaluru',
+    template: '%s | WeCut Salon & Spa',
   },
   description: DESCRIPTION,
   openGraph: {
-    title: 'wecut Salon & Spa — Premium Salon & Spa in Bengaluru',
+    title: 'WeCut Salon & Spa — Premium Salon & Spa in Bengaluru',
     description: DESCRIPTION,
     url: SITE_URL,
-    siteName: 'wecut Salon & Spa',
+    siteName: 'WeCut Salon & Spa',
     locale: 'en_IN',
     type: 'website',
     // Default social-share image (1200x630). metadataBase resolves this to an
@@ -62,13 +62,13 @@ export const metadata: Metadata = {
         url: '/og-default.jpg',
         width: 1200,
         height: 630,
-        alt: 'wecut Salon & Spa',
+        alt: 'WeCut Salon & Spa',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'wecut Salon & Spa — Premium Salon & Spa in Bengaluru',
+    title: 'WeCut Salon & Spa — Premium Salon & Spa in Bengaluru',
     description: DESCRIPTION,
     images: ['/og-default.jpg'],
   },

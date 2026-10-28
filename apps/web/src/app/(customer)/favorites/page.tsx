@@ -39,7 +39,7 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: 'My Favorites',
-  description: 'Your saved wecut services and rituals.',
+  description: 'Your saved WeCut services and rituals.',
   robots: { index: false, follow: false },
 }
 

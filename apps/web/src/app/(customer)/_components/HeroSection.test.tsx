@@ -34,7 +34,7 @@ import { HeroSection } from './HeroSection'
 
 const CMS_IMAGE: ResolvedMedia = {
   url: 'https://pub-40c9806a7ea146c9b0469960f8b84d94.r2.dev/banner/hero.jpg',
-  alt: 'wecut treatment suite lit by warm evening light',
+  alt: 'WeCut treatment suite lit by warm evening light',
   width: 1240,
   height: 1120,
 }
@@ -73,7 +73,7 @@ describe('HeroSection hero image', () => {
     expect(img?.hasAttribute('alt')).toBe(true)
 
     // No stale descriptive alt survives on the fallback path.
-    expect(screen.queryByAltText('wecut salon interior — warm, premium atmosphere')).toBeNull()
+    expect(screen.queryByAltText('WeCut salon interior — warm, premium atmosphere')).toBeNull()
   })
 
   it('never lazy-loads the hero image (it is the homepage LCP element)', () => {

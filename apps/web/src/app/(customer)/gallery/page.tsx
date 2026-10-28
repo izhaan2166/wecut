@@ -41,7 +41,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = buildMetadata({
   title: 'Gallery',
-  description: 'See the wecut Salon & Spa — our interiors, treatments, and work in Bengaluru.',
+  description: 'See the WeCut Salon & Spa — our interiors, treatments, and work in Bengaluru.',
   path: '/gallery',
 })
 
@@ -85,7 +85,7 @@ export default async function GalleryPage() {
               Gallery
             </h1>
             <p className="font-sans text-[17px] leading-[1.6] text-warm-gray mt-4 max-w-[520px]">
-              A look inside wecut — our interiors, treatments, and the work our team is proud of.
+              A look inside WeCut — our interiors, treatments, and the work our team is proud of.
             </p>
           </div>
         </section>

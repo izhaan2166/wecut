@@ -34,7 +34,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata = buildMetadata({
   title: 'Terms of Service',
   description:
-    'The terms governing your use of wecut Salon & Spa services, bookings, payments, memberships, and loyalty programme, including pricing, conduct, and governing law.',
+    'The terms governing your use of WeCut Salon & Spa services, bookings, payments, memberships, and loyalty programme, including pricing, conduct, and governing law.',
   path: '/terms',
   robotsIndex: true,
 })
@@ -56,7 +56,7 @@ export default function TermsOfServicePage() {
         </p>
         <p className="mt-6">
           These Terms of Service ("Terms") govern your use of the website, bookings, and services of{' '}
-          {BUSINESS.name} ("wecut", "we", "us", or "our"). By booking an appointment, visiting our
+          {BUSINESS.name} ("WeCut", "we", "us", or "our"). By booking an appointment, visiting our
           salon, or using our website, you agree to these Terms. Please read them carefully.
         </p>
       </header>
@@ -78,7 +78,7 @@ export default function TermsOfServicePage() {
           2. Our services
         </h2>
         <p className="mt-4">
-          wecut provides salon and spa services including hair care, skincare, beauty treatments,
+          WeCut provides salon and spa services including hair care, skincare, beauty treatments,
           massage and wellness therapies, bridal packages, and related offerings. Service
           availability, duration, and outcomes may vary based on individual needs, staff
           availability, and product suitability. Our team may decline or modify a treatment where it
@@ -165,7 +165,7 @@ export default function TermsOfServicePage() {
           8. Intellectual property
         </h2>
         <p className="mt-4">
-          All content on our website — including the wecut name, logo, text, graphics, and images —
+          All content on our website — including the WeCut name, logo, text, graphics, and images —
           is owned by us or our licensors and is protected by applicable intellectual property laws.
           You may not copy, reproduce, or use our content for commercial purposes without our prior
           written permission.
@@ -178,7 +178,7 @@ export default function TermsOfServicePage() {
         </h2>
         <p className="mt-4">
           We strive to deliver our services with reasonable skill and care. To the extent permitted
-          by law, wecut is not liable for indirect or consequential losses, or for reactions arising
+          by law, WeCut is not liable for indirect or consequential losses, or for reactions arising
           from undisclosed allergies or medical conditions. Nothing in these Terms excludes
           liability that cannot be excluded under applicable law.
         </p>

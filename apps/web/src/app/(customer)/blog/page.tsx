@@ -29,7 +29,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = buildMetadata({
   title: 'Blog',
-  description: 'Beauty and wellness tips, guides, and news from wecut Salon & Spa in Bengaluru.',
+  description: 'Beauty and wellness tips, guides, and news from WeCut Salon & Spa in Bengaluru.',
   path: '/blog',
 })
 
@@ -54,7 +54,7 @@ export default async function BlogPage() {
             <div className="flex items-center gap-2 mb-6">
               <span className="w-2 h-2 rounded-full bg-royal-gold" aria-hidden="true" />
               <span className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink font-bold">
-                The wecut Journal
+                The WeCut Journal
               </span>
             </div>
             <h1

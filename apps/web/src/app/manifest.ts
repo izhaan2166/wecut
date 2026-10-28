@@ -29,15 +29,15 @@
  ************************************************************/
 import type { MetadataRoute } from 'next'
 
-// wecut brand tokens (from apps/web/src/styles/globals.css):
+// WeCut brand tokens (from apps/web/src/styles/globals.css):
 //   --color-cocoa-dark:   #1a0f0a  → theme_color
 //   --color-canvas-white: #ffffff  → background_color
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'wecut Salon & Spa',
-    short_name: 'wecut',
+    name: 'WeCut Salon & Spa',
+    short_name: 'WeCut',
     description:
-      'wecut Salon & Spa — a premium beauty and wellness destination in Bengaluru. Book salon and spa appointments, explore offers, and manage your visits.',
+      'WeCut Salon & Spa — a premium beauty and wellness destination in Bengaluru. Book salon and spa appointments, explore offers, and manage your visits.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

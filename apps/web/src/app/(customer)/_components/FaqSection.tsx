@@ -69,9 +69,19 @@ export function FaqSection({ faqs }: { faqs: Faq[] }) {
             Can&apos;t find the answer you&apos;re looking for?
             <br />
             Don&apos;t hesitate to connect with us via{' '}
-            <span className="font-semibold text-cocoa-dark">phone</span> or{' '}
-            <span className="font-bold text-[#25D366]">WhatsApp</span> to get in touch with our
-            receptionist.
+            <a href="tel:+918148308344" className="font-semibold text-cocoa-dark underline">
+              phone
+            </a>{' '}
+            or{' '}
+            <a
+              href="https://wa.me/918148308344"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-[#25D366] underline"
+            >
+              WhatsApp
+            </a>{' '}
+            to get in touch with our receptionist.
           </p>
         </Reveal>
 

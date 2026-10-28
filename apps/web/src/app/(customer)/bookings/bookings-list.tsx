@@ -259,7 +259,7 @@ export function BookingsList() {
       {visible.length === 0 ? (
         <p className="py-8 font-sans text-[15px] text-dusty-gray">
           {tab === 'upcoming'
-            ? 'No upcoming bookings. Ready for your next wecut moment?'
+            ? 'No upcoming bookings. Ready for your next WeCut moment?'
             : 'No past bookings yet.'}
         </p>
       ) : (

@@ -386,7 +386,7 @@ function mapServiceCard(doc: unknown): ServiceCardItem | null {
     return null
   }
   const id = asId(doc.id)
-  const imageAlt = asString(doc.imageAlt) ?? image.alt ?? `${name} at wecut`
+  const imageAlt = asString(doc.imageAlt) ?? image.alt ?? `${name} at WeCut`
   return {
     id: id !== '' ? id : name,
     name,
@@ -859,7 +859,7 @@ export const FALLBACK_OFFERS: Offer[] = [
     discountLabel: '20% OFF',
     image: {
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChf_-S9qaSgh4ChgD4vHvHOXi0JaNdY6sbENglW-QFs2Y4_PxRHayjVgKBYvET6H1oc_jFCq-SpkAlMqZvATcX4vqOf_4Qv7lowJ0Z-yUpijd-prJwrxZL009WIpMoejD5h8E1v_-VX8fFsNU1Xw-qZCSpfkKGZXC8nFE4r2FGwMDV6aDAqywKydJi6rijlY3TMDjBOuQh3RIWyVZSVNguwgQ-dDaXeufdUkyJX6-zPdZ_AFn-rgIWM6Tpw4_aG2tbZyj4RDWqDmM',
-      alt: '20% off facials at wecut — skincare treatment',
+      alt: '20% off facials at WeCut — skincare treatment',
       width: null,
       height: null,
     },
@@ -875,7 +875,7 @@ export const FALLBACK_OFFERS: Offer[] = [
     discountLabel: 'Free add-on',
     image: {
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDHedetGHswV5AvpWgVH4EwLo9_l2a4jGr_COWOvJIYh1S1t5nt6KYk_ERnSYzSlgQFVu-dClz4Ywcr6J5hT3fvWKZPoUQWt8Bw0Q7rDOmZp_8GxX0DDyqmt5p2yXE9RjXHzB6TRqveNgRpqTQS5VvXUcjda0g2-Nv3jDjp14f5HQW8rHnmgy3OXM3DCbhgWiuFZVF_Kk3EQ5GnGqLP0xBGMo-qR8C6yIgSEaPMB3L000XhYHYhsEj-8VEuCjzHXntthSt61iFilQA',
-      alt: 'Free head massage offer at wecut Spa',
+      alt: 'Free head massage offer at WeCut Spa',
       width: null,
       height: null,
     },
@@ -915,10 +915,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Hair',
     fromPrice: '₹500',
     bookingHref: '/services#haircut',
-    imageAlt: 'Professional hair styling at wecut Salon',
+    imageAlt: 'Professional hair styling at WeCut Salon',
     image: {
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFTeivZU8LWDtg3w4QyhdnYdO7ClTd0NMYng9j-WdftV_EAGAci_BRb0riH6AP1ozu-uu7yf8HecmVVIYfeoqsO8bUS-L1tmeLpT4R2aY2MFBcDEcBJfHUb5OsACUndPHplAIEtT3ViZ6GAgUjH6LpaTyEhhdZ8f-mSdd4-dK05Ch7ovDP-PbhmhPMdqwMS0kdMK4llg45nS_JOWUf9jat6Rf_F3TLkfAUZmy1WgFGiHD9qFIQJ98SZJCEceMxxRY5cr4YY88T-gY',
-      alt: 'Professional hair styling at wecut Salon',
+      alt: 'Professional hair styling at WeCut Salon',
       width: null,
       height: null,
     },
@@ -928,10 +928,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Spa',
     fromPrice: '₹1,499',
     bookingHref: '/services#spa',
-    imageAlt: 'Luxury spa treatment at wecut',
+    imageAlt: 'Luxury spa treatment at WeCut',
     image: {
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZasmXlzNTRSrg_OR0jZFSrGXvcLd9jTCCEs2zzuTKxivasTAvIz-_UG6LI1C2u-L9kqDTvL3H9V9NQkNpahwhy0nqtTy42b7WG79I_OBeVID5PdpO8RrepTsicR84S-3WBVjyV9vSuFS52O8VrXC3QAzeUFmgmSXJ_qKV34NXixljTGYUIvjNqmctILdgFykX2jJ-mmC8bAv9V9X5e9pTcLMvHchNWPoiGq_xWWiRv2tt2TcmENwrkhdFNE5VXC02go2i_W_PxTs',
-      alt: 'Luxury spa treatment at wecut',
+      alt: 'Luxury spa treatment at WeCut',
       width: null,
       height: null,
     },
@@ -941,10 +941,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Bridal',
     fromPrice: '₹2,500',
     bookingHref: '/services#bridal',
-    imageAlt: 'Elegant Indian bridal makeup at wecut',
+    imageAlt: 'Elegant Indian bridal makeup at WeCut',
     image: {
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC8w_Rdj8cu_NrcFjxGQmzAH61tYak6FEB5RtbTOEvIMQd50thOeF0TQvIWR-Am9y_lMXtdsy-C2x85kkH66qkTupeAYgLFRLlqM7Pj34dtR_dWcP5UejQAXH68ym48EYh4Ksms64FYgykRmLPSEGO9sxNkrAWnPzLRiJU4qTLOhjxRNTQkZ5IY3tHBadUiD7O4eLsgNIdsdL7r4T8WrOHB1phWjtrf8Z2ECbVbPj-EskCq641BsEDa4REkm6QrFvIJdPdhan1Hjx8',
-      alt: 'Elegant Indian bridal makeup at wecut',
+      alt: 'Elegant Indian bridal makeup at WeCut',
       width: null,
       height: null,
     },
@@ -954,10 +954,10 @@ export const FALLBACK_SERVICE_CARDS: ServiceCardItem[] = [
     name: 'Nails',
     fromPrice: '₹800',
     bookingHref: '/services#nails',
-    imageAlt: 'Premium nail art at wecut Salon',
+    imageAlt: 'Premium nail art at WeCut Salon',
     image: {
       url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB1DUVyiMfSF07pyFdu4aNeoXPdm72DWD40kVE9iIScW17pYqaWTs6-Lf_VP7vhCNV8SwsBozQkfOR__it01_TLzLm6UiSEZgIm3iRZuH9cMLd1SG0etrkuaQVQSYj-w28ww5QhXEF3AFYa9-CcJd5aDjSmtUpH_ioR3P8pz_ckCwpWTzaGiaIPejTI4RYbK2ZhOjwOLboHAHYXjlC1rn0cd9uXzfA_QEgA8xBQYQbYGpITgYHogc5SDypjmc4Rp2XwHTsbCKeq92c',
-      alt: 'Premium nail art at wecut Salon',
+      alt: 'Premium nail art at WeCut Salon',
       width: null,
       height: null,
     },

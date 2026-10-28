@@ -31,7 +31,7 @@
  * The single allowed web origin. Derived from the public app URL env var with a
  * production fallback. Read once at module load; the pure core never touches env.
  */
-export const WEB_ORIGIN = process.env.NEXT_PUBLIC_APP_URL ?? 'https://theroyalglow.in'
+export const WEB_ORIGIN = process.env.NEXT_PUBLIC_APP_URL ?? 'https://wecut-wine.vercel.app'
 
 /**
  * Pure CORS decision: returns `true` iff `requestOrigin` EXACTLY equals

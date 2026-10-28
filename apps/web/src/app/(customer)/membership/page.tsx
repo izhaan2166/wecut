@@ -50,12 +50,12 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: 'My SPA Membership',
-  description: 'Track your wecut SPA membership hours, validity and session history.',
+  description: 'Track your WeCut SPA membership hours, validity and session history.',
   robots: { index: false, follow: false },
 }
 
-const SALON_PHONE = '+916360135720'
-const SALON_PHONE_DISPLAY = '+91 63601 35720'
+const SALON_PHONE = '+918148308344'
+const SALON_PHONE_DISPLAY = '+91 81483 08344'
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 
 // Urgency thresholds (days remaining) per the membership-flow design.

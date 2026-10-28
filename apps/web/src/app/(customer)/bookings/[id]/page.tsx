@@ -37,7 +37,7 @@ import { BookingDetail } from './booking-detail'
 
 export const metadata: Metadata = {
   title: 'Booking Details',
-  description: 'View and manage a wecut appointment.',
+  description: 'View and manage a WeCut appointment.',
   robots: { index: false, follow: false },
 }
 

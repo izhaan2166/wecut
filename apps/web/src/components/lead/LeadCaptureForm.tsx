@@ -61,7 +61,7 @@ type FieldErrors = {
   phone?: string
 }
 
-const SALON_PHONE = '+916360135720'
+const SALON_PHONE = '+918148308344'
 const SUCCESS_REDIRECT_DELAY_MS = 1500
 
 const SERVICE_GROUP_LABELS: Record<ServiceOption['serviceType'], string> = {
@@ -171,7 +171,7 @@ export function LeadCaptureForm({ services, utm }: { services: ServiceOption[]; 
       {/* Brand + trust signals above the form */}
       <header className="mb-6 text-center">
         <p className="font-display text-2xl text-cocoa-dark">
-          👑 wecut <span className="text-gold-ink">Salon &amp; Spa</span>
+          👑 WeCut <span className="text-gold-ink">Salon &amp; Spa</span>
         </p>
         <p className="mt-2 font-ui text-sm text-dusty-gray">⭐ 4.9 · 86 reviews · Bengaluru</p>
       </header>
@@ -293,7 +293,7 @@ export function LeadCaptureForm({ services, utm }: { services: ServiceOption[]; 
             href={`tel:${SALON_PHONE}`}
             className="mt-1 inline-block underline underline-offset-2 hover:text-gold-ink"
           >
-            📞 +91 63601 35720
+            📞 +91 81483 08344
           </a>
         </address>
       </footer>
@@ -340,7 +340,7 @@ function ErrorCard({ message, onRetry }: { message: string; onRetry: () => void 
           href={`tel:${SALON_PHONE}`}
           className="text-gold-ink underline underline-offset-2 hover:text-cocoa-dark"
         >
-          📞 +91 63601 35720 (tap to call)
+          📞 +91 81483 08344 (tap to call)
         </a>
       </p>
     </section>

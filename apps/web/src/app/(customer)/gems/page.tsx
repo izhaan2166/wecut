@@ -50,7 +50,7 @@ import { auth } from '@/lib/auth-server'
 
 export const metadata: Metadata = {
   title: 'My Gems',
-  description: 'Track your wecut loyalty gems, history and rewards.',
+  description: 'Track your WeCut loyalty gems, history and rewards.',
   robots: { index: false, follow: false },
 }
 

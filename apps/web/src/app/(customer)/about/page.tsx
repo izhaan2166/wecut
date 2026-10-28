@@ -7,7 +7,7 @@
  * Scope        : Customer Pages
  *
  * Description  : About Us page showcasing the brand story, core values, and
- *                team members of wecut Salon & Spa. Rebuilt on the
+ *                team members of WeCut Salon & Spa. Rebuilt on the
  *                shadcn/ui Card + Button + Badge primitives with motion Reveal
  *                entrances and lucide value icons.
  *
@@ -50,7 +50,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata: Metadata = buildMetadata({
   title: 'About Us',
   description:
-    'Learn about wecut Salon & Spa — a premium beauty and wellness destination in Bengaluru, founded by Roshini with a passion for exceptional service.',
+    'Learn about WeCut Salon & Spa — a premium beauty and wellness destination in Bengaluru, founded by Roshini with a passion for exceptional service.',
   path: '/about',
 })
 
@@ -81,7 +81,7 @@ const team: TeamMember[] = [
   {
     name: 'Roshini',
     role: 'Owner & Founder',
-    bio: 'With a vision to bring premium beauty experiences to Bengaluru, Roshini founded wecut to create a space where every client feels like royalty.',
+    bio: 'With a vision to bring premium beauty experiences to Bengaluru, Roshini founded WeCut to create a space where every client feels like royalty.',
     photo: null,
     specializations: [],
   },
@@ -131,7 +131,7 @@ export default async function AboutPage() {
               Our Story
             </h1>
             <p className="mt-6 max-w-[560px] font-sans text-[17px] leading-[1.6] text-dusty-gray">
-              wecut Salon & Spa was born from a simple belief — that everyone deserves to feel like
+              WeCut Salon & Spa was born from a simple belief — that everyone deserves to feel like
               royalty. Founded by Roshini in Bengaluru, we set out to create a premium beauty and
               wellness destination where expert care meets a truly relaxing experience. Every
               detail, from the products we use to the ambiance we craft, is designed to make your
@@ -185,7 +185,7 @@ export default async function AboutPage() {
               Meet Our Team
             </h2>
             <p className="mt-3 max-w-[520px] font-sans text-[17px] leading-[1.6] text-warm-gray">
-              The talented professionals behind every transformation at wecut.
+              The talented professionals behind every transformation at WeCut.
             </p>
           </Reveal>
 
@@ -246,7 +246,7 @@ export default async function AboutPage() {
               id="about-cta-heading"
               className="font-display font-black text-[clamp(32px,4.5vw,48px)] leading-[1.1] tracking-[-0.96px] text-cocoa-dark"
             >
-              Experience the wecut difference
+              Experience the WeCut difference
             </h2>
             <p className="mx-auto mt-4 max-w-[440px] font-sans text-[17px] leading-[1.6] text-warm-gray">
               Visit us and discover why our clients keep coming back for the royal treatment.
@@ -257,7 +257,7 @@ export default async function AboutPage() {
               size="lg"
               className="mt-8 rounded-full font-ui font-bold"
             >
-              <Link href="/?book=1" aria-label="Book an appointment at wecut">
+              <Link href="/?book=1" aria-label="Book an appointment at WeCut">
                 Book Now
               </Link>
             </Button>

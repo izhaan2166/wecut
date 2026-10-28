@@ -9,7 +9,7 @@
  * Description  : Client form for collecting phone, DOB, gender, and consent
  *                preferences during first-time user onboarding. Rebuilt on the
  *                shadcn/ui Input, Label, Switch, and Button primitives with the
- *                wecut brand tokens and font system.
+ *                WeCut brand tokens and font system.
  *
  * Responsibilities :
  * - Collect and validate profile fields (phone, DOB, gender)

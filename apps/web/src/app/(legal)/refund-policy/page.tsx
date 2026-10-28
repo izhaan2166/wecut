@@ -34,7 +34,7 @@ import { buildMetadata } from '@/lib/seo/metadata'
 export const metadata = buildMetadata({
   title: 'Refund & Cancellation Policy',
   description:
-    'wecut Salon & Spa refund and cancellation policy — cancellation windows, no-show and rescheduling rules, membership hour expiry, and how to request a refund.',
+    'WeCut Salon & Spa refund and cancellation policy — cancellation windows, no-show and rescheduling rules, membership hour expiry, and how to request a refund.',
   path: '/refund-policy',
   robotsIndex: true,
 })
@@ -56,7 +56,7 @@ export default function RefundPolicyPage() {
         </p>
         <p className="mt-6">
           This policy explains how cancellations, rescheduling, no-shows, and refunds work at{' '}
-          {BUSINESS.name} ("wecut", "we", "us", or "our"). It forms part of our Terms of Service.
+          {BUSINESS.name} ("WeCut", "we", "us", or "our"). It forms part of our Terms of Service.
           Because most services are paid at our counter after the service is rendered, this policy
           mainly applies to prepaid items such as memberships and any advance payments.
         </p>

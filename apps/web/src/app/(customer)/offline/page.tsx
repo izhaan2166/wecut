@@ -33,7 +33,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: "You're Offline | wecut Salon & Spa",
+  title: "You're Offline | WeCut Salon & Spa",
   robots: { index: false, follow: false },
 }
 
@@ -60,7 +60,7 @@ export default function OfflinePage() {
 
           {/* Message */}
           <p className="font-sans text-[17px] leading-[1.6] text-dusty-gray mt-6 max-w-[480px] mx-auto">
-            We can't reach wecut right now. Check your connection and try again — your appointments
+            We can't reach WeCut right now. Check your connection and try again — your appointments
             and offers will be waiting for you.
           </p>
 
@@ -76,10 +76,10 @@ export default function OfflinePage() {
             <p className="font-sans text-[15px] leading-[1.55] text-warm-stone">
               Need us now? Call{' '}
               <a
-                href="tel:+916360135720"
+                href="tel:+918148308344"
                 className="font-ui text-gold-ink underline underline-offset-2 hover:text-cocoa-dark transition-colors duration-200"
               >
-                +91 63601 35720
+                +91 81483 08344
               </a>
             </p>
           </div>

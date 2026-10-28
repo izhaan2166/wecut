@@ -81,7 +81,7 @@ export async function ServicesSection() {
             id="services-heading"
             className="font-display text-[clamp(28px,4vw,40px)] font-black leading-[1.1] tracking-tight text-cocoa-dark"
           >
-            See what wecut can do for you
+            See what WeCut can do for you
           </h2>
           <p className="mt-2 font-sans text-warm-gray">
             Expert-led treatments tailored to your needs.

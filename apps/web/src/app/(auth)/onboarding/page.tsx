@@ -41,7 +41,7 @@ import { readBookingContext } from '@/lib/onboarding-prompt'
 import { OnboardingForm } from './onboarding-form'
 
 export const metadata = {
-  title: 'Complete Your Profile | wecut Salon & Spa',
+  title: 'Complete Your Profile | WeCut Salon & Spa',
   robots: { index: false, follow: false },
 }
 

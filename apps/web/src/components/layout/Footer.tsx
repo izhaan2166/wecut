@@ -195,7 +195,7 @@ export function Footer() {
         {/* ── Bottom Bar ── */}
         <div className="border-t border-outline-gray pt-8 flex flex-col md:flex-row justify-between items-center gap-5">
           <span className="font-ui text-[10px] font-bold uppercase tracking-widest text-warm-gray">
-            © 2026 wecut Salon &amp; Spa
+            © 2026 WeCut Salon &amp; Spa
           </span>
           <nav
             aria-label="Legal links"

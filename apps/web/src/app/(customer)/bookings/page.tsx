@@ -33,7 +33,7 @@ import { BookingsList } from './bookings-list'
 
 export const metadata: Metadata = {
   title: 'My Bookings',
-  description: 'View and manage your wecut appointments.',
+  description: 'View and manage your WeCut appointments.',
   robots: { index: false, follow: false },
 }
 

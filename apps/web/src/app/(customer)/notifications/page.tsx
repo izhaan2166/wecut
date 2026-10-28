@@ -33,7 +33,7 @@ import { NotificationsPanel } from './notifications-panel'
 
 export const metadata: Metadata = {
   title: 'Notifications',
-  description: 'Your wecut booking updates, reminders, and offers.',
+  description: 'Your WeCut booking updates, reminders, and offers.',
   robots: { index: false, follow: false },
 }
 

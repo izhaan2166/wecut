@@ -41,7 +41,7 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
     reviewerName: 'Priya Sharma',
     rating: 5,
     reviewText:
-      'wecut is truly a premium experience. The stylists listened to exactly what I wanted and delivered perfectly. Booking was effortless and the ambience is calming.',
+      'WeCut is truly a premium experience. The stylists listened to exactly what I wanted and delivered perfectly. Booking was effortless and the ambience is calming.',
     timeLabel: '1 week ago',
   },
   {

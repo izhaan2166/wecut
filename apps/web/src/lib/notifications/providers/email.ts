@@ -16,13 +16,12 @@
  *
  * Features / Functionality :
  * - sendEmail({ to, subject, html, replyTo? }) — async boolean delivery
- * - Lazy resend module import (optional dependency)
  * - Configurable from address via RESEND_FROM_EMAIL
  *
  * Tech Stack   : TypeScript, Resend (optional)
  * Layer        : API Infrastructure
  *
- * Dependencies : @rgss/logger, resend (optional)
+ * Dependencies : @rgss/logger (Resend REST API over fetch)
  *
  * Notes        : Reads process.env directly for graceful degradation
  ************************************************************/
@@ -37,17 +36,16 @@ import { createLogger } from '@rgss/logger'
 // behind a truthy guard lets the app build and run with no key configured
 // (Property 10 — no-op + return false without config).
 //
-// `resend` is an optional, lazily imported dependency — it need not be
-// installed until the key is provisioned, so a missing module simply yields a
-// benign `false`. This helper NEVER throws to its caller (Property 9): any
-// failure is caught, logged, and reported as `false`.
+// Delivery goes straight to Resend's REST API with fetch, so no SDK is needed.
+// This helper NEVER throws to its caller (Property 9): any failure is caught,
+// logged, and reported as `false`.
 
 const logger = createLogger({
   service: 'web:notifications:email',
   environment: process.env.NODE_ENV ?? 'development',
 })
 
-const DEFAULT_FROM = 'wecut <contact@theroyalglow.in>'
+const DEFAULT_FROM = 'WeCut <onboarding@resend.dev>'
 
 export type SendEmailParams = {
   to: string | string[]
@@ -63,40 +61,7 @@ export type SendEmailParams = {
   attachments?: { filename: string; content: string }[]
 }
 
-// Minimal slice of the optional `resend` module surface we rely on. Modeled
-// locally so this file compiles without the package (or its types) installed.
-type ResendSendPayload = {
-  from: string
-  to: string | string[]
-  subject: string
-  html: string
-  // Resend SDK (v3+) accepts camelCase `replyTo`. Optional — only sent when set.
-  replyTo?: string | string[]
-  // Base64 attachments — only sent when provided.
-  attachments?: { filename: string; content: string }[]
-}
-
-type ResendClient = {
-  emails: {
-    send(payload: ResendSendPayload): Promise<unknown>
-  }
-}
-
-type ResendConstructor = new (apiKey: string) => ResendClient
-
-function resolveResend(mod: unknown): ResendConstructor | null {
-  if (typeof mod !== 'object' || mod === null) {
-    return null
-  }
-  const candidate = mod as { Resend?: unknown; default?: { Resend?: unknown } }
-  if (typeof candidate.Resend === 'function') {
-    return candidate.Resend as ResendConstructor
-  }
-  if (candidate.default && typeof candidate.default.Resend === 'function') {
-    return candidate.default.Resend as ResendConstructor
-  }
-  return null
-}
+const RESEND_API_URL = 'https://api.resend.com/emails'
 
 export async function sendEmail(params: SendEmailParams): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY
@@ -111,28 +76,34 @@ export async function sendEmail(params: SendEmailParams): Promise<boolean> {
   }
 
   try {
-    // Lazy, catchable import keeps `resend` an optional dependency. Use a
-    // non-literal specifier so the type checker does not require it installed.
-    const mod: unknown = await import('resend' as string).catch(() => null)
-    const Resend = resolveResend(mod)
-    if (!Resend) {
-      logger.debug('resend module unavailable; cannot deliver email')
+    // Call Resend's REST API directly, so no SDK needs to be installed.
+    const res = await fetch(RESEND_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: params.to,
+        subject: params.subject,
+        html: params.html,
+        // Only include reply_to when provided; keeps the payload minimal otherwise.
+        ...(params.replyTo ? { reply_to: params.replyTo } : {}),
+        // Only include attachments when provided (keeps text emails minimal).
+        ...(params.attachments && params.attachments.length > 0
+          ? { attachments: params.attachments }
+          : {}),
+      }),
+    })
+
+    if (!res.ok) {
+      logger.error('sendEmail rejected by Resend', {
+        status: res.status,
+        body: (await res.text().catch(() => '')).slice(0, 500),
+      })
       return false
     }
-
-    const client = new Resend(apiKey)
-    await client.emails.send({
-      from,
-      to: params.to,
-      subject: params.subject,
-      html: params.html,
-      // Only include replyTo when provided; keeps the payload minimal otherwise.
-      ...(params.replyTo ? { replyTo: params.replyTo } : {}),
-      // Only include attachments when provided (keeps text emails minimal).
-      ...(params.attachments && params.attachments.length > 0
-        ? { attachments: params.attachments }
-        : {}),
-    })
 
     return true
   } catch (error) {

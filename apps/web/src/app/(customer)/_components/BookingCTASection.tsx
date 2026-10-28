@@ -103,9 +103,9 @@ export function BookingCTASection() {
             size="lg"
             className="border-deep-gold font-ui font-bold text-cocoa-dark hover:bg-warm-gold/20"
           >
-            <Link href="tel:+916360135720">
+            <Link href="tel:+918148308344">
               <Phone data-icon="inline-start" aria-hidden="true" />
-              Call us +91 63601 35720
+              Call us +91 81483 08344
             </Link>
           </Button>
         </div>

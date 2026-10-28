@@ -236,7 +236,7 @@ export function ContactForm() {
             value={phone}
             onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
             disabled={isSubmitting}
-            placeholder="63601 35720"
+            placeholder="81483 08344"
             className="h-10 rounded-l-none"
           />
         </div>

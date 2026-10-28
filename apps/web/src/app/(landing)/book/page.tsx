@@ -34,7 +34,7 @@ import { LeadCaptureForm } from '@/components/lead/LeadCaptureForm'
 
 // Ad-traffic landing page — never indexed, never linked from site navigation.
 export const metadata: Metadata = {
-  title: 'Book Your Visit | wecut Salon & Spa',
+  title: 'Book Your Visit | WeCut Salon & Spa',
   robots: { index: false, follow: false },
 }
 

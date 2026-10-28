@@ -43,7 +43,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { track } from '@/lib/analytics/events'
 import { useSession } from '@/lib/auth-client'
-import { markBookingIntentForOnboarding, startGoogleSignIn } from '@/lib/google-signin'
+import { markBookingIntentForOnboarding } from '@/lib/google-signin'
 import { ONBOARDING_PATH } from '@/lib/onboarding-prompt'
 
 // --- Types (mirror GET /api/services response) ---
@@ -150,6 +150,11 @@ function formatTime12h(time: string): string {
   return `${String(h12).padStart(2, '0')}:${m} ${period}`
 }
 
+// Loose client-side check for a 10-digit Indian mobile (the server validates).
+function isLikelyPhone(value: string): boolean {
+  return /^(?:\+?91|0)?[6-9]\d{9}$/.test(value.replace(/[\s-]/g, ''))
+}
+
 // --- Component ---
 interface BookingDialogProps {
   isOpen: boolean
@@ -167,6 +172,11 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([])
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([])
   const [notes, setNotes] = useState('')
+
+  // Guest details: without sign-in the request is emailed to the salon.
+  const [guestName, setGuestName] = useState('')
+  const [guestPhone, setGuestPhone] = useState('')
+  const [guestEmail, setGuestEmail] = useState('')
 
   // Branch picker. `selectedBranchId` is the customer's (or a restored) choice;
   // `activeBranchId` below is the branch actually used. The list is loading
@@ -404,6 +414,9 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
     setSelectedCategoryIds([])
     setSelectedServiceIds([])
     setNotes('')
+    setGuestName('')
+    setGuestPhone('')
+    setGuestEmail('')
     setSlots([])
     setSlotsError(null)
     setSubmitError(null)
@@ -508,12 +521,43 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
       return
     }
 
-    // Not signed in → preserve intent and launch Google sign-in directly.
-    // callbackURL reopens the booking dialog (?book=1) after the OAuth round
-    // trip, where the persisted intent restores the user's selections.
+    // Not signed in → email the request to the salon with the guest's details.
     if (!session?.user) {
-      persistIntent()
-      void startGoogleSignIn('/?book=1')
+      setSubmitting(true)
+      setSubmitError(null)
+      try {
+        const res = await fetch('/api/booking-request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: guestName.trim(),
+            phone: guestPhone.trim(),
+            email: guestEmail.trim(),
+            branchId: activeBranchId,
+            serviceType,
+            bookingDate: toISODate(selectedDate),
+            startTime: selectedTime,
+            serviceIds: selectedServiceIds,
+            notes: notes.trim() ? notes.trim() : undefined,
+          }),
+        })
+        const json = await res.json().catch(() => null)
+        if (!res.ok || !json?.success) {
+          throw new Error(
+            res.status === 400
+              ? (json?.error?.message ?? 'Please check your details and try again.')
+              : "Your booking couldn't be sent.",
+          )
+        }
+        setIsSubmitted(true)
+        track('booking_request_submitted', { bookingId: 'guest' })
+      } catch (err: unknown) {
+        setSubmitError(
+          err instanceof Error ? err.message : "Your booking couldn't be sent. Please try again.",
+        )
+      } finally {
+        setSubmitting(false)
+      }
       return
     }
 
@@ -692,6 +736,12 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
               onNotesChange={setNotes}
               submitError={submitError}
               isSignedIn={Boolean(session?.user)}
+              guestName={guestName}
+              onGuestNameChange={setGuestName}
+              guestPhone={guestPhone}
+              onGuestPhoneChange={setGuestPhone}
+              guestEmail={guestEmail}
+              onGuestEmailChange={setGuestEmail}
             />
           )}
         </div>
@@ -735,7 +785,11 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
                 type="button"
                 variant="gold"
                 onClick={handleSubmit}
-                disabled={submitting || selectedServiceIds.length === 0}
+                disabled={
+                  submitting ||
+                  selectedServiceIds.length === 0 ||
+                  (!session?.user && (guestName.trim().length < 2 || !isLikelyPhone(guestPhone)))
+                }
                 aria-busy={submitting}
                 className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
               >
@@ -744,10 +798,8 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
                     <Loader2 className="animate-spin" aria-hidden="true" />
                     Submitting…
                   </>
-                ) : session?.user ? (
-                  'Submit Booking'
                 ) : (
-                  'Sign in to Book'
+                  'Submit Booking'
                 )}
               </Button>
             )}
@@ -804,7 +856,7 @@ function BranchPicker({
   if (!activeBranchId) {
     return (
       <p className="font-sans text-[14px] text-cocoa-dark" role="alert">
-        Online booking is paused right now. Please call us on +91 63601 35720.
+        Online booking is paused right now. Please call us on +91 81483 08344.
       </p>
     )
   }
@@ -1169,6 +1221,12 @@ function Step4({
   onNotesChange,
   submitError,
   isSignedIn,
+  guestName,
+  onGuestNameChange,
+  guestPhone,
+  onGuestPhoneChange,
+  guestEmail,
+  onGuestEmailChange,
 }: {
   branch: PublicBranch | null
   selectedDate: Date | null
@@ -1181,7 +1239,16 @@ function Step4({
   onNotesChange: (v: string) => void
   submitError: string | null
   isSignedIn: boolean
+  guestName: string
+  onGuestNameChange: (v: string) => void
+  guestPhone: string
+  onGuestPhoneChange: (v: string) => void
+  guestEmail: string
+  onGuestEmailChange: (v: string) => void
 }) {
+  const inputClass =
+    'w-full rounded-[6px] border border-cloud-gray px-3 py-2 font-ui text-[14px] text-cocoa-dark placeholder:text-dusty-gray focus:outline-2 focus:outline-deep-gold focus:outline-offset-2'
+  const labelClass = 'font-ui text-[11px] uppercase tracking-[1px] text-gold-ink block mb-2'
   return (
     <div className="space-y-5">
       <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink">
@@ -1229,6 +1296,62 @@ function Step4({
         </div>
       </div>
 
+      {!isSignedIn && (
+        <div className="space-y-3">
+          <h4 className="font-ui text-[11px] uppercase tracking-[1px] text-gold-ink">
+            Your Details
+          </h4>
+          <div>
+            <label htmlFor="booking-name" className={labelClass}>
+              Name
+            </label>
+            <input
+              id="booking-name"
+              type="text"
+              autoComplete="name"
+              required
+              maxLength={80}
+              value={guestName}
+              onChange={(e) => onGuestNameChange(e.target.value)}
+              placeholder="Your full name"
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="booking-phone" className={labelClass}>
+              Phone / WhatsApp
+            </label>
+            <input
+              id="booking-phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              maxLength={16}
+              value={guestPhone}
+              onChange={(e) => onGuestPhoneChange(e.target.value)}
+              placeholder="10-digit mobile number"
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="booking-email" className={labelClass}>
+              Email (optional)
+            </label>
+            <input
+              id="booking-email"
+              type="email"
+              autoComplete="email"
+              maxLength={120}
+              value={guestEmail}
+              onChange={(e) => onGuestEmailChange(e.target.value)}
+              placeholder="you@example.com"
+              className={inputClass}
+            />
+          </div>
+        </div>
+      )}
+
       <div>
         <label
           htmlFor="booking-notes"
@@ -1254,14 +1377,19 @@ function Step4({
           aria-live="polite"
         >
           <p className="font-sans text-[14px] text-error">{submitError}</p>
-          <p className="font-sans text-[12px] text-dusty-gray mt-1">Or call us: +91 63601 35720</p>
+          <p className="font-sans text-[12px] text-dusty-gray mt-1">
+            Or call / WhatsApp us:{' '}
+            <a href="https://wa.me/918148308344" className="underline">
+              +91 81483 08344
+            </a>
+          </p>
         </div>
       )}
 
       <p className="font-sans text-[12px] text-dusty-gray">
         {isSignedIn
           ? 'Payment is collected at the salon. You will receive a confirmation once your booking is approved.'
-          : 'You need to sign in to confirm this booking. We will keep your selections.'}
+          : 'Payment is collected at the salon. We will call or WhatsApp you to confirm your booking.'}
       </p>
     </div>
   )
@@ -1296,13 +1424,15 @@ function SuccessView({
       )}
 
       <div className="flex w-full max-w-xs flex-col gap-3">
-        <Button
-          asChild
-          variant="gold"
-          className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
-        >
-          <a href="/bookings">View My Bookings</a>
-        </Button>
+        {bookingNumber && (
+          <Button
+            asChild
+            variant="gold"
+            className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
+          >
+            <a href="/bookings">View My Bookings</a>
+          </Button>
+        )}
         <Button
           type="button"
           variant="secondary"

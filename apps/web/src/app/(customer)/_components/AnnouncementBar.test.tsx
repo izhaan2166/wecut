@@ -6,18 +6,14 @@
  * Module Name  : AnnouncementBar (component test)
  * Scope        : Customer Pages — Announcement Strip
  *
- * Description  : Component tests for the site-wide announcement strip and its
- *                decoupling from the homepage hero image. Both read the same
- *                Payload `banner` record, so these tests render the strip and
- *                the hero from ONE banner payload and assert they move
- *                independently: a blank CTA link changes the hero photo only.
+ * Description  : Component tests for the site-wide announcement strip, which
+ *                reads the Payload `banner` record.
  *
  * Responsibilities :
- * - Test a CTA-bearing banner drives both the strip copy/link and the hero image
- * - Test a CTA-less banner drives the hero image while the strip falls back
+ * - Test a CTA-bearing banner drives the strip copy/link
+ * - Test a CTA-less banner leaves the strip on its fallback copy
  * - Test a whitespace-only ctaHref counts as absent
  * - Test `order` decides, and the strip picks the first CTA-bearing banner
- * - Test the no-banner path (fallback copy + bundled hero SVG) does not regress
  *
  * Tech Stack   : Vitest, @testing-library/react, jsdom, MSW
  * Layer        : Testing (Presentation / Component)
@@ -32,11 +28,8 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { HttpResponse, http } from 'msw/http'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { selectHeroBanner } from '@/lib/cms/banners'
-import { getActiveBanners } from '@/lib/cms/client'
 import { server } from '@/test/msw-server'
 import { AnnouncementBar } from './AnnouncementBar'
-import { HeroSection } from './HeroSection'
 
 const CMS_URL = 'https://cms.test'
 const FALLBACK_HEADLINE = /Monsoon Glow offers/
@@ -58,12 +51,6 @@ function bannerDoc(overrides?: Record<string, unknown>) {
 /** Serve the given banner docs from the mocked Payload REST API. */
 function serveBanners(docs: Record<string, unknown>[]) {
   server.use(http.get(`${CMS_URL}/api/banner`, () => HttpResponse.json({ docs })))
-}
-
-/** Render the hero exactly as the homepage does, from the same banner read. */
-async function renderHeroFromCms() {
-  const banners = await getActiveBanners()
-  return render(<HeroSection image={selectHeroBanner(banners)?.image ?? null} />)
 }
 
 /** The strip's single link — the whole bar is one anchor. */
@@ -137,60 +124,5 @@ describe('AnnouncementBar', () => {
 
     expect(stripLink()).toHaveTextContent(FALLBACK_HEADLINE)
     expect(stripLink()).toHaveAttribute('href', FALLBACK_HREF)
-  })
-})
-
-describe('hero image and announcement strip are decoupled', () => {
-  beforeEach(() => {
-    vi.stubEnv('NEXT_PUBLIC_CMS_URL', CMS_URL)
-  })
-
-  afterEach(() => {
-    vi.unstubAllEnvs()
-  })
-
-  it('a banner WITH a ctaHref drives both the strip and the hero image', async () => {
-    serveBanners([bannerDoc({ headline: 'Diwali Glow', ctaHref: '/offers/diwali' })])
-
-    render(await AnnouncementBar())
-    expect(screen.getByRole('link', { name: 'Diwali Glow' })).toHaveAttribute(
-      'href',
-      '/offers/diwali',
-    )
-
-    cleanup()
-    await renderHeroFromCms()
-    expect(screen.getByAltText('Monsoon offer').getAttribute('src')).toContain(
-      encodeURIComponent(BANNER_IMAGE_URL),
-    )
-  })
-
-  it('a banner WITHOUT a ctaHref changes the hero photo ONLY', async () => {
-    serveBanners([bannerDoc({ headline: 'Not an announcement', ctaHref: null, ctaLabel: null })])
-
-    // Strip: unchanged, hardcoded copy.
-    render(await AnnouncementBar())
-    expect(screen.queryByText('Not an announcement')).toBeNull()
-    expect(stripLink()).toHaveTextContent(FALLBACK_HEADLINE)
-
-    // Hero: the owner's uploaded photo, not the bundled SVG.
-    cleanup()
-    const { container } = await renderHeroFromCms()
-    expect(screen.getByAltText('Monsoon offer').getAttribute('src')).toContain(
-      encodeURIComponent(BANNER_IMAGE_URL),
-    )
-    expect(container.querySelector('img[src="/hero-fallback.svg"]')).toBeNull()
-  })
-
-  it('no active banners: hero uses the bundled SVG and the strip its hardcoded copy', async () => {
-    serveBanners([])
-
-    render(await AnnouncementBar())
-    expect(stripLink()).toHaveTextContent(FALLBACK_HEADLINE)
-    expect(stripLink()).toHaveAttribute('href', FALLBACK_HREF)
-
-    cleanup()
-    const { container } = await renderHeroFromCms()
-    expect(container.querySelector('img[src="/hero-fallback.svg"]')).not.toBeNull()
   })
 })

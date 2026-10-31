@@ -136,8 +136,14 @@ function formatDay(date: Date): string {
   return date.toLocaleDateString('en-IN', { weekday: 'short' })
 }
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })
+// "Saturday, 1 November", for screen readers on the day cards.
+function formatLongDate(date: Date): string {
+  return date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })
+}
+
+// "Sat, 1 Nov", for the ticket.
+function formatTicketDate(date: Date): string {
+  return date.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })
 }
 
 // "15:30" or "15:30:00" → "03:30 PM"
@@ -645,6 +651,13 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
   const pickedService =
     servicePicked && selectedServiceIds[0] ? servicesById.get(selectedServiceIds[0]) : undefined
 
+  const selectedServices = selectedServiceIds
+    .map((id) => servicesById.get(id))
+    .filter((s): s is ApiService => Boolean(s))
+
+  const primaryClass =
+    'h-12 w-full rounded-full bg-ink font-ui text-[15px] font-semibold text-paper hover:bg-ink-soft disabled:bg-ink/30 disabled:text-paper disabled:opacity-100'
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
@@ -658,197 +671,191 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
         type="button"
         tabIndex={-1}
         aria-label="Close booking dialog"
-        className="absolute inset-0 bg-cocoa-dark/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
         onClick={handleClose}
       />
 
       {/* Modal */}
       <div
         ref={dialogRef}
-        className="relative z-10 flex flex-col w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-lg sm:rounded-[6px] bg-canvas-white sm:shadow-elevated overflow-hidden"
+        className={`relative z-10 flex h-full w-full flex-col overflow-hidden bg-paper text-ink sm:h-auto sm:max-h-[92vh] sm:rounded-[20px] sm:shadow-elevated ${
+          isSubmitted ? 'sm:max-w-lg' : 'sm:max-w-[920px] md:h-[min(700px,92vh)]'
+        }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-cloud-gray">
-          <h2
-            id="booking-dialog-title"
-            className="font-display text-[20px] text-cocoa-dark tracking-tight"
-          >
-            {isSubmitted ? 'Booking Submitted' : 'Book Appointment'}
-          </h2>
+        <div className="flex items-center justify-between gap-4 border-b border-hairline px-5 py-4 md:px-8">
+          <div className="flex min-w-0 items-baseline gap-4">
+            <h2
+              id="booking-dialog-title"
+              className="font-display text-[24px] leading-none text-ink"
+            >
+              {isSubmitted ? 'Booking Submitted' : 'Book Appointment'}
+            </h2>
+            {!isSubmitted && (
+              <div className="flex items-center gap-1.5" role="group">
+                {/* Live text rather than an aria-label on a roleless div: the label would
+                    not be exposed, and changing text is what actually gets announced as
+                    the customer moves between steps. */}
+                <span className="sr-only" aria-live="polite">
+                  {`Step ${stepIndex + 1} of ${stepOrder.length}`}
+                </span>
+                {stepOrder.map((s, i) => (
+                  <span
+                    key={s}
+                    aria-hidden="true"
+                    className={`h-1 rounded-full motion-safe:transition-all duration-200 ${
+                      i === stepIndex ? 'w-6 bg-ink' : i < stepIndex ? 'w-3 bg-ink' : 'w-3 bg-sand'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
             onClick={handleClose}
-            className="rounded-full"
+            className="rounded-full text-ink hover:bg-sand"
             aria-label="Close booking dialog"
           >
             <X aria-hidden="true" />
           </Button>
         </div>
 
-        {/* Step indicator */}
-        {!isSubmitted && (
-          <div className="flex items-center justify-center gap-2 py-3" role="group">
-            {/* Live text rather than an aria-label on a roleless div: the label would
-                not be exposed, and changing text is what actually gets announced as
-                the customer moves between steps. */}
-            <span className="sr-only" aria-live="polite">
-              {`Step ${stepIndex + 1} of ${stepOrder.length}`}
-            </span>
-            {stepOrder.map((s) => (
-              <div
-                key={s}
-                className={`w-2 h-2 rounded-full motion-safe:transition-colors duration-200 ${
-                  s === step ? 'bg-deep-gold' : s < step ? 'bg-royal-gold' : 'bg-outline-gray'
-                }`}
-                aria-hidden="true"
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto px-5 py-4">
-          {isSubmitted ? (
+        {isSubmitted ? (
+          <div className="flex-1 overflow-y-auto px-5 py-4">
             <SuccessView bookingNumber={bookingNumber} onDone={handleClose} />
-          ) : step === 1 ? (
-            <>
-              {pickedService ? (
-                <div className="mb-4 flex items-center justify-between gap-3 rounded-[6px] bg-cloud-gray px-4 py-3">
-                  <p className="font-sans text-[14px] text-cocoa-dark">
-                    Booking: <span className="font-semibold">{pickedService.name}</span>
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setServicePicked(false)}
-                    className="min-h-[44px] font-ui text-[13px] font-semibold text-cocoa-dark underline"
-                  >
-                    Change
-                  </button>
-                </div>
-              ) : null}
-              <Step1
-                branchList={branchList}
-                branchesError={branchesError}
-                activeBranchId={activeBranchId}
-                onSelectBranch={(id) => {
-                  // Times are per branch, so a time picked for another one is dropped.
-                  setSelectedBranchId(id)
-                  setSelectedTime(null)
-                }}
-                onRetryBranches={() => setBranchesAttempt((n) => n + 1)}
-                selectedDate={selectedDate}
-                selectedTime={selectedTime}
-                slots={slots}
-                slotsLoading={slotsLoading}
-                slotsError={slotsError}
-                onSelectDate={(d) => {
-                  setSelectedDate(d)
-                  setSelectedTime(null)
-                }}
-                onSelectTime={setSelectedTime}
-              />
-            </>
-          ) : step === 2 ? (
-            <Step2
-              serviceType={serviceType}
-              onServiceTypeChange={setServiceTypeAndReset}
-              categories={visibleCategories}
-              loading={servicesLoading}
-              error={servicesError}
-              selectedCategoryIds={selectedCategoryIds}
-              onToggleCategory={toggleCategory}
-            />
-          ) : step === 3 ? (
-            <Step3
-              groupedCategories={groupedSelectedCategories}
-              selectedServiceIds={selectedServiceIds}
-              onToggleService={toggleService}
-              totalPaise={totalPaise}
-            />
-          ) : (
-            <Step4
-              branch={activeBranch}
-              selectedDate={selectedDate}
-              selectedTime={selectedTime}
-              serviceType={serviceType}
-              selectedServices={selectedServiceIds
-                .map((id) => servicesById.get(id))
-                .filter((s): s is ApiService => Boolean(s))}
-              totalPaise={totalPaise}
-              totalDuration={totalDuration}
-              notes={notes}
-              onNotesChange={setNotes}
-              submitError={submitError}
-              isSignedIn={Boolean(session?.user)}
-              guestName={guestName}
-              onGuestNameChange={setGuestName}
-              guestPhone={guestPhone}
-              onGuestPhoneChange={setGuestPhone}
-              guestEmail={guestEmail}
-              onGuestEmailChange={setGuestEmail}
-            />
-          )}
-        </div>
-
-        {/* Footer */}
-        {!isSubmitted && (
-          <div className="flex items-center justify-between border-t border-cloud-gray px-5 py-4">
-            {step > 1 ? (
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={goBack}
-                disabled={submitting}
-                className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px] hover:bg-golden-mist"
-              >
-                Back
-              </Button>
-            ) : (
-              <span />
-            )}
-
-            {step < 4 ? (
-              <Button
-                type="button"
-                variant="gold"
-                onClick={() => {
-                  track('booking_step_completed', { step })
-                  goNext()
-                }}
-                disabled={
-                  (step === 1 && !canNext1) ||
-                  (step === 2 && !canNext2) ||
-                  (step === 3 && !canNext3)
-                }
-                className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
-              >
-                Next
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant="gold"
-                onClick={handleSubmit}
-                disabled={
-                  submitting ||
-                  selectedServiceIds.length === 0 ||
-                  (!session?.user && (guestName.trim().length < 2 || !isLikelyPhone(guestPhone)))
-                }
-                aria-busy={submitting}
-                className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 className="animate-spin" aria-hidden="true" />
-                    Submitting…
-                  </>
+          </div>
+        ) : (
+          // Phones: one scrolling column (the step, then the ticket) above a
+          // fixed action bar. md and up: the step on the left, the ticket and
+          // its actions on the right. `md:contents` lets the scroll wrapper's
+          // children join the grid directly.
+          <div className="flex min-h-0 flex-1 flex-col md:grid md:grid-cols-[minmax(0,1fr)_360px] md:grid-rows-[minmax(0,1fr)_auto]">
+            <div className="min-h-0 flex-1 overflow-y-auto md:contents">
+              <div className="px-5 py-6 md:row-span-2 md:min-h-0 md:overflow-y-auto md:px-8">
+                {step === 1 ? (
+                  <Step1
+                    branchList={branchList}
+                    branchesError={branchesError}
+                    activeBranchId={activeBranchId}
+                    onSelectBranch={(id) => {
+                      // Times are per branch, so a time picked for another one is dropped.
+                      setSelectedBranchId(id)
+                      setSelectedTime(null)
+                    }}
+                    onRetryBranches={() => setBranchesAttempt((n) => n + 1)}
+                    selectedDate={selectedDate}
+                    selectedTime={selectedTime}
+                    slots={slots}
+                    slotsLoading={slotsLoading}
+                    slotsError={slotsError}
+                    onSelectDate={(d) => {
+                      setSelectedDate(d)
+                      setSelectedTime(null)
+                    }}
+                    onSelectTime={setSelectedTime}
+                  />
+                ) : step === 2 ? (
+                  <Step2
+                    serviceType={serviceType}
+                    onServiceTypeChange={setServiceTypeAndReset}
+                    categories={visibleCategories}
+                    loading={servicesLoading}
+                    error={servicesError}
+                    selectedCategoryIds={selectedCategoryIds}
+                    onToggleCategory={toggleCategory}
+                  />
+                ) : step === 3 ? (
+                  <Step3
+                    groupedCategories={groupedSelectedCategories}
+                    selectedServiceIds={selectedServiceIds}
+                    onToggleService={toggleService}
+                  />
                 ) : (
-                  'Submit Booking'
+                  <Step4
+                    notes={notes}
+                    onNotesChange={setNotes}
+                    submitError={submitError}
+                    isSignedIn={Boolean(session?.user)}
+                    guestName={guestName}
+                    onGuestNameChange={setGuestName}
+                    guestPhone={guestPhone}
+                    onGuestPhoneChange={setGuestPhone}
+                    guestEmail={guestEmail}
+                    onGuestEmailChange={setGuestEmail}
+                  />
                 )}
-              </Button>
-            )}
+              </div>
+
+              <div className="px-5 pb-6 md:col-start-2 md:row-start-1 md:min-h-0 md:overflow-y-auto md:border-l md:border-hairline md:px-6 md:pt-6 md:pb-0">
+                <AppointmentTicket
+                  services={selectedServices}
+                  serviceType={serviceType}
+                  branch={activeBranch}
+                  selectedDate={selectedDate}
+                  selectedTime={selectedTime}
+                  totalPaise={totalPaise}
+                  totalDuration={totalDuration}
+                  onChangeService={pickedService ? () => setServicePicked(false) : undefined}
+                />
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3 border-t border-hairline bg-paper px-5 py-4 md:col-start-2 md:row-start-2 md:border-l md:px-6 md:pb-6">
+              {step > 1 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={goBack}
+                  disabled={submitting}
+                  className="h-12 shrink-0 rounded-full px-5 font-ui text-[15px] font-semibold text-ink hover:bg-sand"
+                >
+                  Back
+                </Button>
+              )}
+
+              {step < 4 ? (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    track('booking_step_completed', { step })
+                    goNext()
+                  }}
+                  disabled={
+                    (step === 1 && !canNext1) ||
+                    (step === 2 && !canNext2) ||
+                    (step === 3 && !canNext3)
+                  }
+                  className={`${primaryClass} flex-1`}
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={
+                    submitting ||
+                    selectedServiceIds.length === 0 ||
+                    (!session?.user && (guestName.trim().length < 2 || !isLikelyPhone(guestPhone)))
+                  }
+                  aria-busy={submitting}
+                  className={`${primaryClass} flex-1`}
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="animate-spin" aria-hidden="true" />
+                      Submitting…
+                    </>
+                  ) : (
+                    'Confirm booking'
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -857,6 +864,19 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
 }
 
 // --- Step Components ---
+
+const EYEBROW = 'font-ui text-[11px] font-semibold uppercase tracking-[2px] text-gold-ink'
+const SECTION_TITLE = 'mb-3 font-display text-[22px] leading-tight text-ink'
+const MUTED = 'font-sans text-[14px] text-ink-muted'
+
+function Loading({ label }: { label: string }) {
+  return (
+    <output className="flex items-center gap-2 py-4" aria-live="polite">
+      <Loader2 className="size-4 animate-spin text-ink-muted" aria-hidden="true" />
+      <span className={MUTED}>{label}</span>
+    </output>
+  )
+}
 
 // Step 1's branch row: a pill-styled native <select>, so screen readers and
 // phones get the platform picker. Branches that are listed but not taking
@@ -885,23 +905,20 @@ function BranchPicker({
           variant="outline"
           size="sm"
           onClick={onRetry}
-          className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
+          className="rounded-full border-ink font-ui text-[13px] font-semibold text-ink"
         >
           Try again
         </Button>
       </div>
     ) : (
-      <output className="flex items-center gap-2" aria-live="polite">
-        <Loader2 className="size-4 animate-spin text-gold-ink" aria-hidden="true" />
-        <span className="font-sans text-[14px] text-dusty-gray">Loading branches…</span>
-      </output>
+      <Loading label="Loading branches…" />
     )
   }
 
   // The list loaded but no branch is taking bookings.
   if (!activeBranchId) {
     return (
-      <p className="font-sans text-[14px] text-cocoa-dark" role="alert">
+      <p className="font-sans text-[15px] text-ink" role="alert">
         Online booking is paused right now. Please call us on +91 81483 08344.
       </p>
     )
@@ -909,23 +926,20 @@ function BranchPicker({
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-      <label
-        htmlFor="booking-branch"
-        className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink"
-      >
-        Branch:
+      <label htmlFor="booking-branch" className={EYEBROW}>
+        Branch
       </label>
       <div className="relative">
         {/* The selected branch is always one taking bookings, hence the green dot. */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 left-3 size-2 -translate-y-1/2 rounded-full bg-success"
+          className="pointer-events-none absolute top-1/2 left-3.5 size-2 -translate-y-1/2 rounded-full bg-success"
         />
         <select
           id="booking-branch"
           value={activeBranchId}
           onChange={(e) => onSelect(e.target.value)}
-          className="cursor-pointer appearance-none rounded-full border border-deep-gold/40 bg-warm-cream py-1.5 pr-8 pl-7 font-ui text-[13px] text-cocoa-dark hover:border-deep-gold focus-visible:outline-2 focus-visible:outline-deep-gold focus-visible:outline-offset-2 motion-safe:transition-colors motion-safe:duration-200"
+          className="h-10 cursor-pointer appearance-none rounded-full border border-hairline bg-white pr-9 pl-8 font-ui text-[14px] font-medium text-ink hover:border-ink focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2 motion-safe:transition-colors motion-safe:duration-200"
         >
           {branchList.branches.map((b) => (
             <option key={b.id} value={b.id} disabled={!b.acceptingBookings}>
@@ -937,11 +951,20 @@ function BranchPicker({
         </select>
         <ChevronDown
           aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-gold-ink"
+          className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-ink-muted"
         />
       </div>
     </div>
   )
+}
+
+// "November" or "November – December" when the fortnight crosses a month.
+function monthSpan(days: Date[]): string {
+  const name = (d: Date) => d.toLocaleDateString('en-IN', { month: 'long' })
+  const first = days[0]
+  const last = days[days.length - 1]
+  if (!first || !last) return ''
+  return name(first) === name(last) ? name(first) : `${name(first)} – ${name(last)}`
 }
 
 function Step1({
@@ -990,14 +1013,15 @@ function Step1({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-8">
       {branchPicker}
 
       <div>
-        <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink mb-3">
-          Select Date
-        </h3>
-        <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <h3 className="font-display text-[22px] leading-tight text-ink">Select Date</h3>
+          <span className={EYEBROW}>{monthSpan(days)}</span>
+        </div>
+        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pt-1 pb-2">
           {days.map((d) => {
             const isSelected = selectedDate?.toDateString() === d.toDateString()
             return (
@@ -1008,15 +1032,22 @@ function Step1({
                 key={toISODate(d)}
                 type="button"
                 onClick={() => onSelectDate(d)}
-                className={`flex-shrink-0 flex flex-col items-center gap-0.5 w-14 py-2.5 rounded-[6px] border motion-safe:transition-all duration-200 ${
+                aria-label={formatLongDate(d)}
+                className={`flex h-[68px] w-[58px] flex-shrink-0 flex-col items-center justify-center gap-0.5 rounded-[14px] border motion-safe:transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2 ${
                   isSelected
-                    ? 'bg-royal-gold border-deep-gold text-cocoa-dark'
-                    : 'bg-canvas-white border-cloud-gray text-cocoa-dark hover:border-golden-mist'
+                    ? 'border-ink bg-ink text-paper'
+                    : 'border-hairline bg-white text-ink hover:border-ink'
                 }`}
                 aria-pressed={isSelected}
               >
-                <span className="font-ui text-[10px] uppercase tracking-[1px]">{formatDay(d)}</span>
-                <span className="font-ui text-[14px] font-medium">{formatDate(d)}</span>
+                <span
+                  className={`font-ui text-[10px] font-semibold uppercase tracking-[1.5px] ${
+                    isSelected ? 'text-paper/70' : 'text-ink-muted'
+                  }`}
+                >
+                  {formatDay(d)}
+                </span>
+                <span className="font-display text-[24px] leading-none">{d.getDate()}</span>
               </button>
             )
           })}
@@ -1024,38 +1055,24 @@ function Step1({
       </div>
 
       <div>
-        <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink mb-3">
-          Select Time
-        </h3>
+        <h3 className={SECTION_TITLE}>Select Time</h3>
 
         {!selectedDate ? (
-          <p className="font-sans text-[14px] text-dusty-gray">
-            Pick a date to see available times.
-          </p>
+          <p className={MUTED}>Pick a date to see available times.</p>
         ) : !activeBranchId && branchesLoading ? (
-          <output className="flex items-center gap-2 py-4" aria-live="polite">
-            <Loader2 className="size-4 animate-spin text-gold-ink" aria-hidden="true" />
-            <span className="font-sans text-[14px] text-dusty-gray">Loading available times…</span>
-          </output>
+          <Loading label="Loading available times…" />
         ) : !activeBranchId ? (
-          <p className="font-sans text-[14px] text-dusty-gray">
-            Available times appear once a branch is selected.
-          </p>
+          <p className={MUTED}>Available times appear once a branch is selected.</p>
         ) : slotsLoading ? (
-          <output className="flex items-center gap-2 py-4" aria-live="polite">
-            <Loader2 className="size-4 animate-spin text-gold-ink" aria-hidden="true" />
-            <span className="font-sans text-[14px] text-dusty-gray">Loading available times…</span>
-          </output>
+          <Loading label="Loading available times…" />
         ) : slotsError ? (
           <p className="font-sans text-[14px] text-error" role="alert">
             {slotsError}
           </p>
         ) : slots.length === 0 ? (
-          <p className="font-sans text-[14px] text-dusty-gray">
-            No slots available for this date. Try another day.
-          </p>
+          <p className={MUTED}>No slots available for this date. Try another day.</p>
         ) : (
-          <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+          <div className="flex flex-wrap gap-2">
             {slots.map((slot) => {
               const isSelected = selectedTime === slot.startTime
               return (
@@ -1066,12 +1083,12 @@ function Step1({
                   disabled={!slot.available}
                   aria-pressed={isSelected}
                   aria-disabled={!slot.available}
-                  className={`font-ui text-[13px] py-2 rounded-full border motion-safe:transition-all duration-200 ${
+                  className={`h-10 min-w-[76px] rounded-full border px-4 font-ui text-[14px] font-medium motion-safe:transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2 ${
                     isSelected
-                      ? 'bg-royal-gold border-deep-gold text-cocoa-dark'
+                      ? 'border-ink bg-ink text-paper'
                       : slot.available
-                        ? 'bg-canvas-white border-cloud-gray text-cocoa-dark hover:border-golden-mist'
-                        : 'bg-cloud-gray border-cloud-gray text-dusty-gray line-through cursor-not-allowed'
+                        ? 'border-hairline bg-white text-ink hover:border-ink'
+                        : 'cursor-not-allowed border-transparent bg-sand/60 text-ink-muted line-through'
                   }`}
                 >
                   {slot.startTime}
@@ -1084,6 +1101,9 @@ function Step1({
     </div>
   )
 }
+
+const CHOICE_ROW =
+  'flex cursor-pointer items-center gap-3 rounded-[14px] border p-4 motion-safe:transition-colors duration-200'
 
 function Step2({
   serviceType,
@@ -1103,13 +1123,11 @@ function Step2({
   onToggleCategory: (id: string) => void
 }) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-8">
       <div>
-        <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink mb-3">
-          Service Type
-        </h3>
+        <h3 className={SECTION_TITLE}>Service Type</h3>
         <div
-          className="inline-flex gap-1 rounded-full bg-cloud-gray p-1"
+          className="inline-flex gap-1 rounded-full border border-hairline bg-white p-1"
           role="radiogroup"
           aria-label="Service type"
         >
@@ -1120,57 +1138,52 @@ function Step2({
               // biome-ignore lint/a11y/useSemanticElements: intentional ARIA radiogroup of styled pill buttons; native <input type="radio"> cannot carry this pill styling.
               role="radio"
               aria-checked={serviceType === t}
-              variant={serviceType === t ? 'gold' : 'ghost'}
+              variant="ghost"
               size="sm"
               onClick={() => onServiceTypeChange(t)}
-              className={`rounded-full font-ui text-[12px] uppercase tracking-[0.5px] ${
-                serviceType === t ? '' : 'text-cocoa-dark hover:bg-golden-mist'
+              className={`h-9 rounded-full px-5 font-ui text-[14px] font-semibold ${
+                serviceType === t
+                  ? 'bg-ink text-paper hover:bg-ink hover:text-paper'
+                  : 'text-ink hover:bg-sand'
               }`}
             >
-              {t === 'spa' ? 'SPA' : 'Salon'}
+              {t === 'spa' ? 'Spa' : 'Salon'}
             </Button>
           ))}
         </div>
       </div>
 
       <div>
-        <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink mb-3">
-          Categories
-        </h3>
+        <h3 className={SECTION_TITLE}>Categories</h3>
 
         {loading ? (
-          <output className="flex items-center gap-2 py-4" aria-live="polite">
-            <Loader2 className="size-4 animate-spin text-gold-ink" aria-hidden="true" />
-            <span className="font-sans text-[14px] text-dusty-gray">Loading categories…</span>
-          </output>
+          <Loading label="Loading categories…" />
         ) : error ? (
           <p className="font-sans text-[14px] text-error" role="alert">
             {error}
           </p>
         ) : categories.length === 0 ? (
-          <p className="font-sans text-[14px] text-dusty-gray">
-            No {serviceType === 'spa' ? 'SPA' : 'salon'} categories available right now.
+          <p className={MUTED}>
+            No {serviceType === 'spa' ? 'spa' : 'salon'} categories available right now.
           </p>
         ) : (
-          <div className="space-y-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {categories.map((cat) => {
               const isChecked = selectedCategoryIds.includes(cat.id)
               return (
                 <label
                   key={cat.id}
-                  className={`flex items-center gap-3 p-3 rounded-[6px] border cursor-pointer motion-safe:transition-all duration-200 ${
-                    isChecked
-                      ? 'border-deep-gold bg-warm-cream'
-                      : 'border-cloud-gray hover:border-golden-mist'
+                  className={`${CHOICE_ROW} ${
+                    isChecked ? 'border-ink bg-white' : 'border-hairline bg-white hover:border-ink'
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => onToggleCategory(cat.id)}
-                    className="w-4 h-4 accent-deep-gold"
+                    className="size-4 accent-ink"
                   />
-                  <span className="font-ui text-[15px] text-cocoa-dark">{cat.name}</span>
+                  <span className="font-ui text-[15px] font-medium text-ink">{cat.name}</span>
                 </label>
               )
             })}
@@ -1185,41 +1198,29 @@ function Step3({
   groupedCategories,
   selectedServiceIds,
   onToggleService,
-  totalPaise,
 }: {
   groupedCategories: ApiCategory[]
   selectedServiceIds: string[]
   onToggleService: (id: string) => void
-  totalPaise: number
 }) {
   const hasServices = groupedCategories.some((c) => c.services.length > 0)
 
   return (
-    <div className="space-y-4">
-      <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink">
-        Select Services
-      </h3>
+    <div className="space-y-6">
+      <h3 className="font-display text-[22px] leading-tight text-ink">Select Services</h3>
 
-      {!hasServices && (
-        <p className="font-sans text-[14px] text-dusty-gray">
-          No services found for the selected categories.
-        </p>
-      )}
+      {!hasServices && <p className={MUTED}>No services found for the selected categories.</p>}
 
       {groupedCategories.map((cat) => (
         <div key={cat.id} className="space-y-2">
-          <h4 className="font-ui text-[11px] uppercase tracking-[1px] text-cocoa-dark">
-            {cat.name}
-          </h4>
+          <h4 className={EYEBROW}>{cat.name}</h4>
           {cat.services.map((svc) => {
             const isChecked = selectedServiceIds.includes(svc.id)
             return (
               <label
                 key={svc.id}
-                className={`flex items-center justify-between gap-3 p-3 rounded-[6px] border cursor-pointer motion-safe:transition-all duration-200 ${
-                  isChecked
-                    ? 'border-deep-gold bg-warm-cream'
-                    : 'border-cloud-gray hover:border-golden-mist'
+                className={`${CHOICE_ROW} justify-between ${
+                  isChecked ? 'border-ink bg-white' : 'border-hairline bg-white hover:border-ink'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -1227,16 +1228,16 @@ function Step3({
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => onToggleService(svc.id)}
-                    className="w-4 h-4 accent-deep-gold"
+                    className="size-4 accent-ink"
                   />
                   <div>
-                    <span className="font-ui text-[15px] text-cocoa-dark">{svc.name}</span>
-                    <span className="block font-ui text-[12px] text-dusty-gray">
+                    <span className="font-ui text-[15px] font-medium text-ink">{svc.name}</span>
+                    <span className="block font-sans text-[13px] text-ink-muted">
                       {svc.durationMinutes} min
                     </span>
                   </div>
                 </div>
-                <span className="font-ui text-[13px] text-cocoa-dark">
+                <span className="font-ui text-[15px] font-semibold text-ink">
                   {formatINR(svc.pricePaise)}
                 </span>
               </label>
@@ -1244,25 +1245,11 @@ function Step3({
           })}
         </div>
       ))}
-
-      {totalPaise > 0 && (
-        <div className="sticky bottom-0 flex items-center justify-between p-3 rounded-full bg-cocoa-dark text-canvas-white">
-          <span className="font-ui text-[11px] uppercase tracking-[1px]">Total</span>
-          <span className="font-ui text-[14px]">{formatINR(totalPaise)}</span>
-        </div>
-      )}
     </div>
   )
 }
 
 function Step4({
-  branch,
-  selectedDate,
-  selectedTime,
-  serviceType,
-  selectedServices,
-  totalPaise,
-  totalDuration,
   notes,
   onNotesChange,
   submitError,
@@ -1274,13 +1261,6 @@ function Step4({
   guestEmail,
   onGuestEmailChange,
 }: {
-  branch: PublicBranch | null
-  selectedDate: Date | null
-  selectedTime: string | null
-  serviceType: ServiceType
-  selectedServices: ApiService[]
-  totalPaise: number
-  totalDuration: number
   notes: string
   onNotesChange: (v: string) => void
   submitError: string | null
@@ -1293,60 +1273,17 @@ function Step4({
   onGuestEmailChange: (v: string) => void
 }) {
   const inputClass =
-    'w-full rounded-[6px] border border-cloud-gray px-3 py-2 font-ui text-[14px] text-cocoa-dark placeholder:text-dusty-gray focus:outline-2 focus:outline-deep-gold focus:outline-offset-2'
-  const labelClass = 'font-ui text-[11px] uppercase tracking-[1px] text-gold-ink block mb-2'
+    'h-12 w-full rounded-[12px] border border-hairline bg-white px-4 font-sans text-[15px] text-ink placeholder:text-ink-muted/70 focus:border-ink focus:outline-none'
+  const labelClass = 'mb-2 block font-ui text-[13px] font-semibold text-ink'
   return (
-    <div className="space-y-5">
-      <h3 className="font-ui text-[11px] uppercase tracking-[2px] text-gold-ink">
-        Booking Summary
-      </h3>
-
-      <div className="space-y-3 p-4 rounded-[6px] bg-cloud-gray">
-        <div className="flex justify-between gap-4 font-ui text-[14px]">
-          <span className="text-dusty-gray">Branch</span>
-          <span className="text-cocoa-dark text-right">{branch ? branchLabel(branch) : '—'}</span>
-        </div>
-        <div className="flex justify-between font-ui text-[14px]">
-          <span className="text-dusty-gray">Date</span>
-          <span className="text-cocoa-dark">{selectedDate ? formatDate(selectedDate) : '—'}</span>
-        </div>
-        <div className="flex justify-between font-ui text-[14px]">
-          <span className="text-dusty-gray">Time</span>
-          <span className="text-cocoa-dark">
-            {selectedTime ? formatTime12h(selectedTime) : '—'}
-          </span>
-        </div>
-        <div className="flex justify-between font-ui text-[14px]">
-          <span className="text-dusty-gray">Type</span>
-          <span className="text-cocoa-dark capitalize">{serviceType}</span>
-        </div>
-        {totalDuration > 0 && (
-          <div className="flex justify-between font-ui text-[14px]">
-            <span className="text-dusty-gray">Duration</span>
-            <span className="text-cocoa-dark">~{totalDuration} min</span>
-          </div>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <h4 className="font-ui text-[11px] uppercase tracking-[1px] text-gold-ink">Services</h4>
-        {selectedServices.map((svc) => (
-          <div key={svc.id} className="flex justify-between font-ui text-[14px] text-cocoa-dark">
-            <span>{svc.name}</span>
-            <span>{formatINR(svc.pricePaise)}</span>
-          </div>
-        ))}
-        <div className="flex justify-between pt-2 border-t border-outline-gray font-ui text-[14px] text-cocoa-dark">
-          <span>Total</span>
-          <span>{formatINR(totalPaise)}</span>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-display text-[22px] leading-tight text-ink">Your details</h3>
+        <p className={`mt-1 ${MUTED}`}>Check your appointment, then tell us who's coming.</p>
       </div>
 
       {!isSignedIn && (
-        <div className="space-y-3">
-          <h4 className="font-ui text-[11px] uppercase tracking-[1px] text-gold-ink">
-            Your Details
-          </h4>
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="booking-name" className={labelClass}>
               Name
@@ -1380,7 +1317,7 @@ function Step4({
               className={inputClass}
             />
           </div>
-          <div>
+          <div className="sm:col-span-2">
             <label htmlFor="booking-email" className={labelClass}>
               Email (optional)
             </label>
@@ -1399,10 +1336,7 @@ function Step4({
       )}
 
       <div>
-        <label
-          htmlFor="booking-notes"
-          className="font-ui text-[11px] uppercase tracking-[1px] text-gold-ink block mb-2"
-        >
+        <label htmlFor="booking-notes" className={labelClass}>
           Notes (optional)
         </label>
         <textarea
@@ -1412,18 +1346,18 @@ function Step4({
           rows={3}
           maxLength={500}
           placeholder="Any special requests..."
-          className="w-full rounded-[6px] border border-cloud-gray px-3 py-2 font-ui text-[14px] text-cocoa-dark placeholder:text-dusty-gray focus:outline-2 focus:outline-deep-gold focus:outline-offset-2 resize-none"
+          className="w-full resize-none rounded-[12px] border border-hairline bg-white px-4 py-3 font-sans text-[15px] text-ink placeholder:text-ink-muted/70 focus:border-ink focus:outline-none"
         />
       </div>
 
       {submitError && (
         <div
-          className="rounded-[6px] border border-error/40 bg-error/5 px-4 py-3"
+          className="rounded-[12px] border border-error/40 bg-error/5 px-4 py-3"
           role="alert"
           aria-live="polite"
         >
           <p className="font-sans text-[14px] text-error">{submitError}</p>
-          <p className="font-sans text-[12px] text-dusty-gray mt-1">
+          <p className="mt-1 font-sans text-[13px] text-ink-muted">
             Or call / WhatsApp us:{' '}
             <a href="https://wa.me/918148308344" className="underline">
               +91 81483 08344
@@ -1432,12 +1366,113 @@ function Step4({
         </div>
       )}
 
-      <p className="font-sans text-[12px] text-dusty-gray">
+      <p className="font-sans text-[13px] text-ink-muted">
         {isSignedIn
           ? 'Payment is collected at the salon. You will receive a confirmation once your booking is approved.'
           : 'Payment is collected at the salon. We will call or WhatsApp you to confirm your booking.'}
       </p>
     </div>
+  )
+}
+
+// The right-hand "ticket": what the customer is booking so far, filled in
+// as they go. Its dashed tear line has a notch cut into each side.
+function AppointmentTicket({
+  services,
+  serviceType,
+  branch,
+  selectedDate,
+  selectedTime,
+  totalPaise,
+  totalDuration,
+  onChangeService,
+}: {
+  services: ApiService[]
+  serviceType: ServiceType
+  branch: PublicBranch | null
+  selectedDate: Date | null
+  selectedTime: string | null
+  totalPaise: number
+  totalDuration: number
+  onChangeService?: (() => void) | undefined
+}) {
+  const [first, ...rest] = services
+  const row = 'flex items-baseline justify-between gap-4 py-2.5'
+  const label = 'font-sans text-[14px] text-ink-muted'
+  const value = 'text-right font-ui text-[15px] font-semibold text-ink'
+
+  return (
+    <section
+      aria-label="Booking Summary"
+      className="relative overflow-hidden rounded-[18px] border border-hairline bg-white"
+    >
+      <div className="px-6 pt-6 pb-5">
+        <p className={EYEBROW}>Your appointment</p>
+        {first ? (
+          <>
+            <p className="mt-2 font-display text-[28px] leading-[1.1] text-ink">{first.name}</p>
+            {rest.length > 0 && (
+              <ul className="mt-1 space-y-0.5">
+                {rest.map((svc) => (
+                  <li key={svc.id} className="font-display text-[20px] leading-snug text-ink">
+                    + {svc.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        ) : (
+          <p className="mt-2 font-display text-[28px] leading-[1.1] text-ink-muted/60">
+            Your {serviceType === 'spa' ? 'spa' : 'salon'} visit
+          </p>
+        )}
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <p className="font-sans text-[14px] text-ink-muted">with the WeCut team</p>
+          {onChangeService && (
+            <button
+              type="button"
+              onClick={onChangeService}
+              className="min-h-[44px] font-ui text-[13px] font-semibold text-ink underline underline-offset-4"
+            >
+              Change
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div aria-hidden="true" className="relative h-0">
+        <span className="absolute top-1/2 -left-3 size-6 -translate-y-1/2 rounded-full border border-hairline bg-paper" />
+        <span className="absolute top-1/2 -right-3 size-6 -translate-y-1/2 rounded-full border border-hairline bg-paper" />
+        <span className="absolute inset-x-6 top-0 border-t border-dashed border-hairline" />
+      </div>
+
+      <dl className="px-6 pt-4 pb-5">
+        <div className={row}>
+          <dt className={label}>Date</dt>
+          <dd className={value}>{selectedDate ? formatTicketDate(selectedDate) : '—'}</dd>
+        </div>
+        <div className={row}>
+          <dt className={label}>Time</dt>
+          <dd className={value}>{selectedTime ? formatTime12h(selectedTime) : '—'}</dd>
+        </div>
+        <div className={row}>
+          <dt className={label}>Branch</dt>
+          <dd className={value}>{branch ? branchLabel(branch) : '—'}</dd>
+        </div>
+        {totalDuration > 0 && (
+          <div className={row}>
+            <dt className={label}>Duration</dt>
+            <dd className={value}>~{totalDuration} min</dd>
+          </div>
+        )}
+        <div className={`${row} mt-2 border-t border-hairline pt-4`}>
+          <dt className="font-ui text-[15px] font-semibold text-ink">Total</dt>
+          <dd className="font-display text-[26px] leading-none text-ink">
+            {totalPaise > 0 ? formatINR(totalPaise) : '—'}
+          </dd>
+        </div>
+      </dl>
+    </section>
   )
 }
 
@@ -1450,20 +1485,18 @@ function SuccessView({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
-      <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-success/10 text-success">
+      <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-ink text-paper">
         <Check className="size-8" strokeWidth={2.5} aria-hidden="true" />
       </div>
-      <h3 className="mb-2 font-display text-[24px] text-cocoa-dark">Booking Submitted!</h3>
-      <p className="mb-4 max-w-xs font-sans text-[15px] text-warm-gray">
+      <h3 className="mb-2 font-display text-[28px] text-ink">Booking Submitted!</h3>
+      <p className="mb-6 max-w-xs font-sans text-[15px] text-ink-soft">
         Our team will confirm your appointment shortly.
       </p>
 
       {bookingNumber && (
-        <div className="mb-8 rounded-[6px] border border-golden-mist bg-warm-cream px-5 py-3">
-          <span className="mb-1 block font-ui text-[10px] uppercase tracking-[1px] text-gold-ink">
-            Booking Number
-          </span>
-          <span className="font-ui text-[16px] tracking-[0.5px] text-cocoa-dark">
+        <div className="mb-8 rounded-[14px] border border-hairline bg-white px-6 py-4">
+          <span className={`mb-1 block ${EYEBROW}`}>Booking Number</span>
+          <span className="font-ui text-[17px] font-semibold tracking-[0.5px] text-ink">
             {bookingNumber}
           </span>
         </div>
@@ -1473,17 +1506,16 @@ function SuccessView({
         {bookingNumber && (
           <Button
             asChild
-            variant="gold"
-            className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px]"
+            className="h-12 rounded-full bg-ink font-ui text-[15px] font-semibold text-paper hover:bg-ink-soft"
           >
             <a href="/bookings">View My Bookings</a>
           </Button>
         )}
         <Button
           type="button"
-          variant="secondary"
+          variant="ghost"
           onClick={onDone}
-          className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px] hover:bg-golden-mist"
+          className="h-12 rounded-full border border-hairline font-ui text-[15px] font-semibold text-ink hover:bg-sand"
         >
           Done
         </Button>

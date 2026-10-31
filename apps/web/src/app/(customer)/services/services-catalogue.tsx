@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 08-06-2026 & Updated - 08-06-2026
+ * Date         : Created - 08-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : ServicesCatalogue
@@ -21,6 +21,7 @@
  * - Salon/SPA toggle filtered by category serviceType
  * - Categories and services preserve the server-provided display order
  * - Deep-link booking via /?book=1&service={slug}
+ * - Category deep-links: /services#<categoryId> or #spa opens the right tab
  *
  * Tech Stack   : React (client), Next.js 16 (App Router), Tailwind CSS v4,
  *                shadcn/ui, Radix, lucide-react
@@ -112,6 +113,7 @@ export function ServicesCatalogue() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [serviceType, setServiceType] = useState<ServiceType>('salon')
+  const [scrollTarget, setScrollTarget] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -138,6 +140,32 @@ export function ServicesCatalogue() {
     () => (categories ?? []).filter((category) => category.serviceType === serviceType),
     [categories, serviceType],
   )
+
+  // Homepage tiles link to /services#<categoryId>, or #spa for the spa tile.
+  // Once the catalogue loads, switch to the right Salon/SPA tab and bring the
+  // category (or the tabs, for #spa) into view.
+  useEffect(() => {
+    if (!categories) return
+    const hash = decodeURIComponent(window.location.hash.slice(1))
+    if (hash === 'spa') {
+      setServiceType('spa')
+      setScrollTarget('service-type')
+      return
+    }
+    const target = categories.find((category) => category.id === hash)
+    if (target) {
+      setServiceType(target.serviceType)
+      setScrollTarget(target.id)
+    }
+  }, [categories])
+
+  // Runs after the tab switch has rendered, so the target is in the DOM.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-run once the visible categories change.
+  useEffect(() => {
+    if (!scrollTarget) return
+    document.getElementById(scrollTarget)?.scrollIntoView({ block: 'start' })
+    setScrollTarget(null)
+  }, [scrollTarget, visibleCategories])
 
   return (
     <div className="px-5 py-10 lg:py-16">
@@ -176,7 +204,8 @@ export function ServicesCatalogue() {
           <>
             {/* Salon / SPA Toggle */}
             <div
-              className="mb-10 flex items-center justify-center gap-2"
+              id="service-type"
+              className="mb-10 flex scroll-mt-[140px] items-center justify-center gap-2"
               role="tablist"
               aria-label="Service type"
             >
@@ -212,8 +241,9 @@ export function ServicesCatalogue() {
                 {visibleCategories.map((category) => (
                   <AccordionItem
                     key={category.id}
+                    id={category.id}
                     value={category.id}
-                    className="border-outline-gray"
+                    className="scroll-mt-[140px] border-outline-gray"
                   >
                     <AccordionTrigger className="py-4 font-display text-lg text-cocoa-dark hover:no-underline">
                       {category.name}

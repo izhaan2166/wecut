@@ -1,14 +1,14 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 12-06-2026 & Updated - 28-10-2026
+ * Date         : Created - 12-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : HeroSection (component test)
  * Scope        : Customer Pages — Homepage Hero
  *
- * Description  : Component tests for the homepage hero. Verifies the headline
- *                and CTAs render, and that the hero is text-only: no image and
- *                no location/hours card.
+ * Description  : Component tests for the editorial homepage hero. Verifies
+ *                the headline, the Book and Call actions, and that the photo
+ *                renders only when one is passed in.
  *
  * Tech Stack   : Vitest, @testing-library/react, jsdom
  * Layer        : Testing (Presentation / Component)
@@ -24,27 +24,30 @@ afterEach(() => {
 })
 
 describe('HeroSection', () => {
-  it('renders the headline and both CTAs', () => {
+  it('renders the headline and both actions', () => {
     render(<HeroSection />)
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Where beautymeets Royalty.',
+      'Where beauty meets royalty.',
     )
     expect(screen.getByRole('link', { name: 'Book an appointment at WeCut' })).toHaveAttribute(
       'href',
       '/?book=1',
     )
-    expect(screen.getByRole('link', { name: 'Explore Services' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Call 81483 08344' })).toHaveAttribute(
       'href',
-      '/services',
+      'tel:+918148308344',
     )
   })
 
-  it('is text-only: no image and no location/hours card', () => {
-    const { container } = render(<HeroSection />)
-
+  it('shows the photo only when one is given', () => {
+    const { container, rerender } = render(<HeroSection />)
     expect(container.querySelector('img')).toBeNull()
-    expect(screen.queryByText(/RAYASANDRA/)).toBeNull()
-    expect(screen.queryByRole('link', { name: 'Visit' })).toBeNull()
+
+    rerender(<HeroSection image={{ url: 'https://example.com/salon.jpg', alt: 'Salon chair' }} />)
+    expect(screen.getByRole('img', { name: 'Salon chair' })).toHaveAttribute(
+      'src',
+      'https://example.com/salon.jpg',
+    )
   })
 })

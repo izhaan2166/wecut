@@ -226,7 +226,7 @@ async function advanceToSummary() {
   fireEvent.click(screen.getByRole('button', { name: 'Next' }))
 
   // Step 4 — summary.
-  await screen.findByText('Booking Summary', {}, LOAD)
+  await screen.findByText('Your details', {}, LOAD)
 }
 
 describe('BookingDialog UI wiring (Req 14)', () => {
@@ -270,7 +270,7 @@ describe('BookingDialog UI wiring (Req 14)', () => {
     renderDialog()
     await advanceToSummary()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Submit Booking' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm booking' }))
 
     expect(await screen.findByText('BK-RS-2609-H-38291', {}, LOAD)).toBeInTheDocument()
     expect(screen.getByText('Booking Submitted!')).toBeInTheDocument()
@@ -297,7 +297,7 @@ describe('BookingDialog UI wiring (Req 14)', () => {
     renderDialog()
     await advanceToSummary()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Submit Booking' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm booking' }))
 
     expect(await screen.findByRole('alert', {}, LOAD)).toHaveTextContent(
       'That slot was just taken.',
@@ -363,7 +363,7 @@ describe('BookingDialog branch picker', () => {
 
     expect(screen.getByText('Indiranagar, Bengaluru')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Submit Booking' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm booking' }))
 
     expect(await screen.findByText('BK-RS-2609-H-38291', {}, LOAD)).toBeInTheDocument()
     expect(postedBody).toMatchObject({ branchId: 'branch_indiranagar' })
@@ -460,10 +460,10 @@ describe('BookingDialog branch picker', () => {
 
       renderDialog()
 
-      expect(await screen.findByText('Booking Summary', {}, LOAD)).toBeInTheDocument()
+      expect(await screen.findByText('Your details', {}, LOAD)).toBeInTheDocument()
       expect(screen.getByText(shownBranch)).toBeInTheDocument()
 
-      fireEvent.click(screen.getByRole('button', { name: 'Submit Booking' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Confirm booking' }))
 
       expect(await screen.findByText('BK-RS-2609-H-38291', {}, LOAD)).toBeInTheDocument()
       expect(postedBody).toMatchObject({
@@ -491,7 +491,7 @@ describe('BookingDialog branch picker', () => {
     renderDialog()
     fireEvent.change(await findBranchPicker(), { target: { value: 'branch_indiranagar' } })
     await advanceToSummary()
-    fireEvent.click(screen.getByRole('button', { name: 'Submit Booking' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm booking' }))
 
     await waitFor(() => expect(routerPushMock).toHaveBeenCalledWith(ONBOARDING_PATH), LOAD)
     expect(JSON.parse(sessionStorage.getItem(BOOKING_INTENT_KEY) ?? '{}')).toMatchObject({
@@ -571,5 +571,33 @@ describe('BookingDialog focus', () => {
     expect(document.body).toHaveFocus()
     fireEvent.keyDown(document, { key: 'Tab' })
     expect(close).toHaveFocus()
+  })
+})
+
+describe('BookingDialog opened from a service Book link', () => {
+  afterEach(() => {
+    window.history.replaceState(null, '', '/')
+  })
+
+  it('skips the category and service steps for the service already picked', async () => {
+    window.history.replaceState(null, '', '/?book=1&service=signature-haircut')
+    mockApi()
+
+    renderDialog()
+    expect(await screen.findByText('Signature Haircut', {}, LOAD)).toBeInTheDocument()
+
+    await findBranchPicker()
+    fireEvent.click(dateButtons()[0] as HTMLElement)
+    fireEvent.click(await findSlot('10:00'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Straight to the summary, with the picked service in it.
+    await screen.findByText('Your details', {}, LOAD)
+    expect(screen.queryByRole('checkbox', { name: /Hair & Styling/i })).toBeNull()
+    expect(screen.getByText('Signature Haircut')).toBeInTheDocument()
+
+    // Back returns to the date and time step, not the service list.
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    expect(await findBranchPicker()).toBeInTheDocument()
   })
 })

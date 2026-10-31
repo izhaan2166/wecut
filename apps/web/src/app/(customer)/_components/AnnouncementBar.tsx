@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 08-06-2026 & Updated - 01-08-2026
+ * Date         : Created - 08-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : AnnouncementBar
@@ -49,11 +49,8 @@ export async function AnnouncementBar() {
   const href = banner?.ctaHref ?? FALLBACK_HREF
 
   return (
-    <div
-      className="relative z-50 text-center font-ui font-bold text-xs py-2 px-4"
-      style={{ backgroundColor: '#FFF8E7', color: '#1A0F0A' }}
-    >
-      <Link href={href} className="hover:underline" style={{ color: '#1A0F0A' }}>
+    <div className="relative z-50 bg-ink px-4 py-2 text-center font-ui text-xs font-medium text-paper">
+      <Link href={href} className="text-paper hover:underline">
         {headline}
       </Link>
     </div>

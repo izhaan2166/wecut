@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 04-06-2026 & Updated - 04-06-2026
+ * Date         : Created - 04-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : BookingDialogProvider
@@ -23,7 +23,7 @@
  *
  * Dependencies : ./BookingDialog
  *
- * Notes        : None
+ * Notes        : Closing clears the ?book / ?service deep-link from the URL.
  ************************************************************/
 
 'use client'
@@ -47,7 +47,17 @@ export function BookingDialogProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const open = useCallback(() => setIsOpen(true), [])
-  const close = useCallback(() => setIsOpen(false), [])
+  const close = useCallback(() => {
+    setIsOpen(false)
+    // Drop the `?book=1&service=…` deep-link so the same Book link opens the
+    // dialog again next time (the trigger only reacts to a URL change).
+    const url = new URL(window.location.href)
+    if (url.searchParams.has('book') || url.searchParams.has('service')) {
+      url.searchParams.delete('book')
+      url.searchParams.delete('service')
+      window.history.replaceState(null, '', url)
+    }
+  }, [])
 
   return (
     <BookingDialogContext.Provider value={{ open, close, isOpen }}>

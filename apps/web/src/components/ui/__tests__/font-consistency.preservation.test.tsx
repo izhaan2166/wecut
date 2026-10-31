@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 11-06-2026 & Updated - 11-06-2026
+ * Date         : Created - 11-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : font-consistency (preservation property test)
@@ -22,9 +22,9 @@
  *                layer must be byte-identical.
  *
  * Validates    : Requirements 3.1 (conforming heading/body unchanged),
- *                3.2 (shared @rgss/ui tokens + base layer not redefined in
- *                apps/web), 3.4 (primitive variant/size/data-* + aria-*
- *                preserved).
+ *                3.2 (shared @rgss/ui tokens + base layer kept; apps/web
+ *                overrides the font tokens only with its editorial families),
+ *                3.4 (primitive variant/size/data-* + aria-* preserved).
  *
  * Tech Stack   : Vitest, @testing-library/react, jsdom, Node fs
  * Layer        : Testing (Presentation / Component)
@@ -170,17 +170,26 @@ describe('Font consistency — Preservation (Property 2)', () => {
     }
   })
 
-  // ── Req 3.2 — apps/web does not redefine the shared font tokens ──
-  describe('apps/web does not redefine the @rgss/ui font tokens (Req 3.2)', () => {
+  // ── Req 3.2 — font tokens: shared theme for admin, editorial override for web ──
+  // The 2026-10-30 redesign gave the customer site its own editorial families
+  // (DM Serif Display + DM Sans). apps/web overrides the three tokens once, in
+  // globals.css; apps/admin keeps the shared @rgss/ui families.
+  describe('apps/web font tokens (Req 3.2, editorial theme)', () => {
     const webCssFiles = ['globals.css', 'shadcn-theme.css'] as const
+    const EDITORIAL_TOKENS: Record<string, string> = {
+      '--font-display': 'DM Serif Display',
+      '--font-sans': 'DM Sans',
+      '--font-ui': 'DM Sans',
+    }
 
     it('imports the shared theme rather than duplicating it', () => {
       const globals = readFileSync(resolve(WEB_STYLES_DIR, 'globals.css'), 'utf8')
       expect(globals).toMatch(/@import\s+["']@rgss\/ui\/theme\.css["']/)
     })
 
-    it('declares no literal --font-display/--font-sans/--font-ui value (only var() passthroughs allowed)', () => {
+    it('sets each font token to its editorial family once; anything else is a var() passthrough', () => {
       const brandFamilies = ['Cabinet Grotesk', 'Clash Grotesk', 'Plus Jakarta Sans']
+      const seen = new Map<string, number>()
 
       for (const file of webCssFiles) {
         const css = readFileSync(resolve(WEB_STYLES_DIR, file), 'utf8')
@@ -189,12 +198,12 @@ describe('Font consistency — Preservation (Property 2)', () => {
         while (match !== null) {
           const token = `--font-${match[1]}`
           const value = (match[2] ?? '').trim()
-          // The only permitted declaration is a passthrough that references the
-          // shared token, e.g. `--font-display: var(--font-display)`. Any
-          // literal brand family here would duplicate the source of truth.
+          const isPassthrough = /^var\(--font-(display|sans|ui)\)$/.test(value)
+          const isEditorial = value.startsWith(`"${EDITORIAL_TOKENS[token]}"`)
+          if (!isPassthrough) seen.set(token, (seen.get(token) ?? 0) + 1)
           expect(
-            /^var\(--font-(display|sans|ui)\)$/.test(value),
-            `${file}: ${token} must be a var(--font-*) passthrough, got "${value}"`,
+            isPassthrough || isEditorial,
+            `${file}: ${token} must be the editorial family or a var() passthrough, got "${value}"`,
           ).toBe(true)
           for (const family of brandFamilies) {
             expect(value).not.toContain(family)
@@ -202,9 +211,13 @@ describe('Font consistency — Preservation (Property 2)', () => {
           match = declRe.exec(css)
         }
       }
+
+      for (const count of seen.values()) {
+        expect(count).toBeLessThanOrEqual(1)
+      }
     })
 
-    it('keeps the brand font literals as the single source of truth in @rgss/ui (not in apps/web)', () => {
+    it('keeps the original brand families in @rgss/ui for apps/admin', () => {
       const theme = readFileSync(SHARED_THEME_CSS, 'utf8')
       expect(theme).toMatch(/--font-display:\s*"Cabinet Grotesk"/)
       expect(theme).toMatch(/--font-sans:\s*"Clash Grotesk"/)

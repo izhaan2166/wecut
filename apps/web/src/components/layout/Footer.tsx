@@ -1,13 +1,13 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 04-06-2026 & Updated - 07-06-2026
+ * Date         : Created - 04-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : Footer
  * Scope        : Layout
  *
  * Description  : Site-wide footer rebuilt to exactly match the Stitch MCP
- *                design. Light warm surface background (#fff8f5), 12-col grid,
+ *                design. White surface on the editorial paper theme, 12-col grid,
  *                4 columns: Brand/NAP, Explore links, Account links, Social + Email.
  *                Bottom bar: copyright + legal links + cookie preferences.
  *
@@ -72,39 +72,34 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer
-      className="border-t border-outline-gray font-sans"
-      style={{ backgroundColor: '#fff8f5' }}
-    >
+    <footer className="border-t border-hairline bg-white font-sans">
       <div className="container mx-auto px-4 md:px-8 max-w-[1280px] pt-20 pb-10">
         {/* ── Main Grid: 12 columns ── */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-16">
           {/* Col 1: Brand — spans 4 */}
           <div className="md:col-span-4 space-y-8 max-w-xs">
             <div className="space-y-4">
-              <h2 className="font-display font-black text-2xl tracking-tight text-cocoa-dark">
-                WeCut Salon &amp; SPA
-              </h2>
+              <h2 className="font-display text-[28px] text-ink">WeCut Salon &amp; SPA</h2>
               <div className="space-y-1">
-                <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink">
+                <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-ink-muted">
                   Visit Branch
                 </p>
-                <address className="not-italic font-sans text-sm text-warm-gray">
+                <address className="not-italic font-sans text-sm text-ink-soft">
                   Rayasandra, 560100
                 </address>
               </div>
             </div>
 
             <div className="space-y-3">
-              <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink">
+              <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-ink-muted">
                 Opening Hours
               </p>
-              <div className="font-sans text-sm text-warm-gray">
+              <div className="font-sans text-sm text-ink-soft">
                 <div className="grid grid-cols-[auto_1fr] gap-y-2 gap-x-4">
                   <span>Mon — Fri</span>
-                  <span className="text-cocoa-dark font-medium">10:00 — 21:00</span>
+                  <span className="text-ink font-medium">10:00 — 21:00</span>
                   <span>Sat — Sun</span>
-                  <span className="text-cocoa-dark font-medium">10:00 — 22:00</span>
+                  <span className="text-ink font-medium">10:00 — 22:00</span>
                 </div>
               </div>
             </div>
@@ -112,7 +107,7 @@ export function Footer() {
 
           {/* Col 2: Explore — spans 2, offset 1 */}
           <nav aria-label="Explore links" className="md:col-span-2 md:col-start-6">
-            <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink mb-7">
+            <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-ink-muted mb-7">
               Explore
             </p>
             <ul className="space-y-4">
@@ -120,7 +115,7 @@ export function Footer() {
                 <li key={link.href + link.label}>
                   <Link
                     href={link.href}
-                    className="font-ui text-sm text-warm-gray hover:text-gold-ink transition-colors duration-200"
+                    className="font-ui text-sm text-ink-soft hover:text-ink transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -131,7 +126,7 @@ export function Footer() {
 
           {/* Col 3: Account — spans 2 */}
           <nav aria-label="Account links" className="md:col-span-2">
-            <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink mb-7">
+            <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-ink-muted mb-7">
               Account
             </p>
             <ul className="space-y-4">
@@ -139,7 +134,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-ui text-sm text-warm-gray hover:text-gold-ink transition-colors duration-200"
+                    className="font-ui text-sm text-ink-soft hover:text-ink transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -151,7 +146,7 @@ export function Footer() {
           {/* Col 4: Follow Us + Email — spans 3 */}
           <div className="md:col-span-3 space-y-8">
             <div>
-              <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink mb-6">
+              <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-ink-muted mb-6">
                 Follow Us
               </p>
               <div className="flex items-center gap-4">
@@ -162,7 +157,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="text-cocoa-dark hover:text-gold-ink transition-colors duration-200"
+                    className="text-ink hover:text-ink transition-colors duration-200"
                   >
                     <svg
                       className="w-5 h-5"
@@ -179,12 +174,12 @@ export function Footer() {
             </div>
 
             <div className="space-y-2">
-              <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-gold-ink">
+              <p className="font-ui text-[10px] font-bold uppercase tracking-[0.2em] text-ink-muted">
                 Email Us
               </p>
               <a
                 href="mailto:hello@theroyalglow.in"
-                className="font-ui text-sm text-warm-gray hover:text-gold-ink transition-colors duration-200 block"
+                className="font-ui text-sm text-ink-soft hover:text-ink transition-colors duration-200 block"
               >
                 hello@theroyalglow.in
               </a>
@@ -193,24 +188,21 @@ export function Footer() {
         </div>
 
         {/* ── Bottom Bar ── */}
-        <div className="border-t border-outline-gray pt-8 flex flex-col md:flex-row justify-between items-center gap-5">
-          <span className="font-ui text-[10px] font-bold uppercase tracking-widest text-warm-gray">
+        <div className="border-t border-hairline pt-8 flex flex-col md:flex-row justify-between items-center gap-5">
+          <span className="font-ui text-[10px] font-bold uppercase tracking-widest text-ink-soft">
             © 2026 WeCut Salon &amp; Spa
           </span>
           <nav
             aria-label="Legal links"
-            className="flex flex-wrap justify-center items-center gap-8 font-ui text-[10px] font-bold uppercase tracking-widest text-warm-gray"
+            className="flex flex-wrap justify-center items-center gap-8 font-ui text-[10px] font-bold uppercase tracking-widest text-ink-soft"
           >
-            <Link href="/privacy" className="hover:text-gold-ink transition-colors duration-200">
+            <Link href="/privacy" className="hover:text-ink transition-colors duration-200">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-gold-ink transition-colors duration-200">
+            <Link href="/terms" className="hover:text-ink transition-colors duration-200">
               Terms of Service
             </Link>
-            <Link
-              href="/refund-policy"
-              className="hover:text-gold-ink transition-colors duration-200"
-            >
+            <Link href="/refund-policy" className="hover:text-ink transition-colors duration-200">
               Refund Policy
             </Link>
             <CookiePreferencesButton />

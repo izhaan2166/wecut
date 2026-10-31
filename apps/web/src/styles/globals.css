@@ -29,9 +29,9 @@
  *
  * Dependencies : tailwindcss, @rgss/ui (theme.css)
  *
- * Notes        : Design tokens live once in @rgss/ui/theme.css. Do NOT
- *                redefine brand colours/fonts/radii here — edit the shared
- *                theme so apps/web and apps/admin stay in sync.
+ * Notes        : Design tokens live once in @rgss/ui/theme.css. The one
+ *                exception is the customer-site editorial theme below (fonts
+ *                and paper/ink colours), which apps/admin does not use.
  ************************************************************/
 
 /* The brand font stylesheets are NOT imported here. A CSS @import forces the
@@ -44,29 +44,52 @@
 @import "@rgss/ui/theme.css";
 @import "./shadcn-theme.css";
 
+/* ── Customer-site editorial theme (2026-10-30 redesign) ──
+   The customer site moved to the "Editorial Split" look: DM Serif Display for
+   headings, DM Sans for body and UI text, on warm paper with ink buttons. The
+   shared @rgss/ui theme keeps the original families for apps/admin, so the
+   customer site overrides the three font tokens here. The families are loaded
+   in the root layout (src/app/layout.tsx). */
+@theme {
+  --font-display: "DM Serif Display", ui-serif, Georgia, serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-ui: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-paper: #f7f5f2;
+  --color-ink: #22201d;
+  --color-ink-soft: #4d4740;
+  --color-ink-muted: #6e675e;
+  --color-hairline: #e6e0d8;
+  --color-sand: #e5ded4;
+}
+
 /* shadcn dark-variant hook. The customer site is light-only (no theme toggle
    mounted), so no `.dark` palette is defined — the variant is declared for
    component compatibility and resolves to the `:root` Brand-Token bindings. */
 @custom-variant dark (&:is(.dark *));
 
-/* ── Display-font weight default (font-consistency fix) ──
-   Cabinet Grotesk (`--font-display`) is loaded ONLY at weights 800 and 900.
-   Any element using the `font-display` utility WITHOUT an explicit font-weight
-   utility would otherwise request weight 400 — which isn't loaded — and render
-   at a fallen-back/synthesised weight that looks visibly different from the
-   homepage's heavy display headings.
-
-   This base-layer rule gives every `font-display` element a real, loaded weight
-   (800 / extrabold) by default. It lives in `@layer base`, so any explicit
-   weight utility (`font-black` → 900, `font-bold`, `font-medium`, etc., which
-   Tailwind emits in the higher `utilities` layer) still wins. The homepage —
-   whose headings all carry explicit weights — is therefore unchanged, while
-   every previously-unweighted display heading/number across the site now
-   matches the homepage's Cabinet Grotesk treatment. Body (`font-sans`) and UI
-   (`font-ui`) elements are unaffected. */
+/* ── Display-font weight (editorial theme) ──
+   DM Serif Display ships a single 400 weight. Many headings still carry
+   `font-black` / `font-bold` from the previous theme; with weight synthesis
+   off, the browser renders them in the real 400 face instead of smearing a
+   fake bold over the serif. */
 @layer base {
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .font-display,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-synthesis-weight: none;
+  }
+
   .font-display {
-    font-weight: 800;
+    font-weight: 400;
   }
 }
 

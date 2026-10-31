@@ -1,6 +1,6 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 04-06-2026 & Updated - 27-09-2026
+ * Date         : Created - 04-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : BookingDialog
@@ -354,7 +354,21 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
     restoredRef.current = true
     if (typeof window === 'undefined') return
     const raw = sessionStorage.getItem(BOOKING_INTENT_KEY)
-    if (!raw) return
+    if (!raw) {
+      // A service's own Book link (`/?book=1&service=<slug>`) opens the dialog
+      // with that service already ticked.
+      const slug = new URLSearchParams(window.location.search).get('service')
+      const picked = slug
+        ? categories.flatMap((c) => c.services).find((s) => s.slug === slug)
+        : undefined
+      const pickedCategory = picked && categories.find((c) => c.id === picked.categoryId)
+      if (picked && pickedCategory) {
+        setServiceType(pickedCategory.serviceType)
+        setSelectedCategoryIds([pickedCategory.id])
+        setSelectedServiceIds([picked.id])
+      }
+      return
+    }
     sessionStorage.removeItem(BOOKING_INTENT_KEY)
     try {
       const intent = JSON.parse(raw) as BookingIntent

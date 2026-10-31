@@ -81,24 +81,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Brand fonts are loaded here rather than via `@import url(...)` inside
             globals.css. A CSS @import is the worst discovery path available: the
             browser must download and parse our stylesheet BEFORE it even learns the
-            font stylesheets exist, then fetch those, then the font files — a
-            serialised three-hop chain that blocked first paint and was the single
-            biggest contributor to the 3.4-4.0s text LCP Lighthouse measured.
-            As <link> tags in the document head they are discovered immediately in
-            the initial HTML and fetched in parallel, and preconnect warms the TLS
-            handshake to both CDNs up front.
-            NOTE: the fonts stay on their CDNs (not self-hosted) by decision; these
-            origins are allowed in the CSP (see src/middleware.ts). */}
-        <link crossOrigin="anonymous" href="https://api.fontshare.com" rel="preconnect" />
+            font stylesheet exists, then fetch it, then the font files — a
+            serialised three-hop chain that blocked first paint. As a <link> in the
+            document head it is discovered immediately in the initial HTML, and
+            preconnect warms the TLS handshake to both Google Fonts origins.
+            DM Serif Display (headings) + DM Sans (body/UI) are the editorial
+            theme's families; the tokens that use them are in styles/globals.css.
+            These origins are allowed in the CSP (see src/middleware.ts). */}
         <link crossOrigin="anonymous" href="https://fonts.googleapis.com" rel="preconnect" />
         <link crossOrigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect" />
-        <link crossOrigin="anonymous" href="https://cdn.fontshare.com" rel="preconnect" />
         <link
-          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900&f[]=clash-grotesk@400,500,600,700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400..800&display=swap"
           rel="stylesheet"
         />
       </head>

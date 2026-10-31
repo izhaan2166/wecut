@@ -1,19 +1,20 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 04-06-2026 & Updated - 08-06-2026
+ * Date         : Created - 04-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : Header
  * Scope        : Layout
  *
- * Description  : Site-wide header. White/90 glass background, logo (image +
- *                wordmark), desktop nav links, and the account menu when
- *                logged in. There is no sign-in button or One Tap prompt.
- *                Rebuilt on the shadcn/ui Button primitive with lucide icons.
+ * Description  : Site-wide header. Paper/90 glass background, serif WeCut
+ *                wordmark, desktop nav links, an always-visible Book button,
+ *                and the account menu when logged in. There is no sign-in
+ *                button or One Tap prompt.
  *
  * Responsibilities :
- * - Render logo (40×40 image + Cabinet Grotesk wordmark)
+ * - Render the text wordmark (DM Serif Display)
  * - Render desktop nav: Services, Offers, About, Contact, Blog
+ * - Render Book now (desktop) / Book (mobile), both opening the booking dialog
  * - Logged in: UserMenu dropdown (notifications, bookings, etc. live inside it)
  * - Add scroll-triggered border shadow
  * - Toggle mobile nav panel
@@ -28,7 +29,7 @@
 
 'use client'
 
-import { ChevronDown, Menu } from 'lucide-react'
+import { ArrowRight, ChevronDown, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -85,7 +86,7 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
   return (
     <header
       className={cn(
-        'fixed inset-x-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md transition-all duration-200',
+        'fixed inset-x-0 z-40 border-b border-hairline bg-paper/90 backdrop-blur-md transition-all duration-200',
         isScrolled ? 'top-0 shadow-md' : 'top-9',
       )}
     >
@@ -94,10 +95,8 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
         <Link href="/" className="flex items-center" aria-label="WeCut — Go to homepage">
           {/* Text-only brand lockup: wordmark + Salon & Spa descriptor */}
           <span className="flex flex-col leading-none">
-            <span className="font-display text-[19px] font-black tracking-tight text-cocoa-dark">
-              WeCut
-            </span>
-            <span className="mt-1 font-ui text-[10px] font-semibold uppercase tracking-[0.22em] text-warm-gray">
+            <span className="font-display text-[28px] text-ink">WeCut</span>
+            <span className="mt-1 font-ui text-[10px] font-medium uppercase tracking-[0.22em] text-ink-muted">
               Salon &amp; Spa
             </span>
           </span>
@@ -110,9 +109,9 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
               key={link.href}
               href={link.href}
               className={cn(
-                'relative py-1 font-ui text-sm font-bold text-cocoa-dark transition-colors duration-200 hover:text-gold-ink',
+                'relative py-1 font-ui text-[15px] font-medium text-ink transition-colors duration-200 hover:text-ink-soft',
                 pathname === link.href &&
-                  'after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-deep-gold',
+                  'after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-ink',
               )}
             >
               {link.label}
@@ -120,15 +119,26 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
           ))}
         </nav>
 
-        {/* ── Auth CTA ── */}
-        {user ? (
-          <div className="hidden items-center md:flex">
-            <UserMenu user={user} />
-          </div>
-        ) : null}
+        {/* ── Book + account (desktop) ── */}
+        <div className="hidden items-center gap-4 md:flex">
+          <Link
+            href="/?book=1"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-ink px-5 font-ui text-sm font-semibold text-paper transition-colors duration-200 hover:bg-ink-soft"
+          >
+            Book now
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+          {user ? <UserMenu user={user} /> : null}
+        </div>
 
         {/* ── Mobile right side ── */}
         <div className="flex items-center gap-2 md:hidden">
+          <Link
+            href="/?book=1"
+            className="inline-flex min-h-[44px] items-center rounded-full bg-ink px-4 font-ui text-sm font-semibold text-paper"
+          >
+            Book
+          </Link>
           {user ? (
             // Logged in: avatar button opens the drawer (account + nav inside).
             <button
@@ -165,7 +175,7 @@ export function Header({ initialUser = null }: { initialUser?: HeaderUser | null
               type="button"
               variant="ghost"
               size="icon"
-              className="text-cocoa-dark"
+              className="size-11 text-ink"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={isMobileMenuOpen}

@@ -1,104 +1,89 @@
 /************************************************************
  * Author       : KATABATHUNI BOSE
- * Date         : Created - 04-06-2026 & Updated - 28-10-2026
+ * Date         : Created - 04-06-2026 & Updated - 31-10-2026
  *
  * Project      : wecut-webapp
  * Module Name  : HeroSection
  * Scope        : Customer Pages
  *
- * Description  : Homepage hero — a single full-width dark card with the brand
- *                headline, sub-copy, CTAs and service category tags.
+ * Description  : Homepage hero in the editorial split layout: headline, one
+ *                line of copy and two actions on the left, a tall salon photo
+ *                on the right (stacked below the text on phones).
  *
  * Responsibilities :
- * - Render the brand headline, sub-copy, and primary/secondary CTAs (Button)
- * - Surface service category tags as a quick-scan strip (Badge)
+ * - Render the brand headline, sub-copy and the Book / Call actions
+ * - Render the hero photo when one is passed in
  *
  * Features / Functionality :
- * - Motion fade/slide-in entrance (reduced-motion safe via variants)
- * - Book Now (deep-link ?book=1) + Explore Services CTAs
+ * - Book (deep-link ?book=1) opens the booking dialog
+ * - Call dials the salon directly
  *
- * Tech Stack   : React, Next.js 16 (App Router), Tailwind CSS v4, shadcn/ui,
- *                Radix, motion, lucide-react
+ * Tech Stack   : React, Next.js 16 (App Router), Tailwind CSS v4, lucide-react
  * Layer        : Presentation (Component)
  *
- * Dependencies : @/components/ui/button, @/components/ui/badge, motion/react,
- *                lucide-react, next/link
+ * Dependencies : lucide-react, next/link
  ************************************************************/
-'use client'
 
-import { ArrowRight } from 'lucide-react'
-import { motion } from 'motion/react'
+import { ArrowRight, Phone } from 'lucide-react'
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { fadeInUp } from '@/components/ui/motion/motion-variants'
 
-const categories = ['HAIR', 'SPA', 'SKIN', 'BRIDAL', 'NAILS', 'GROOMING']
+export type HeroImage = {
+  url: string
+  alt: string
+}
 
-export function HeroSection() {
+export function HeroSection({ image }: { image?: HeroImage | undefined }) {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="mx-auto w-full max-w-[1280px] px-4 py-10 md:px-8"
+      className="mx-auto grid w-full max-w-[1200px] gap-10 px-5 pt-8 pb-16 md:px-10 lg:grid-cols-2 lg:gap-12 lg:pb-20"
     >
-      <motion.div
-        variants={fadeInUp}
-        initial="hidden"
-        animate="visible"
-        className="flex min-h-[560px] flex-col items-center justify-center rounded-[6px] bg-cocoa-dark px-6 py-16 text-center sm:px-12 lg:px-16"
-      >
-        {/* Eyebrow */}
-        {/* No opacity: at 60% the deep-gold computed to #826b3e on the dark hero
-            = 3.69:1, below the 4.5:1 WCAG AA floor for this 10px bold text.
-            Full deep-gold clears it comfortably. */}
-        <p className="mb-6 font-ui text-[11px] font-bold uppercase tracking-[0.2em] text-deep-gold">
-          WeCut Salon &amp; Spa
+      <div className="flex flex-col justify-center gap-6">
+        <p className="font-ui text-[13px] font-medium uppercase tracking-[0.18em] text-ink-muted">
+          WeCut Salon &amp; Spa · Rayasandra
         </p>
 
-        {/* Headline — each phrase is a non-wrapping block so it always
-            renders as exactly two lines. */}
         <h1
           id="hero-heading"
-          className="font-display text-[clamp(38px,7vw,88px)] font-black leading-[1.02] tracking-[-0.03em] text-canvas-white"
+          className="font-display text-[clamp(44px,7vw,84px)] leading-[0.98] text-ink"
         >
-          <span className="block whitespace-nowrap">Where beauty</span>
-          <span className="block whitespace-nowrap">meets Royalty.</span>
+          Where beauty meets royalty.
         </h1>
 
-        {/* Body */}
-        <p className="mt-6 max-w-[560px] font-sans text-[17px] leading-[1.6] text-dusty-gray">
-          A premium salon and spa experience in Bengaluru. Hair, skin, nails and signature rituals —
-          crafted by master artists in a calm, golden sanctuary.
+        <p className="max-w-[460px] font-sans text-lg leading-relaxed text-ink-soft">
+          Cuts, colour, skin and spa, done carefully by people who listen first.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <Button asChild variant="gold" size="lg" className="font-ui font-bold">
-            <Link href="/?book=1" aria-label="Book an appointment at WeCut">
-              Book Now
-              <ArrowRight data-icon="inline-end" aria-hidden="true" />
-            </Link>
-          </Button>
-          <Button asChild variant="onDark" size="lg" className="font-ui font-bold">
-            <Link href="/services">Explore Services</Link>
-          </Button>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/?book=1"
+            aria-label="Book an appointment at WeCut"
+            className="inline-flex min-h-[50px] items-center gap-2 rounded-full bg-ink px-7 font-ui font-semibold text-paper transition-colors duration-200 hover:bg-ink-soft"
+          >
+            Book an appointment
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+          <a
+            href="tel:+918148308344"
+            className="inline-flex min-h-[50px] items-center gap-2 rounded-full border border-ink px-6 font-ui font-medium text-ink transition-colors duration-200 hover:bg-ink hover:text-paper"
+          >
+            <Phone className="size-4" aria-hidden="true" />
+            Call 81483 08344
+          </a>
         </div>
+      </div>
 
-        {/* Category Tags */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          {categories.map((cat) => (
-            <Badge
-              key={cat}
-              variant="ghost"
-              // opacity-40 computed to #766f6c on the dark hero = 3.81:1, under the
-              // 4.5:1 AA floor. 70% keeps the muted treatment while clearing it.
-              className="px-0 font-ui text-[10px] font-bold uppercase tracking-widest text-canvas-white opacity-70"
-            >
-              {cat}
-            </Badge>
-          ))}
+      {image ? (
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-sand lg:aspect-auto lg:min-h-[560px]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={image.url}
+            alt={image.alt}
+            fetchPriority="high"
+            className="absolute inset-0 size-full object-cover"
+          />
         </div>
-      </motion.div>
+      ) : null}
     </section>
   )
 }

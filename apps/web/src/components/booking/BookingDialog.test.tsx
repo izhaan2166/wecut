@@ -573,3 +573,31 @@ describe('BookingDialog focus', () => {
     expect(close).toHaveFocus()
   })
 })
+
+describe('BookingDialog opened from a service Book link', () => {
+  afterEach(() => {
+    window.history.replaceState(null, '', '/')
+  })
+
+  it('skips the category and service steps for the service already picked', async () => {
+    window.history.replaceState(null, '', '/?book=1&service=signature-haircut')
+    mockApi()
+
+    renderDialog()
+    expect(await screen.findByText('Signature Haircut', {}, LOAD)).toBeInTheDocument()
+
+    await findBranchPicker()
+    fireEvent.click(dateButtons()[0] as HTMLElement)
+    fireEvent.click(await findSlot('10:00'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Straight to the summary, with the picked service in it.
+    await screen.findByText('Booking Summary', {}, LOAD)
+    expect(screen.queryByRole('checkbox', { name: /Hair & Styling/i })).toBeNull()
+    expect(screen.getByText('Signature Haircut')).toBeInTheDocument()
+
+    // Back returns to the date and time step, not the service list.
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    expect(await findBranchPicker()).toBeInTheDocument()
+  })
+})

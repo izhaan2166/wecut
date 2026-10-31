@@ -166,6 +166,9 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
   const router = useRouter()
 
   const [step, setStep] = useState(1)
+  // True when the dialog was opened from a service's own Book link: the
+  // service is already chosen, so the category and service steps are skipped.
+  const [servicePicked, setServicePicked] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [serviceType, setServiceType] = useState<ServiceType>('salon')
@@ -366,6 +369,7 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
         setServiceType(pickedCategory.serviceType)
         setSelectedCategoryIds([pickedCategory.id])
         setSelectedServiceIds([picked.id])
+        setServicePicked(true)
       }
       return
     }
@@ -421,6 +425,7 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
 
   const reset = useCallback(() => {
     setStep(1)
+    setServicePicked(false)
     setSelectedBranchId(null)
     setSelectedDate(null)
     setSelectedTime(null)
@@ -631,6 +636,15 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
   const canNext2 = selectedCategoryIds.length > 0
   const canNext3 = selectedServiceIds.length > 0
 
+  // Steps: 1 branch/date/time, 2 categories, 3 services, 4 details. A picked
+  // service goes straight from 1 to 4.
+  const stepOrder = servicePicked ? [1, 4] : [1, 2, 3, 4]
+  const stepIndex = Math.max(0, stepOrder.indexOf(step))
+  const goNext = () => setStep(stepOrder[stepIndex + 1] ?? 4)
+  const goBack = () => setStep(stepOrder[stepIndex - 1] ?? 1)
+  const pickedService =
+    servicePicked && selectedServiceIds[0] ? servicesById.get(selectedServiceIds[0]) : undefined
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
@@ -679,8 +693,10 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
             {/* Live text rather than an aria-label on a roleless div: the label would
                 not be exposed, and changing text is what actually gets announced as
                 the customer moves between steps. */}
-            <span className="sr-only" aria-live="polite">{`Step ${step} of 4`}</span>
-            {[1, 2, 3, 4].map((s) => (
+            <span className="sr-only" aria-live="polite">
+              {`Step ${stepIndex + 1} of ${stepOrder.length}`}
+            </span>
+            {stepOrder.map((s) => (
               <div
                 key={s}
                 className={`w-2 h-2 rounded-full motion-safe:transition-colors duration-200 ${
@@ -697,27 +713,43 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
           {isSubmitted ? (
             <SuccessView bookingNumber={bookingNumber} onDone={handleClose} />
           ) : step === 1 ? (
-            <Step1
-              branchList={branchList}
-              branchesError={branchesError}
-              activeBranchId={activeBranchId}
-              onSelectBranch={(id) => {
-                // Times are per branch, so a time picked for another one is dropped.
-                setSelectedBranchId(id)
-                setSelectedTime(null)
-              }}
-              onRetryBranches={() => setBranchesAttempt((n) => n + 1)}
-              selectedDate={selectedDate}
-              selectedTime={selectedTime}
-              slots={slots}
-              slotsLoading={slotsLoading}
-              slotsError={slotsError}
-              onSelectDate={(d) => {
-                setSelectedDate(d)
-                setSelectedTime(null)
-              }}
-              onSelectTime={setSelectedTime}
-            />
+            <>
+              {pickedService ? (
+                <div className="mb-4 flex items-center justify-between gap-3 rounded-[6px] bg-cloud-gray px-4 py-3">
+                  <p className="font-sans text-[14px] text-cocoa-dark">
+                    Booking: <span className="font-semibold">{pickedService.name}</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setServicePicked(false)}
+                    className="min-h-[44px] font-ui text-[13px] font-semibold text-cocoa-dark underline"
+                  >
+                    Change
+                  </button>
+                </div>
+              ) : null}
+              <Step1
+                branchList={branchList}
+                branchesError={branchesError}
+                activeBranchId={activeBranchId}
+                onSelectBranch={(id) => {
+                  // Times are per branch, so a time picked for another one is dropped.
+                  setSelectedBranchId(id)
+                  setSelectedTime(null)
+                }}
+                onRetryBranches={() => setBranchesAttempt((n) => n + 1)}
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                slots={slots}
+                slotsLoading={slotsLoading}
+                slotsError={slotsError}
+                onSelectDate={(d) => {
+                  setSelectedDate(d)
+                  setSelectedTime(null)
+                }}
+                onSelectTime={setSelectedTime}
+              />
+            </>
           ) : step === 2 ? (
             <Step2
               serviceType={serviceType}
@@ -767,7 +799,7 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => setStep((s) => s - 1)}
+                onClick={goBack}
                 disabled={submitting}
                 className="rounded-full font-ui text-[12px] uppercase tracking-[0.5px] hover:bg-golden-mist"
               >
@@ -783,7 +815,7 @@ export function BookingDialog({ isOpen, onClose }: BookingDialogProps) {
                 variant="gold"
                 onClick={() => {
                   track('booking_step_completed', { step })
-                  setStep((s) => s + 1)
+                  goNext()
                 }}
                 disabled={
                   (step === 1 && !canNext1) ||
